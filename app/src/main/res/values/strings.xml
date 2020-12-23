@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Project</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log in</string>
+    <string name="register">Register</string>
+    <string name="button">Button</string>
+    <string name="today">Today</string>
+    <string name="previous_day">Previous day</string>
+    <string name="next_day">Next day</string>
+    <string name="calories_remaining">Calories Remaining</string>
+    <string name="minus_sign">-</string>
+    <string name="equal_sign">=</string>
+    <string name="goal">Goal</string>
+    <string name="food">Food</string>
+    <string name="remaining">Remaining</string>
+    <string name="breakfast">Breakfast</string>
+    <string name="add_food">+ Add Food</string>
+    <string name="lunch">Lunch</string>
+    <string name="dinner">Dinner</string>
+    <string name="snacks">Snacks</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="amount">Amount</string>
+    <string name="calories_amount">Calories Amount</string>
+    <string name="exercise">Exercise</string>
+    <string name="add_exercise">+ Add Exercise</string>
+    <string name="title_activity_weight">WeightActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+</resources>
