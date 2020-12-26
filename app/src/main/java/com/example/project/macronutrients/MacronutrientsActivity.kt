@@ -1,7 +1,10 @@
 package com.example.project.macronutrients
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.project.R
 import com.github.mikephil.charting.charts.PieChart
@@ -23,6 +26,7 @@ class MacronutrientsActivity : AppCompatActivity() {
 
         val pieChart = findViewById<PieChart>(R.id.macronutrientsChart)
         setPieChart(pieChart)
+
     }
 
     private fun setPieChart(pieChart: PieChart) {
@@ -48,6 +52,11 @@ class MacronutrientsActivity : AppCompatActivity() {
         pieDataSet.valueFormatter = PercentFormatter(pieChart)
 
         pieChart.animateXY(1000, 1000)
+    }
+
+    fun goalsButtonOnClick(view: View) {
+        val intent = Intent(applicationContext, GoalsActivity::class.java)
+        startActivity(intent)
     }
 
 

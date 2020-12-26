@@ -12,7 +12,7 @@
         android:theme="@style/Theme.Project.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/macronutrientsToolbar"
+            android:id="@+id/goalsToolBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -205,6 +205,8 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
+        android:id="@+id/goalsButton"
+        android:onClick="goalsButtonOnClick"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="10dp"

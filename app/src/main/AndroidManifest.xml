@@ -25,6 +25,9 @@
         <activity
             android:name=".macronutrients.MacronutrientsActivity"
             android:label="Macronutrients" />
+        <activity
+            android:name=".macronutrients.GoalsActivity"
+            android:label="Goals" />
     </application>
 
 </manifest>
