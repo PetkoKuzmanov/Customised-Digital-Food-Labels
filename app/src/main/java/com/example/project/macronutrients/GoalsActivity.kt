@@ -41,37 +41,21 @@ class GoalsActivity : AppCompatActivity() {
         val fatsCalories = findViewById<TextView>(R.id.fatsCalories)
         val proteinsCalories = findViewById<TextView>(R.id.proteinsCalories)
 
-//        val reff = mAuth.currentUser?.let {
-//            database.child("users").child(it.uid).child("goals")
-//        }
-//        reff?.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                val carbohydrates = snapshot.child("carbohydrates").value.toString()
-//                val fats = snapshot.child("fats").value.toString()
-//                val proteins = snapshot.child("proteins").value.toString()
-//
-//                carbohydratesGoalAmount.setText(carbohydrates, TextView.BufferType.NORMAL)
-//                fatsGoalAmount.setText(fats, TextView.BufferType.NORMAL)
-//                proteinsGoalAmount.setText(proteins, TextView.BufferType.NORMAL)
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//
-//            }
-//
-//        })
+        val carbohydrates = intent.getStringExtra("carbohydrates").toString()
+        val fats = intent.getStringExtra("fats").toString()
+        val proteins = intent.getStringExtra("proteins").toString()
 
         //Set the texts of the edit and text views
-//        carbohydratesGoalAmount.setText("111", TextView.BufferType.EDITABLE)
-//        updateCaloriesForMacronutrient(carbohydratesCalories, carbohydratesGoalAmount.text)
+        carbohydratesGoalAmount.setText(carbohydrates, TextView.BufferType.EDITABLE)
+        updateCaloriesForMacronutrient(carbohydratesCalories, carbohydratesGoalAmount.text)
 
-//        fatsGoalAmount.setText("100", TextView.BufferType.EDITABLE)
-//        updateCaloriesForMacronutrient(fatsCalories, fatsGoalAmount.text)
-//
-//        proteinsGoalAmount.setText("200", TextView.BufferType.EDITABLE)
-//        updateCaloriesForMacronutrient(proteinsCalories, proteinsGoalAmount.text)
-//
-//        updateCalories(carbohydratesCalories.text, fatsCalories.text, proteinsCalories.text)
+        fatsGoalAmount.setText(fats, TextView.BufferType.EDITABLE)
+        updateCaloriesForMacronutrient(fatsCalories, fatsGoalAmount.text)
+
+        proteinsGoalAmount.setText(proteins, TextView.BufferType.EDITABLE)
+        updateCaloriesForMacronutrient(proteinsCalories, proteinsGoalAmount.text)
+
+        updateCalories(carbohydratesCalories.text, fatsCalories.text, proteinsCalories.text)
 
         //Event listeners which update the data when the user inputs amounts for macronutrients
         carbohydratesGoalAmount.doAfterTextChanged { editable ->
@@ -147,7 +131,7 @@ class GoalsActivity : AppCompatActivity() {
         val caloriesGoalAmountTextView = findViewById<TextView>(R.id.caloriesGoalAmountTextView)
 
         val carbohydratesInt = carbohydratesCalories.text.toString().toInt() / 4
-        val fatsInt = fatsCalories.text.toString().toInt() / 4
+        val fatsInt = fatsCalories.text.toString().toInt() / 9
         val proteinsInt = proteinsCalories.text.toString().toInt() / 4
         val caloriesInt = caloriesGoalAmountTextView.text.toString().toInt()
 
