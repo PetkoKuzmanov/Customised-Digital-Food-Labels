@@ -78,24 +78,38 @@ class MacronutrientsActivity : AppCompatActivity() {
 
         databaseReference?.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val calories = snapshot.child("calories").value.toString().toDouble()
-                carbohydrates = snapshot.child("carbohydrates").value.toString()
-                fats = snapshot.child("fats").value.toString()
-                proteins = snapshot.child("proteins").value.toString()
+                if (snapshot.hasChildren()) {
+                    var calories = snapshot.child("calories").value.toString().toDouble()
+                    carbohydrates = snapshot.child("carbohydrates").value.toString()
+                    fats = snapshot.child("fats").value.toString()
+                    proteins = snapshot.child("proteins").value.toString()
 
-                val carbohydratesCalories = carbohydrates.toInt() * 4
-                val fatsCalories = fats.toInt() * 9
-                val proteinsCalories = proteins.toInt() * 4
+                    val carbohydratesCalories = carbohydrates.toInt() * 4
+                    val fatsCalories = fats.toInt() * 9
+                    val proteinsCalories = proteins.toInt() * 4
 
-                val carbohydratesGoalPercent: Int =
-                    ((carbohydratesCalories / calories) * 100).roundToInt()
-                val fatsGoalPercent: Int = ((fatsCalories / calories) * 100).roundToInt()
-                val proteinsGoalPercent: Int = ((proteinsCalories / calories) * 100).roundToInt()
+                    if (calories == 0.0) {
+                        calories = 1.0
+                    }
+                    val carbohydratesGoalPercent: Int =
+                        ((carbohydratesCalories / calories) * 100).roundToInt()
+                    val fatsGoalPercent: Int = ((fatsCalories / calories) * 100).roundToInt()
+                    val proteinsGoalPercent: Int =
+                        ((proteinsCalories / calories) * 100).roundToInt()
 
-                carbohydratesGoal.text = "$carbohydratesGoalPercent%"
-                fatsGoal.text = "$fatsGoalPercent%"
-                proteinsGoal.text = "$proteinsGoalPercent%"
+                    carbohydratesGoal.text = "$carbohydratesGoalPercent%"
+                    fatsGoal.text = "$fatsGoalPercent%"
+                    proteinsGoal.text = "$proteinsGoalPercent%"
+                } else {
+                    carbohydratesGoal.text = "0%"
+                    fatsGoal.text = "0%"
+                    proteinsGoal.text = "0%"
 
+                    carbohydrates = "0"
+                    fats = "0"
+                    proteins = "0"
+
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -145,7 +159,7 @@ class MacronutrientsActivity : AppCompatActivity() {
 
         pieChart.animateXY(1000, 1000)
     }
-    
+
 //    class MyValueFormatter(pieChart: PieChart) : PercentFormatter() {
 //        private lateinit var pieChart: PieChart
 //
