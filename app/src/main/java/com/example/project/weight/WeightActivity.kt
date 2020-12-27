@@ -53,27 +53,10 @@ class WeightActivity : AppCompatActivity() {
         setContentView(R.layout.activity_weight)
         setSupportActionBar(findViewById(R.id.weightToolbar))
 
-        val weightModel = WeightModel()
-        weightModel.setDate("22-12-2020")
-        weightModel.setWeight(63.0)
-        val mutableWeight = MutableList(1) {
-            weightModel
-
-        }
-        val mAdapter = WeightAdapter(mutableWeight)
-
-        val weightView = findViewById<RecyclerView>(R.id.weightRecyclerView)
-        val linearLayoutManager = LinearLayoutManager(this)
-        weightView.layoutManager = linearLayoutManager
-        weightView.adapter = mAdapter
-
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
-            addWeightDialog(mAdapter)
-        }
+        getWeight()
 
         val lineChart = findViewById<LineChart>(R.id.weightLineChart)
         setLineChart(lineChart)
-        getWeight()
     }
 
     private fun addWeightDialog(mAdapter: WeightAdapter) {
@@ -171,33 +154,16 @@ class WeightActivity : AppCompatActivity() {
                     recyclerView.layoutManager = layoutManager
                     val mAdapter = WeightAdapter(weightModelList)
                     recyclerView.adapter = mAdapter
+
+                    findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
+                        addWeightDialog(mAdapter)
+                    }
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
             }
         })
-
-//        val datesList = arrayListOf(
-//            "12 November 2020",
-//            "11 November 2020",
-//            "10 November 2020",
-//            "9 November 2020",
-//            "8 November 2020",
-//            "7 November 2020",
-//            "6 November 2020",
-//            "5 November 2020",
-//            "4 November 2020",
-//            "3 November 2020",
-//            "2 November 2020",
-//            "1 November 2020",
-//            "31 October 2020",
-//            "30 October 2020",
-//            "29 October 2020"
-//        )
-//        val weightAmountList = arrayListOf(
-//            65.0, 65.1, 64.9, 64.9, 64.7, 64.8, 64.6, 64.3, 64.2, 64.2, 64.5, 63.9, 63.7, 63.5, 64.3
-//        )
     }
 
     private fun setLineChart(lineChart: LineChart) {
