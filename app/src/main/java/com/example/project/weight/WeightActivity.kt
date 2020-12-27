@@ -29,6 +29,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -40,12 +41,6 @@ class WeightActivity : AppCompatActivity() {
 
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var database: DatabaseReference
-    val datesList: ArrayList<String> = arrayListOf(
-
-    )
-    val weightsList: ArrayList<Double> = arrayListOf(
-
-    )
     val context = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,8 +50,55 @@ class WeightActivity : AppCompatActivity() {
 
         getWeight()
 
-        val lineChart = findViewById<LineChart>(R.id.weightLineChart)
-        setLineChart(lineChart)
+    }
+
+
+    private fun getWeight() {
+        val weightModelList = ArrayList<WeightModel>()
+        val mutableMap:MutableMap<String, Double> = mutableMapOf()
+
+        database = Firebase.database.reference
+        val databaseReference = mAuth.currentUser?.let {
+            database.child("users").child(it.uid).child("weight")
+        }
+
+        databaseReference?.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                weightModelList.clear()
+                mutableMap.clear()
+
+                for (dateSnapshot in snapshot.children) {
+                    val date = dateSnapshot.key.toString()
+                    val weight = dateSnapshot.value.toString().toDouble()
+                    mutableMap[date] = weight
+                }
+
+                if (mutableMap.isNotEmpty()) {
+                    for (index in mutableMap.entries.reversed()) {
+                        val weightModel = WeightModel()
+                        weightModel.setDate(index.key)
+                        weightModel.setWeight(index.value)
+                        weightModelList.add(weightModel)
+                    }
+                }
+                val recyclerView = findViewById<RecyclerView>(R.id.weightRecyclerView)
+                val layoutManager = LinearLayoutManager(context)
+                recyclerView.layoutManager = layoutManager
+
+                val mAdapter = WeightAdapter(weightModelList)
+                recyclerView.adapter = mAdapter
+                findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
+                    addWeightDialog(mAdapter)
+                }
+
+                val lineChart = findViewById<LineChart>(R.id.weightLineChart)
+                setLineChart(lineChart)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
     }
 
     private fun addWeightDialog(mAdapter: WeightAdapter) {
@@ -67,7 +109,7 @@ class WeightActivity : AppCompatActivity() {
 
         //Set the current date as the date
         val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val formatted = current.format(formatter)
         dateTextView.text = formatted
 
@@ -82,7 +124,7 @@ class WeightActivity : AppCompatActivity() {
             val datePickerDialog = DatePickerDialog(
                 this,
                 { _, year, month, dayOfMonth ->
-                    dateTextView.text = ("$dayOfMonth-" + (month + 1) + "-$year")
+                    dateTextView.text = ("$year-" + (month + 1) + "-$dayOfMonth")
                 },
                 year,
                 month,
@@ -120,52 +162,6 @@ class WeightActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private fun getWeight() {
-        val weightModelList = ArrayList<WeightModel>()
-
-        database = Firebase.database.reference
-        val databaseReference = mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("weight")
-        }
-
-        databaseReference?.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                datesList.clear()
-                weightsList.clear()
-                weightModelList.clear()
-
-                for (dateSnapshot in snapshot.children) {
-                    val date = dateSnapshot.key.toString()
-                    val weight = dateSnapshot.value.toString().toDouble()
-                    datesList.add(date)
-                    weightsList.add(weight)
-                }
-
-                if (datesList.isNotEmpty() && weightsList.isNotEmpty()) {
-                    for (i: Int in 0 until datesList.size) {
-                        val weightModel = WeightModel()
-                        weightModel.setDate(datesList[i])
-                        weightModel.setWeight(weightsList[i])
-                        weightModelList.add(weightModel)
-                    }
-
-                    val recyclerView = findViewById<RecyclerView>(R.id.weightRecyclerView)
-                    val layoutManager = LinearLayoutManager(context)
-                    recyclerView.layoutManager = layoutManager
-                    val mAdapter = WeightAdapter(weightModelList)
-                    recyclerView.adapter = mAdapter
-
-                    findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
-                        addWeightDialog(mAdapter)
-                    }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
-    }
-
     private fun setLineChart(lineChart: LineChart) {
         lineChart.setTouchEnabled(true)
         lineChart.setPinchZoom(true)
@@ -191,22 +187,12 @@ class WeightActivity : AppCompatActivity() {
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         lineChart.axisRight.isEnabled = false
 
+
         val dates = arrayListOf(
             "2020-10-29",
             "2020-10-30",
             "2020-10-31",
             "2020-11-01",
-            "2020-11-02",
-            "2020-11-03",
-            "2020-11-04",
-            "2020-11-05",
-            "2020-11-06",
-            "2020-11-07",
-            "2020-11-08",
-            "2020-11-09",
-            "2020-11-10",
-            "2020-11-11",
-            "2020-11-12"
         )
 
         xAxis.valueFormatter = ClaimsXAxisValueFormatter(dates)
@@ -228,17 +214,7 @@ class WeightActivity : AppCompatActivity() {
         values.add(Entry(2f, 63.5f))
         values.add(Entry(3f, 63.7f))
         values.add(Entry(4f, 63.9f))
-        values.add(Entry(5f, 64.5f))
-        values.add(Entry(6f, 64.2f))
-        values.add(Entry(7f, 64.2f))
-        values.add(Entry(8f, 64.3f))
-        values.add(Entry(9f, 64.6f))
-        values.add(Entry(10f, 64.8f))
-        values.add(Entry(11f, 64.7f))
-        values.add(Entry(12f, 64.9f))
-        values.add(Entry(13f, 64.9f))
-        values.add(Entry(14f, 65.1f))
-        values.add(Entry(15f, 65f))
+
 
         val lineDataSet = LineDataSet(values, "Weight")
         val lineData = LineData(lineDataSet)
