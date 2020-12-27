@@ -4,12 +4,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
+import com.example.project.weight.WeightAdapter
+import com.example.project.weight.WeightModel
+import com.github.mikephil.charting.charts.LineChart
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class DiaryDayFragment : Fragment() {
+    private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var database: DatabaseReference
+    val context = this
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,7 +38,29 @@ class DiaryDayFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        getData()
         processFood()
+    }
+
+    private fun getData() {
+        database = Firebase.database.reference
+        val databaseReference = mAuth.currentUser?.let {
+            database.child("users").child(it.uid)
+        }
+
+        databaseReference?.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val caloriesGoal = snapshot.child("goals").child("calories").value.toString()
+
+                val caloriesGoalTextView = requireView().findViewById<TextView>(R.id.goalCalories)
+                caloriesGoalTextView.text = caloriesGoal
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
     }
 
     private fun processFood() {

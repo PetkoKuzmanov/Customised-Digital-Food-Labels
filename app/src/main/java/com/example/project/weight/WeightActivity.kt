@@ -49,9 +49,7 @@ class WeightActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.weightToolbar))
 
         getWeight()
-
     }
-
 
     private fun getWeight() {
         val weightModelList = ArrayList<WeightModel>()
@@ -68,7 +66,7 @@ class WeightActivity : AppCompatActivity() {
                 mutableMap.clear()
 
                 for (index in snapshot.children) {
-                    if (index.key != "goals" && index.key != "weight") {
+                    if (index.key != "goals") {
                         val dateSnapshot = index.child("weight")
 
                         val date = index.key.toString()
@@ -85,6 +83,10 @@ class WeightActivity : AppCompatActivity() {
                         weightModelList.add(weightModel)
                     }
                 }
+
+                val lineChart = findViewById<LineChart>(R.id.weightLineChart)
+                setLineChart(lineChart)
+
                 val recyclerView = findViewById<RecyclerView>(R.id.weightRecyclerView)
                 val layoutManager = LinearLayoutManager(context)
                 recyclerView.layoutManager = layoutManager
@@ -94,9 +96,6 @@ class WeightActivity : AppCompatActivity() {
                 findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
                     addWeightDialog(mAdapter)
                 }
-
-                val lineChart = findViewById<LineChart>(R.id.weightLineChart)
-                setLineChart(lineChart)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -127,7 +126,11 @@ class WeightActivity : AppCompatActivity() {
             val datePickerDialog = DatePickerDialog(
                 this,
                 { _, year, month, dayOfMonth ->
-                    dateTextView.text = ("$year-" + (month + 1) + "-$dayOfMonth")
+                    if (dayOfMonth < 10) {
+                        dateTextView.text = ("$year-" + (month + 1) + "-0$dayOfMonth")
+                    } else {
+                        dateTextView.text = ("$year-" + (month + 1) + "-$dayOfMonth")
+                    }
                 },
                 year,
                 month,
