@@ -1,23 +1,30 @@
 package com.example.project.weight
 
-import android.graphics.Color
+import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.os.Bundle
+import android.text.TextUtils
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.github.mikephil.charting.utils.Utils
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
@@ -30,13 +37,83 @@ class WeightActivity : AppCompatActivity() {
         setContentView(R.layout.activity_weight)
         setSupportActionBar(findViewById(R.id.weightToolbar))
 
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
+        val mutableWeight = MutableList(1) {
+            WeightModel()
+        }
+        val mAdapter = WeightAdapter(mutableWeight)
 
+        val weightView = findViewById<RecyclerView>(R.id.weightRecyclerView)
+        val linearLayoutManager = LinearLayoutManager(this)
+        weightView.layoutManager = linearLayoutManager
+        weightView.adapter = mAdapter
+
+        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
+            addTaskDialog(mAdapter)
         }
 
         val lineChart = findViewById<LineChart>(R.id.weightLineChart)
         setLineChart(lineChart)
         processWeight()
+    }
+
+    private fun addTaskDialog(mAdapter: WeightAdapter) {
+        val inflater = LayoutInflater.from(this)
+        val addWeightView = inflater.inflate(R.layout.add_weight_layout, null)
+        val enterWeight = addWeightView.findViewById(R.id.enterWeight) as EditText
+        val dateTextView = addWeightView.findViewById<TextView>(R.id.datePickerTextView)
+
+        //Set the current date as the date
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val formatted = current.format(formatter)
+        dateTextView.text = formatted
+
+        //Add a datePicker
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+
+        val datePickerButton = addWeightView.findViewById<Button>(R.id.datePickerButton)
+        datePickerButton.setOnClickListener {
+            val datePickerDialog = DatePickerDialog(
+                this,
+                { _, year, month, dayOfMonth ->
+                    dateTextView.text = ("$dayOfMonth/" + (month + 1) + "/$year")
+                },
+                year,
+                month,
+                day
+            )
+            datePickerDialog.show()
+        }
+
+        //Create the alertDialog
+        val builder = AlertDialog.Builder(this)
+            .setView(addWeightView)
+        builder.create()
+        builder.setPositiveButton("ADD") { _, _ ->
+            val input = enterWeight.text.toString()
+            val fab = findViewById<FloatingActionButton>(R.id.fab)
+            var weight = 0.0
+
+//            val snackbar = Snackbar.make(
+//                findViewById(R.layout.activity_weight), "Snackbar text",
+//                Snackbar.LENGTH_LONG
+//            )
+//            snackbar.anchorView = fab
+
+            //Check if the topic can be added
+            if (!TextUtils.isEmpty(input)) {
+                weight = input.toDouble()
+                mAdapter.addItem(weight)
+            }
+        }
+        builder.setNegativeButton("CANCEL") { _, _ ->
+            //Cancels the adding of the weight even if this is left empty
+        }
+        builder.show()
     }
 
     private fun processWeight() {

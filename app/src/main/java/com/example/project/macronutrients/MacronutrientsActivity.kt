@@ -3,7 +3,6 @@ package com.example.project.macronutrients
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -84,18 +83,18 @@ class MacronutrientsActivity : AppCompatActivity() {
                     fats = snapshot.child("fats").value.toString()
                     proteins = snapshot.child("proteins").value.toString()
 
-                    val carbohydratesCalories = carbohydrates.toInt() * 4
-                    val fatsCalories = fats.toInt() * 9
-                    val proteinsCalories = proteins.toInt() * 4
+                    val carbohydratesGoalCalories = carbohydrates.toInt() * 4
+                    val fatsGoalCalories = fats.toInt() * 9
+                    val proteinsGoalCalories = proteins.toInt() * 4
 
                     if (calories == 0.0) {
                         calories = 1.0
                     }
                     val carbohydratesGoalPercent: Int =
-                        ((carbohydratesCalories / calories) * 100).roundToInt()
-                    val fatsGoalPercent: Int = ((fatsCalories / calories) * 100).roundToInt()
+                        ((carbohydratesGoalCalories / calories) * 100).roundToInt()
+                    val fatsGoalPercent: Int = ((fatsGoalCalories / calories) * 100).roundToInt()
                     val proteinsGoalPercent: Int =
-                        ((proteinsCalories / calories) * 100).roundToInt()
+                        ((proteinsGoalCalories / calories) * 100).roundToInt()
 
                     carbohydratesGoal.text = "$carbohydratesGoalPercent%"
                     fatsGoal.text = "$fatsGoalPercent%"
@@ -108,7 +107,6 @@ class MacronutrientsActivity : AppCompatActivity() {
                     carbohydrates = "0"
                     fats = "0"
                     proteins = "0"
-
                 }
             }
 

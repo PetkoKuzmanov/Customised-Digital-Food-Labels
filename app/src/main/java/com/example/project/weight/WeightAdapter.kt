@@ -46,4 +46,8 @@ class WeightAdapter(private val imageModelArrayList: MutableList<WeightModel>) :
     override fun getItemCount(): Int {
         return imageModelArrayList.size
     }
+
+    fun addItem(weight: Double) {
+
+    }
 }
