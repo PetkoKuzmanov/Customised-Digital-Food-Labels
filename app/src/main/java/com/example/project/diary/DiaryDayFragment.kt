@@ -1,5 +1,6 @@
 package com.example.project.diary
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
+import com.example.project.addFood.AddFoodActivity
+import com.example.project.macronutrients.MacronutrientsActivity
 import com.example.project.weight.WeightAdapter
 import com.example.project.weight.WeightModel
 import com.github.mikephil.charting.charts.LineChart
@@ -20,6 +23,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import org.w3c.dom.Text
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -41,6 +45,30 @@ class DiaryDayFragment : Fragment() {
 
         getData()
         processFood()
+
+        val addFoodToBreakfastTextView = requireView().findViewById<TextView>(R.id.addFoodToBreakfastTextView)
+        val addFoodToLunchTextView = requireView().findViewById<TextView>(R.id.addFoodToLunchTextView)
+        val addFoodToDinnerTextView = requireView().findViewById<TextView>(R.id.addFoodToDinnerTextView)
+        val addFoodToSnacksTextView = requireView().findViewById<TextView>(R.id.addFoodToSnacksTextView)
+
+        addFoodToBreakfastTextView.setOnClickListener {
+            val intent = Intent(requireView().context, AddFoodActivity::class.java)
+            startActivity(intent)
+        }
+        addFoodToLunchTextView.setOnClickListener {
+            val intent = Intent(requireView().context, AddFoodActivity::class.java)
+            startActivity(intent)
+        }
+        addFoodToDinnerTextView.setOnClickListener {
+            val intent = Intent(requireView().context, AddFoodActivity::class.java)
+            startActivity(intent)
+        }
+        addFoodToSnacksTextView.setOnClickListener {
+            val intent = Intent(requireView().context, AddFoodActivity::class.java)
+            startActivity(intent)
+        }
+
+
     }
 
     private fun getData() {
@@ -169,5 +197,9 @@ class DiaryDayFragment : Fragment() {
         dinnerRecyclerView.layoutManager = dinnerLayoutManager
         val dinnerAdapter = DiaryDayAdapter(dinnerFoodList)
         dinnerRecyclerView.adapter = dinnerAdapter
+    }
+
+    fun addFood() {
+
     }
 }
