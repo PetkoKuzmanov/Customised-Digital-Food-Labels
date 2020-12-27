@@ -29,7 +29,6 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -112,8 +111,8 @@ class WeightActivity : AppCompatActivity() {
         //Set the current date as the date
         val current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val formatted = current.format(formatter)
-        dateTextView.text = formatted
+        val formattedDate = current.format(formatter)
+        dateTextView.text = formattedDate
 
         //Add a datePicker
         val calendar = Calendar.getInstance()

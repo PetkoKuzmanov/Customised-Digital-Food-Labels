@@ -53,18 +53,22 @@ class DiaryDayFragment : Fragment() {
 
         addFoodToBreakfastTextView.setOnClickListener {
             val intent = Intent(requireView().context, AddFoodActivity::class.java)
+            intent.putExtra("section", "breakfast")
             startActivity(intent)
         }
         addFoodToLunchTextView.setOnClickListener {
             val intent = Intent(requireView().context, AddFoodActivity::class.java)
+            intent.putExtra("section", "lunch")
             startActivity(intent)
         }
         addFoodToDinnerTextView.setOnClickListener {
             val intent = Intent(requireView().context, AddFoodActivity::class.java)
+            intent.putExtra("section", "dinner")
             startActivity(intent)
         }
         addFoodToSnacksTextView.setOnClickListener {
             val intent = Intent(requireView().context, AddFoodActivity::class.java)
+            intent.putExtra("section", "snacks")
             startActivity(intent)
         }
 
