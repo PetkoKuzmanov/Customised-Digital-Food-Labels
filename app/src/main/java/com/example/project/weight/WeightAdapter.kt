@@ -7,11 +7,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 class WeightAdapter(private val imageModelArrayList: MutableList<WeightModel>) :
     RecyclerView.Adapter<WeightAdapter.ViewHolder>() {
 
     var context: Context? = null
+    private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var database: DatabaseReference
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -34,20 +40,19 @@ class WeightAdapter(private val imageModelArrayList: MutableList<WeightModel>) :
 
         holder.date.text = info.getDate()
         holder.weight.text = info.getWeight().toString() + "kg"
-
-//        val url = info.getUrls()
-//
-//        holder.itemView.setOnClickListener {
-//            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-//            context?.let { it1 -> ContextCompat.startActivity(it1, intent, null) }
-//        }
     }
 
     override fun getItemCount(): Int {
         return imageModelArrayList.size
     }
 
-    fun addItem(weight: Double) {
+    fun addItem(weight: Double, date: String) {
+        database = Firebase.database.reference
 
+        mAuth.currentUser?.let {
+            database.child("users").child(it.uid).child("weight").child(date)
+                .setValue(weight)
+        }
     }
+
 }
