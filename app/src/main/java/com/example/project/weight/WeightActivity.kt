@@ -55,23 +55,26 @@ class WeightActivity : AppCompatActivity() {
 
     private fun getWeight() {
         val weightModelList = ArrayList<WeightModel>()
-        val mutableMap:MutableMap<String, Double> = mutableMapOf()
+        val mutableMap: MutableMap<String, Double> = mutableMapOf()
 
         database = Firebase.database.reference
         val databaseReference = mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("weight")
+            database.child("users").child(it.uid)
         }
 
         databaseReference?.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-
                 weightModelList.clear()
                 mutableMap.clear()
 
-                for (dateSnapshot in snapshot.children) {
-                    val date = dateSnapshot.key.toString()
-                    val weight = dateSnapshot.value.toString().toDouble()
-                    mutableMap[date] = weight
+                for (index in snapshot.children) {
+                    if (index.key != "goals" && index.key != "weight") {
+                        val dateSnapshot = index.child("weight")
+
+                        val date = index.key.toString()
+                        val weight = dateSnapshot.value.toString().toDouble()
+                        mutableMap[date] = weight
+                    }
                 }
 
                 if (mutableMap.isNotEmpty()) {
