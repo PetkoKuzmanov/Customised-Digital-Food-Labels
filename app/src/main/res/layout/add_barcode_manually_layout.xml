@@ -4,11 +4,11 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/enterCalories"
+        android:id="@+id/enterBarcode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter calories"
-        android:inputType="numberDecimal"
+        android:hint="Enter barcode"
+        android:inputType="number"
         android:maxLines="1" />
 
 </LinearLayout>

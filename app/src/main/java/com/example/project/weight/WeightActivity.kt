@@ -56,7 +56,7 @@ class WeightActivity : AppCompatActivity() {
 
         database = Firebase.database.reference
         val databaseReference = mAuth.currentUser?.let {
-            database.child("users").child(it.uid)
+            database.child("users").child(it.uid).child("dates")
         }
 
         databaseReference?.addValueEventListener(object : ValueEventListener {
@@ -65,13 +65,12 @@ class WeightActivity : AppCompatActivity() {
                 mutableMap.clear()
 
                 for (index in snapshot.children) {
-                    if (index.key != "goals") {
-                        val dateSnapshot = index.child("weight")
+                    val dateSnapshot = index.child("weight")
 
-                        val date = index.key.toString()
-                        val weight = dateSnapshot.value.toString().toDouble()
-                        mutableMap[date] = weight
-                    }
+                    val date = index.key.toString()
+                    val weight = dateSnapshot.value.toString().toDouble()
+                    mutableMap[date] = weight
+
                 }
 
                 if (mutableMap.isNotEmpty()) {

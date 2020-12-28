@@ -55,7 +55,7 @@ class WeightAdapter(private val imageModelArrayList: MutableList<WeightModel>) :
 //        }
 
         mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child(date).child("weight")
+            database.child("users").child(it.uid).child("dates").child(date).child("weight")
                 .setValue(weight)
         }
     }

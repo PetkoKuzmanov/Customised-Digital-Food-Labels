@@ -15,7 +15,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.mlkit.vision.barcode.Barcode
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import java.time.LocalDateTime
@@ -25,15 +24,13 @@ class AddFoodActivity : AppCompatActivity() {
 
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var database: DatabaseReference
-    private val textRecoReqCode = 100
-    private val barcodeRecoReqCode = 200
-
+    private val textRequestCode = 100
+    private val barcodeRequestCode = 200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_food)
-        setSupportActionBar(findViewById(R.id.addFoodToolBar))
-
+        setSupportActionBar(findViewById(R.id.addFoodToolbar))
     }
 
     fun quickAdd(view: View) {
@@ -68,9 +65,11 @@ class AddFoodActivity : AppCompatActivity() {
 //                    database.child("users").child(it.uid).child(formattedDate).child("diary")
 //                        .child(section).child(formattedTime).child("id").setValue(id)
 //                }
+                val calories = input.toInt()
                 mAuth.currentUser?.let {
-                    database.child("users").child(it.uid).child(formattedDate).child("diary")
-                        .child(section).child("calories-$formattedTime").setValue(input)
+                    database.child("users").child(it.uid).child("dates").child(formattedDate)
+                        .child("diary")
+                        .child(section).child("calories-$formattedTime").setValue(calories)
                 }
                 this.onBackPressed()
             }
@@ -83,13 +82,13 @@ class AddFoodActivity : AppCompatActivity() {
 
     fun scanItem(view: View) {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, barcodeRecoReqCode)
+        startActivityForResult(intent, barcodeRequestCode)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == textRecoReqCode) {
+        if (requestCode == textRequestCode) {
             when (resultCode) {
                 RESULT_OK -> {
                     val photo = data?.extras?.get("data") as Bitmap
@@ -104,7 +103,7 @@ class AddFoodActivity : AppCompatActivity() {
             }
         }
 
-        if (requestCode == barcodeRecoReqCode) {
+        if (requestCode == barcodeRequestCode) {
             if (resultCode == RESULT_OK) {
                 val photo = data?.extras?.get("data") as Bitmap
                 barcodeRecognition(photo)
@@ -121,7 +120,7 @@ class AddFoodActivity : AppCompatActivity() {
                 // Task completed successfully
                 if (barcodes.size == 0) {
                     println("WWWWWWWWWWWWWW")
-
+                    addBarcodeManuallyAlert()
                 } else {
                     for (barcode in barcodes) {
                         val bounds = barcode.boundingBox
@@ -142,5 +141,33 @@ class AddFoodActivity : AppCompatActivity() {
 
     private fun textRecognition(photo: Bitmap) {
 
+    }
+
+    private fun addBarcodeManuallyAlert() {
+        val inflater = LayoutInflater.from(this)
+        val addBarcodeView = inflater.inflate(R.layout.add_barcode_manually_layout, null)
+        val enterBarcode = addBarcodeView.findViewById(R.id.enterBarcode) as EditText
+
+        //Create the alertDialog
+        val builder = AlertDialog.Builder(this)
+            .setView(addBarcodeView)
+            .setTitle("Could not find barcode")
+        builder.create()
+        builder.setPositiveButton("ADD") { _, _ ->
+            val input = enterBarcode.text.toString()
+
+            //Check if the topic can be added
+            if (!TextUtils.isEmpty(input)) {
+                val intent = Intent(applicationContext, AddFoodInfoActivity::class.java)
+                intent.putExtra("barcode", input)
+                startActivity(intent)
+            } else {
+                //input is empty
+            }
+        }
+        builder.setNegativeButton("CANCEL") { _, _ ->
+            //Cancels the adding of the weight even if this is left empty
+        }
+        builder.show()
     }
 }
