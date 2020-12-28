@@ -1,8 +1,11 @@
 package com.example.project.addFood
 
 import android.app.AlertDialog
+import android.content.Intent
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +15,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.mlkit.vision.barcode.Barcode
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.common.InputImage
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -19,6 +25,8 @@ class AddFoodActivity : AppCompatActivity() {
 
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var database: DatabaseReference
+    private val textRecoReqCode = 100
+    private val barcodeRecoReqCode = 200
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,9 +43,6 @@ class AddFoodActivity : AppCompatActivity() {
         val section = intent.getStringExtra("section").toString()
 
         database = Firebase.database.reference
-        val databaseReference = mAuth.currentUser?.let {
-            database.child("users").child(it.uid)
-        }
 
         //Set the current date as the date
         val current = LocalDateTime.now()
@@ -67,7 +72,7 @@ class AddFoodActivity : AppCompatActivity() {
                     database.child("users").child(it.uid).child(formattedDate).child("diary")
                         .child(section).child("calories-$formattedTime").setValue(input)
                 }
-
+                this.onBackPressed()
             }
         }
         builder.setNegativeButton("CANCEL") { _, _ ->
@@ -77,6 +82,65 @@ class AddFoodActivity : AppCompatActivity() {
     }
 
     fun scanItem(view: View) {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(intent, barcodeRecoReqCode)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == textRecoReqCode) {
+            when (resultCode) {
+                RESULT_OK -> {
+                    val photo = data?.extras?.get("data") as Bitmap
+                    textRecognition(photo)
+                }
+                RESULT_CANCELED -> {
+                    println("Operation cancelled by user")
+                }
+                else -> {
+                    println("Failed to capture image")
+                }
+            }
+        }
+
+        if (requestCode == barcodeRecoReqCode) {
+            if (resultCode == RESULT_OK) {
+                val photo = data?.extras?.get("data") as Bitmap
+                barcodeRecognition(photo)
+            }
+        }
+    }
+
+    private fun barcodeRecognition(photo: Bitmap) {
+        val image = InputImage.fromBitmap(photo, 0)
+        val scanner = BarcodeScanning.getClient()
+
+        val result = scanner.process(image)
+            .addOnSuccessListener { barcodes ->
+                // Task completed successfully
+                if (barcodes.size == 0) {
+                    println("WWWWWWWWWWWWWW")
+
+                } else {
+                    for (barcode in barcodes) {
+                        val bounds = barcode.boundingBox
+                        val corners = barcode.cornerPoints
+
+                        val rawValue = barcode.rawValue
+                        println("AAAAAAAAAAAAAAAAAAAAAAAAAA" + rawValue)
+
+                    }
+                }
+            }
+            .addOnFailureListener {
+                // Task failed with an exception
+                // ...
+                println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
+            }
+    }
+
+    private fun textRecognition(photo: Bitmap) {
 
     }
 }
