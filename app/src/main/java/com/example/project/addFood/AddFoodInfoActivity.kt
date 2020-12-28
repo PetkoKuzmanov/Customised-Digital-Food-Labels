@@ -2,6 +2,8 @@ package com.example.project.addFood
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.widget.doAfterTextChanged
@@ -35,6 +37,11 @@ class AddFoodInfoActivity : AppCompatActivity() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate((R.menu.add_food_info_toolbar_layout), menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
     /*
     Update the textView for the calories
      */
@@ -61,5 +68,9 @@ class AddFoodInfoActivity : AppCompatActivity() {
 
         val caloriesInt = carbohydratesInt + fatsInt + proteinsInt
         caloriesTextView.text = caloriesInt.toString()
+    }
+
+    fun addFoodInfo(item: MenuItem) {
+
     }
 }

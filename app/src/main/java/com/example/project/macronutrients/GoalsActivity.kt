@@ -2,6 +2,8 @@ package com.example.project.macronutrients
 
 import android.os.Bundle
 import android.text.Editable
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -78,6 +80,11 @@ class GoalsActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate((R.menu.goals_toolbar_layout), menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
     /*
     Update the textView for the calories
      */
@@ -114,9 +121,41 @@ class GoalsActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
+//    override fun onStop() {
+//        super.onStop()
+//
+//        val carbohydratesCalories = findViewById<TextView>(R.id.carbohydratesCalories)
+//        val fatsCalories = findViewById<TextView>(R.id.fatsCalories)
+//        val proteinsCalories = findViewById<TextView>(R.id.proteinsCalories)
+//        val caloriesGoalAmountTextView = findViewById<TextView>(R.id.caloriesAmountTextView)
+//
+//        val carbohydratesInt = carbohydratesCalories.text.toString().toInt() / 4
+//        val fatsInt = fatsCalories.text.toString().toInt() / 9
+//        val proteinsInt = proteinsCalories.text.toString().toInt() / 4
+//        val caloriesInt = caloriesGoalAmountTextView.text.toString().toInt()
+//
+//        mAuth.currentUser?.let {
+//            database.child("users").child(it.uid).child("goals").child("carbohydrates")
+//                .setValue(carbohydratesInt)
+//        }
+//
+//        mAuth.currentUser?.let {
+//            database.child("users").child(it.uid).child("goals").child("fats")
+//                .setValue(fatsInt)
+//        }
+//
+//        mAuth.currentUser?.let {
+//            database.child("users").child(it.uid).child("goals").child("proteins")
+//                .setValue(proteinsInt)
+//        }
+//
+//        mAuth.currentUser?.let {
+//            database.child("users").child(it.uid).child("goals").child("calories")
+//                .setValue(caloriesInt)
+//        }
+//    }
 
+    fun addGoals(item: MenuItem) {
         val carbohydratesCalories = findViewById<TextView>(R.id.carbohydratesCalories)
         val fatsCalories = findViewById<TextView>(R.id.fatsCalories)
         val proteinsCalories = findViewById<TextView>(R.id.proteinsCalories)
@@ -146,5 +185,7 @@ class GoalsActivity : AppCompatActivity() {
             database.child("users").child(it.uid).child("goals").child("calories")
                 .setValue(caloriesInt)
         }
+        this.onBackPressed()
+
     }
 }
