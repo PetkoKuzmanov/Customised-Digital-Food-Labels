@@ -36,7 +36,7 @@ class DiaryDayAdapter (private val imageModelArrayList: MutableList<FoodModel>) 
 
         holder.name.text = info.getName()
         holder.description.text = info.getDescription()
-        holder.amount.text = info.getAmount() + info.getAmountMeasurement()
+        holder.amount.text = info.getAmount() + info.getMeasurement()
         holder.caloriesAmount.text = info.getCaloriesAmount()
 
 //        val url = info.getUrls()

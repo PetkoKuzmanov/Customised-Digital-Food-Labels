@@ -11,11 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
 import com.example.project.addFood.AddFoodActivity
-import com.example.project.macronutrients.MacronutrientsActivity
-import com.example.project.weight.WeightAdapter
-import com.example.project.weight.WeightModel
-import com.github.mikephil.charting.charts.LineChart
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,9 +18,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import org.w3c.dom.Text
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class DiaryDayFragment : Fragment() {
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -119,7 +111,7 @@ class DiaryDayFragment : Fragment() {
             foodModel.setDate(breakfastNamesList[i])
             foodModel.setWeight(breakfastDescriptionsList[i])
             foodModel.setAmount(breakfastAmountsList[i])
-            foodModel.setAmountMeasurement(breakfastAmountMeasurementsList[i])
+            foodModel.setMeasurement(breakfastAmountMeasurementsList[i])
             foodModel.setCaloriesAmount(breakfastCaloriesAmountsList[i])
             breakfastFoodList.add(foodModel)
         }
@@ -155,7 +147,7 @@ class DiaryDayFragment : Fragment() {
             foodModel.setDate(lunchNamesList[i])
             foodModel.setWeight(lunchDescriptionsList[i])
             foodModel.setAmount(lunchAmountsList[i])
-            foodModel.setAmountMeasurement(lunchAmountMeasurementsList[i])
+            foodModel.setMeasurement(lunchAmountMeasurementsList[i])
             foodModel.setCaloriesAmount(lunchCaloriesAmountsList[i])
             lunchFoodList.add(foodModel)
         }
@@ -191,7 +183,7 @@ class DiaryDayFragment : Fragment() {
             foodModel.setDate(dinnerNamesList[i])
             foodModel.setWeight(dinnerDescriptionsList[i])
             foodModel.setAmount(dinnerAmountsList[i])
-            foodModel.setAmountMeasurement(dinnerAmountMeasurementsList[i])
+            foodModel.setMeasurement(dinnerAmountMeasurementsList[i])
             foodModel.setCaloriesAmount(dinnerCaloriesAmountsList[i])
             dinnerFoodList.add(foodModel)
         }

@@ -6,7 +6,7 @@ class FoodModel {
     private lateinit var name: String
     private lateinit var description: String
     private lateinit var amount: String
-    private lateinit var amountMeasurement: String
+    private lateinit var measurement: String
     private lateinit var caloriesAmount: String
 
     fun getId(): String {
@@ -41,12 +41,12 @@ class FoodModel {
         this.amount = amount
     }
 
-    fun getAmountMeasurement(): String {
-        return amountMeasurement
+    fun getMeasurement(): String {
+        return measurement
     }
 
-    fun setAmountMeasurement(amountMeasurement: String) {
-        this.amountMeasurement = amountMeasurement
+    fun setMeasurement(amountMeasurement: String) {
+        this.measurement = amountMeasurement
     }
 
     fun getCaloriesAmount(): String {

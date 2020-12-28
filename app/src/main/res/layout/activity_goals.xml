@@ -28,7 +28,7 @@
         android:paddingBottom="5dp">
 
         <TextView
-            android:id="@+id/caloriesGoalTextView"
+            android:id="@+id/caloriesTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Calories"
@@ -37,7 +37,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/caloriesGoalAmountTextView"
+            android:id="@+id/caloriesAmountTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
@@ -47,17 +47,17 @@
 
 
         <TextView
-            android:id="@+id/carbohydratesGoalTextView"
+            android:id="@+id/carbohydratesTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:text="Carbohydrates"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/caloriesGoalTextView" />
+            app:layout_constraintTop_toBottomOf="@id/caloriesTextView" />
 
         <EditText
-            android:id="@+id/carbohydratesGoalAmount"
+            android:id="@+id/carbohydratesEditText"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="5dp"
@@ -66,8 +66,8 @@
             android:text=""
             android:textAlignment="center"
             android:textSize="15sp"
-            app:layout_constraintStart_toEndOf="@+id/carbohydratesGoalTextView"
-            app:layout_constraintTop_toTopOf="@+id/carbohydratesGoalTextView" />
+            app:layout_constraintStart_toEndOf="@+id/carbohydratesTextView"
+            app:layout_constraintTop_toTopOf="@+id/carbohydratesTextView" />
 
         <TextView
             android:id="@+id/carbohydratesCalories"
@@ -77,20 +77,20 @@
             android:text="0"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/caloriesGoalAmountTextView" />
+            app:layout_constraintTop_toBottomOf="@id/caloriesAmountTextView" />
 
         <TextView
-            android:id="@+id/fatsGoalTextView"
+            android:id="@+id/fatsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:text="Fats"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/carbohydratesGoalTextView" />
+            app:layout_constraintTop_toBottomOf="@id/carbohydratesTextView" />
 
         <EditText
-            android:id="@+id/fatsGoalAmount"
+            android:id="@+id/fatsEditText"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="5dp"
@@ -99,8 +99,8 @@
             android:text=""
             android:textAlignment="center"
             android:textSize="15sp"
-            app:layout_constraintStart_toEndOf="@+id/fatsGoalTextView"
-            app:layout_constraintTop_toTopOf="@+id/fatsGoalTextView" />
+            app:layout_constraintStart_toEndOf="@+id/fatsTextView"
+            app:layout_constraintTop_toTopOf="@+id/fatsTextView" />
 
         <TextView
             android:id="@+id/fatsCalories"
@@ -113,17 +113,17 @@
             app:layout_constraintTop_toBottomOf="@id/carbohydratesCalories" />
 
         <TextView
-            android:id="@+id/proteinsGoalTextView"
+            android:id="@+id/proteinsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:text="Proteins"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fatsGoalTextView" />
+            app:layout_constraintTop_toBottomOf="@id/fatsTextView" />
 
         <EditText
-            android:id="@+id/proteinsGoalAmount"
+            android:id="@+id/proteinsEditText"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="5dp"
@@ -132,8 +132,8 @@
             android:text=""
             android:textAlignment="center"
             android:textSize="15sp"
-            app:layout_constraintStart_toEndOf="@+id/proteinsGoalTextView"
-            app:layout_constraintTop_toTopOf="@+id/proteinsGoalTextView" />
+            app:layout_constraintStart_toEndOf="@+id/proteinsTextView"
+            app:layout_constraintTop_toTopOf="@+id/proteinsTextView" />
 
         <TextView
             android:id="@+id/proteinsCalories"
