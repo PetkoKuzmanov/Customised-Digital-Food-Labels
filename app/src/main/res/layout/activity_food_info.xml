@@ -57,10 +57,11 @@
         <EditText
             android:id="@+id/numberOfServingsEditText"
             android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:inputType="numberDecimal"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/numberOfServingsTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/foodDescriptionTextView" />
 
         <TextView
             android:id="@+id/carbohydratesColor"
@@ -86,7 +87,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="250g"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/carbohydratesInfoLabel"
             app:layout_constraintTop_toTopOf="@+id/carbohydratesInfoLabel" />
@@ -115,7 +115,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="50g"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/fatsInfoLabel"
             app:layout_constraintTop_toTopOf="@+id/fatsInfoLabel" />
@@ -144,7 +143,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="150g"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/proteinsInfoLabel"
             app:layout_constraintTop_toTopOf="@+id/proteinsInfoLabel" />

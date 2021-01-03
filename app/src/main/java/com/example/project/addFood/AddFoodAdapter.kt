@@ -47,15 +47,31 @@ class AddFoodAdapter(private val foodModelsList: MutableList<FoodModel>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val info = filteredFoodModelsList[position]
 
-        holder.name.text = info.getName()
-        holder.description.text = info.getDescription()
-        holder.amount.text = info.getAmount() + info.getMeasurement()
-        holder.caloriesAmount.text = info.getCaloriesAmount()
+        val id = info.getId()
+        val name = info.getName()
+        val description = info.getDescription()
+        val amount = info.getAmount()
+        val measurement = info.getMeasurement()
+        val caloriesAmount = info.getCaloriesAmount()
+        val carbohydratesAmount = info.getCarbohydratesAmount()
+        val fatsAmount = info.getFatsAmount()
+        val proteinsAmount = info.getProteinsAmount()
 
-//        val id = info.getId()
+        holder.name.text = name
+        holder.description.text = description
+        holder.amount.text = amount + measurement
+        holder.caloriesAmount.text = caloriesAmount
+
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, FoodInfoActivity::class.java)
-//        intent.putExtra("id", id)
+            intent.putExtra("id", id)
+            intent.putExtra("name", name)
+            intent.putExtra("description", description)
+            intent.putExtra("amount", amount)
+            intent.putExtra("caloriesAmount", caloriesAmount)
+            intent.putExtra("carbohydratesAmount", carbohydratesAmount)
+            intent.putExtra("fatsAmount", fatsAmount)
+            intent.putExtra("proteinsAmount", proteinsAmount)
             ContextCompat.startActivity(holder.itemView.context, intent, null)
         }
     }

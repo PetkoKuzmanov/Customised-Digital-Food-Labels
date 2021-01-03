@@ -14,9 +14,7 @@ import android.widget.EditText
 import android.widget.Filterable
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
-import com.example.project.diary.DiaryDayAdapter
 import com.example.project.diary.FoodModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -69,33 +67,16 @@ class AddFoodActivity : AppCompatActivity() {
     private fun populateList() {
         val historyFoodModelList = ArrayList<FoodModel>()
 
-        val historyNamesList = arrayListOf<String>(
-        )
-        val historyDescriptionsList = arrayListOf<String>(
-        )
-        val historyAmountsList = arrayListOf<String>(
-        )
-        val historyAmountMeasurementsList = arrayListOf<String>(
-        )
-        val historyCaloriesAmountsList = arrayListOf<String>(
-        )
-
         database = Firebase.database.reference
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 historyFoodModelList.clear()
-                historyNamesList.clear()
-                historyDescriptionsList.clear()
-                historyAmountsList.clear()
-                historyAmountMeasurementsList.clear()
-                historyCaloriesAmountsList.clear()
 
                 val foodHistoryReference = mAuth.currentUser?.let {
                     snapshot.child("users").child(it.uid).child("history")
                 }
 
                 for (index in foodHistoryReference?.children!!) {
-
                     val foodId = index.child("id").value.toString()
                     val foodAmount = index.child("amount").value.toString()
 
@@ -105,24 +86,23 @@ class AddFoodActivity : AppCompatActivity() {
                     val foodDescription = foodReference.child("description").value.toString()
                     val foodAmountMeasurement = foodReference.child("measurement").value.toString()
                     val foodCalories = foodReference.child("calories").value.toString().toInt()
+                    val foodCarbohydrates = foodReference.child("carbohydrates").value.toString()
+                    val foodFats = foodReference.child("fats").value.toString()
+                    val foodProteins = foodReference.child("proteins").value.toString()
 
                     val foodInstanceCalories =
                         ((foodCalories * foodAmount.toDouble()) / 100).roundToInt().toString()
 
-                    historyNamesList.add(foodName)
-                    historyDescriptionsList.add(foodDescription)
-                    historyAmountsList.add(foodAmount)
-                    historyAmountMeasurementsList.add(foodAmountMeasurement)
-                    historyCaloriesAmountsList.add(foodInstanceCalories)
-                }
-
-                for (i: Int in 0 until historyNamesList.size) {
                     val foodModel = FoodModel()
-                    foodModel.setName(historyNamesList[i])
-                    foodModel.setWeight(historyDescriptionsList[i])
-                    foodModel.setAmount(historyAmountsList[i])
-                    foodModel.setMeasurement(historyAmountMeasurementsList[i])
-                    foodModel.setCaloriesAmount(historyCaloriesAmountsList[i])
+                    foodModel.setName(foodName)
+                    foodModel.setId(foodId)
+                    foodModel.setDescription(foodDescription)
+                    foodModel.setAmount(foodAmount)
+                    foodModel.setMeasurement(foodAmountMeasurement)
+                    foodModel.setCaloriesAmount(foodInstanceCalories)
+                    foodModel.setCarbohydratesAmount(foodCarbohydrates)
+                    foodModel.setFatsAmount(foodFats)
+                    foodModel.setProteinsAmount(foodProteins)
                     historyFoodModelList.add(foodModel)
                 }
 
