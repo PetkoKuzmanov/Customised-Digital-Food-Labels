@@ -103,6 +103,7 @@ class AddFoodActivity : AppCompatActivity() {
                     foodModel.setCarbohydratesAmount(foodCarbohydrates)
                     foodModel.setFatsAmount(foodFats)
                     foodModel.setProteinsAmount(foodProteins)
+                    foodModel.setMeal(intent?.getStringExtra("meal")!!)
                     historyFoodModelList.add(foodModel)
                 }
 
@@ -122,7 +123,7 @@ class AddFoodActivity : AppCompatActivity() {
         val inflater = LayoutInflater.from(this)
         val quickAddView = inflater.inflate(R.layout.quick_add_layout, null)
         val enterCalories = quickAddView.findViewById(R.id.enterCalories) as EditText
-        val section = intent.getStringExtra("section").toString()
+        val meal = intent.getStringExtra("meal").toString()
 
         database = Firebase.database.reference
 
@@ -154,7 +155,7 @@ class AddFoodActivity : AppCompatActivity() {
                 mAuth.currentUser?.let {
                     database.child("users").child(it.uid).child("dates").child(formattedDate)
                         .child("diary")
-                        .child(section).child("calories-$formattedTime").setValue(calories)
+                        .child(meal).child("calories-$formattedTime").setValue(calories)
                 }
                 this.onBackPressed()
             }

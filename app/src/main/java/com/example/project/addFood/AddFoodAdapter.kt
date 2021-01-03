@@ -56,6 +56,7 @@ class AddFoodAdapter(private val foodModelsList: MutableList<FoodModel>) :
         val carbohydratesAmount = info.getCarbohydratesAmount()
         val fatsAmount = info.getFatsAmount()
         val proteinsAmount = info.getProteinsAmount()
+        val meal = info.getMeal()
 
         holder.name.text = name
         holder.description.text = description
@@ -72,6 +73,7 @@ class AddFoodAdapter(private val foodModelsList: MutableList<FoodModel>) :
             intent.putExtra("carbohydratesAmount", carbohydratesAmount)
             intent.putExtra("fatsAmount", fatsAmount)
             intent.putExtra("proteinsAmount", proteinsAmount)
+            intent.putExtra("meal", meal)
             ContextCompat.startActivity(holder.itemView.context, intent, null)
         }
     }

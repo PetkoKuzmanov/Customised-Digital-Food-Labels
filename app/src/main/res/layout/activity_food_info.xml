@@ -150,6 +150,7 @@
             app:layout_constraintTop_toTopOf="@+id/proteinsInfoLabel" />
 
         <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/foodInfoPieChart"
             android:layout_width="125dp"
             android:layout_height="125dp"
             app:layout_constraintEnd_toEndOf="parent"
