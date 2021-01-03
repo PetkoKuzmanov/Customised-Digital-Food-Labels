@@ -11,6 +11,8 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
+import android.widget.Filterable
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
@@ -25,6 +27,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
+import kotlinx.android.synthetic.main.activity_add_food.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
@@ -42,6 +45,20 @@ class AddFoodActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.addFoodToolbar))
 
         populateList()
+
+        val searchView = findViewById<SearchView>(R.id.foodSearchView)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                println("TEXT SUBMIT")
+                (historyRecyclerView.adapter as Filterable).filter.filter(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                (historyRecyclerView.adapter as Filterable).filter.filter(newText)
+                return true
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -90,7 +107,7 @@ class AddFoodActivity : AppCompatActivity() {
                     val foodCalories = foodReference.child("calories").value.toString().toInt()
 
                     val foodInstanceCalories =
-                        ((foodCalories * foodAmount.toDouble()) / 100 ).roundToInt().toString()
+                        ((foodCalories * foodAmount.toDouble()) / 100).roundToInt().toString()
 
                     historyNamesList.add(foodName)
                     historyDescriptionsList.add(foodDescription)
@@ -110,9 +127,9 @@ class AddFoodActivity : AppCompatActivity() {
                 }
 
                 val layoutManager = LinearLayoutManager(context)
-                val historyRecyclerView = findViewById<RecyclerView>(R.id.historyRecyclerView)
+                val historyRecyclerView = historyRecyclerView
                 historyRecyclerView.layoutManager = layoutManager
-                val historyAdapter = DiaryDayAdapter(historyFoodModelList)
+                val historyAdapter = AddFoodAdapter(historyFoodModelList)
                 historyRecyclerView.adapter = historyAdapter
             }
 

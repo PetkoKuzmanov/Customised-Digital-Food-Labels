@@ -12,7 +12,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class WeightAdapter(private val imageModelArrayList: MutableList<WeightModel>) :
+class WeightAdapter(private val weightModelsList: MutableList<WeightModel>) :
     RecyclerView.Adapter<WeightAdapter.ViewHolder>() {
 
     var context: Context? = null
@@ -36,14 +36,14 @@ class WeightAdapter(private val imageModelArrayList: MutableList<WeightModel>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val info = imageModelArrayList[position]
+        val info = weightModelsList[position]
 
         holder.date.text = info.getDate()
         holder.weight.text = info.getWeight().toString() + "kg"
     }
 
     override fun getItemCount(): Int {
-        return imageModelArrayList.size
+        return weightModelsList.size
     }
 
     fun addItem(weight: Double, date: String) {

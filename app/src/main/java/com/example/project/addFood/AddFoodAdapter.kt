@@ -5,17 +5,26 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
 import com.example.project.diary.FoodInfoActivity
 import com.example.project.diary.FoodModel
+import java.util.*
+import kotlin.collections.ArrayList
 
-class AddFoodAdapter (private val imageModelArrayList: MutableList<FoodModel>) :
-    RecyclerView.Adapter<AddFoodAdapter.ViewHolder>() {
+class AddFoodAdapter(private val foodModelsList: MutableList<FoodModel>) :
+    RecyclerView.Adapter<AddFoodAdapter.ViewHolder>(), Filterable {
 
     var context: Context? = null
+    var filteredFoodModelsList = ArrayList<FoodModel>()
+
+    init {
+        filteredFoodModelsList = foodModelsList as ArrayList<FoodModel>
+    }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -36,7 +45,7 @@ class AddFoodAdapter (private val imageModelArrayList: MutableList<FoodModel>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val info = imageModelArrayList[position]
+        val info = filteredFoodModelsList[position]
 
         holder.name.text = info.getName()
         holder.description.text = info.getDescription()
@@ -52,6 +61,43 @@ class AddFoodAdapter (private val imageModelArrayList: MutableList<FoodModel>) :
     }
 
     override fun getItemCount(): Int {
-        return imageModelArrayList.size
+        return filteredFoodModelsList.size
+    }
+
+    override fun getFilter(): Filter {
+        return exampleFilter
+    }
+
+    private val exampleFilter: Filter = object : Filter() {
+        override fun performFiltering(constraint: CharSequence): FilterResults {
+            var filteredList: MutableList<FoodModel> = ArrayList()
+            if (constraint.isEmpty()) {
+                filteredList = foodModelsList as ArrayList<FoodModel>
+            } else {
+                val filterPattern =
+                    constraint.toString().toLowerCase(Locale.ROOT).trim { it <= ' ' }
+                for (item in filteredFoodModelsList) {
+                    if (item.getName().toLowerCase(Locale.ROOT).contains(filterPattern)) {
+                        filteredList.add(item)
+                    }
+                }
+                for (item in foodModelsList) {
+                    if (item.getName().toLowerCase(Locale.ROOT)
+                            .contains(filterPattern) && !filteredFoodModelsList.contains(item)
+                    ) {
+                        filteredList.add(item)
+                    }
+                }
+            }
+
+            val result = FilterResults()
+            result.values = filteredList
+            return result
+        }
+
+        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            filteredFoodModelsList = results?.values as ArrayList<FoodModel>
+            notifyDataSetChanged()
+        }
     }
 }
