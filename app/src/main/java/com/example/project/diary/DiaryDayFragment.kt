@@ -18,11 +18,15 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 class DiaryDayFragment : Fragment() {
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var database: DatabaseReference
     val context = this
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,12 +40,16 @@ class DiaryDayFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         getData()
-        processFood()
+//        processFood()
 
-        val addFoodToBreakfastTextView = requireView().findViewById<TextView>(R.id.addFoodToBreakfastTextView)
-        val addFoodToLunchTextView = requireView().findViewById<TextView>(R.id.addFoodToLunchTextView)
-        val addFoodToDinnerTextView = requireView().findViewById<TextView>(R.id.addFoodToDinnerTextView)
-        val addFoodToSnacksTextView = requireView().findViewById<TextView>(R.id.addFoodToSnacksTextView)
+        val addFoodToBreakfastTextView =
+            requireView().findViewById<TextView>(R.id.addFoodToBreakfastTextView)
+        val addFoodToLunchTextView =
+            requireView().findViewById<TextView>(R.id.addFoodToLunchTextView)
+        val addFoodToDinnerTextView =
+            requireView().findViewById<TextView>(R.id.addFoodToDinnerTextView)
+        val addFoodToSnacksTextView =
+            requireView().findViewById<TextView>(R.id.addFoodToSnacksTextView)
 
         addFoodToBreakfastTextView.setOnClickListener {
             val intent = Intent(requireView().context, AddFoodActivity::class.java)
@@ -63,23 +71,118 @@ class DiaryDayFragment : Fragment() {
             intent.putExtra("meal", "snacks")
             startActivity(intent)
         }
-
-
     }
 
     private fun getData() {
-        database = Firebase.database.reference
-        val databaseReference = mAuth.currentUser?.let {
-            database.child("users").child(it.uid)
-        }
+        val breakfastFoodList = ArrayList<FoodModel>()
+        val lunchFoodList = ArrayList<FoodModel>()
+        val dinnerFoodList = ArrayList<FoodModel>()
+        val snacksFoodList = ArrayList<FoodModel>()
 
-        databaseReference?.addValueEventListener(object : ValueEventListener {
+        database = Firebase.database.reference
+        database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val caloriesGoal = snapshot.child("goals").child("calories").value.toString()
+                val caloriesGoal = mAuth.currentUser?.let {
+                    snapshot.child("users").child(it.uid).child("goals")
+                        .child("calories").value.toString()
+                }
 
                 val caloriesGoalTextView = requireView().findViewById<TextView>(R.id.goalCalories)
                 caloriesGoalTextView.text = caloriesGoal
 
+                //Set the current date as the date
+                val current = LocalDateTime.now()
+                val formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                val formattedDate = current.format(formatterDate)
+
+                val diaryReference = mAuth.currentUser?.let {
+                    snapshot.child("users").child(it.uid).child("dates").child(formattedDate)
+                        .child("diary")
+                }
+
+                //Get the data for the meals
+                for (meal in diaryReference?.children!!) {
+                    for (index in meal.children) {
+                        if (index.key?.contains("food")!!) {
+                            val foodId = index.child("id").value.toString()
+                            val foodAmount = index.child("amount").value.toString()
+
+                            val foodReference = snapshot.child("food").child(foodId)
+
+
+                            val foodName = foodReference.child("name").value.toString()
+                            val foodDescription =
+                                foodReference.child("description").value.toString()
+                            val foodAmountMeasurement =
+                                foodReference.child("measurement").value.toString()
+                            val foodCalories =
+                                foodReference.child("calories").value.toString().toInt()
+                            val foodCarbohydrates =
+                                foodReference.child("carbohydrates").value.toString()
+                            val foodFats = foodReference.child("fats").value.toString()
+                            val foodProteins = foodReference.child("proteins").value.toString()
+
+                            val foodInstanceCalories =
+                                ((foodCalories * foodAmount.toDouble()) / 100).roundToInt()
+                                    .toString()
+
+                            val foodModel = FoodModel()
+                            foodModel.setName(foodName)
+                            foodModel.setId(foodId)
+                            foodModel.setDescription(foodDescription)
+                            foodModel.setAmount(foodAmount)
+                            foodModel.setMeasurement(foodAmountMeasurement)
+                            foodModel.setCaloriesAmount(foodInstanceCalories)
+                            foodModel.setCarbohydratesAmount(foodCarbohydrates)
+                            foodModel.setFatsAmount(foodFats)
+                            foodModel.setProteinsAmount(foodProteins)
+                            foodModel.setMeal(meal.key.toString())
+
+                            when {
+                                meal.key.toString() == "breakfast" -> {
+                                    breakfastFoodList.add(foodModel)
+                                }
+                                meal.key.toString() == "lunch" -> {
+                                    lunchFoodList.add(foodModel)
+                                }
+                                meal.key.toString() == "dinner" -> {
+                                    dinnerFoodList.add(foodModel)
+                                }
+                                meal.key.toString() == "snacks" -> {
+                                    snacksFoodList.add(foodModel)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                val breakfastLayoutManager = LinearLayoutManager(activity)
+                val breakfastRecyclerView =
+                    requireView().findViewById(R.id.breakfastRecyclerView) as RecyclerView
+                breakfastRecyclerView.layoutManager = breakfastLayoutManager
+                val breakfastAdapter = DiaryDayAdapter(breakfastFoodList)
+                breakfastRecyclerView.adapter = breakfastAdapter
+
+                val lunchLayoutManager = LinearLayoutManager(activity)
+                val lunchRecyclerView =
+                    requireView().findViewById(R.id.lunchRecyclerView) as RecyclerView
+                lunchRecyclerView.layoutManager = lunchLayoutManager
+                val lunchAdapter = DiaryDayAdapter(lunchFoodList)
+                lunchRecyclerView.adapter = lunchAdapter
+
+                val dinnerLayoutManager = LinearLayoutManager(activity)
+                val dinnerRecyclerView =
+                    requireView().findViewById(R.id.dinnerRecyclerView) as RecyclerView
+                dinnerRecyclerView.layoutManager = dinnerLayoutManager
+                val dinnerAdapter = DiaryDayAdapter(dinnerFoodList)
+                dinnerRecyclerView.adapter = dinnerAdapter
+
+                val snacksLayoutManager = LinearLayoutManager(activity)
+                val snacksRecyclerView =
+                    requireView().findViewById(R.id.snacksRecyclerView) as RecyclerView
+                snacksRecyclerView.layoutManager = snacksLayoutManager
+                val snacksAdapter = DiaryDayAdapter(snacksFoodList)
+                snacksRecyclerView.adapter = snacksAdapter
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -88,40 +191,7 @@ class DiaryDayFragment : Fragment() {
     }
 
     private fun processFood() {
-        val breakfastFoodList = ArrayList<FoodModel>()
 
-        val breakfastNamesList = arrayListOf(
-            "Oats", "Milk", "Orange juice"
-        )
-        val breakfastDescriptionsList = arrayListOf(
-            "Quaker", "Tesco", "Juicerino"
-        )
-        val breakfastAmountsList = arrayListOf(
-            "50", "200", "250"
-        )
-        val breakfastAmountMeasurementsList = arrayListOf(
-            "g", "ml", "ml"
-        )
-        val breakfastCaloriesAmountsList = arrayListOf(
-            "150", "150", "125"
-        )
-
-        for (i: Int in 0 until 3) {
-            val foodModel = FoodModel()
-            foodModel.setName(breakfastNamesList[i])
-            foodModel.setDescription(breakfastDescriptionsList[i])
-            foodModel.setAmount(breakfastAmountsList[i])
-            foodModel.setMeasurement(breakfastAmountMeasurementsList[i])
-            foodModel.setCaloriesAmount(breakfastCaloriesAmountsList[i])
-            breakfastFoodList.add(foodModel)
-        }
-
-        val breakfastLayoutManager = LinearLayoutManager(activity)
-        val breakfastRecyclerView =
-            requireView().findViewById(R.id.breakfastRecyclerView) as RecyclerView
-        breakfastRecyclerView.layoutManager = breakfastLayoutManager
-        val breakfastAdapter = DiaryDayAdapter(breakfastFoodList)
-        breakfastRecyclerView.adapter = breakfastAdapter
 
         //lunch
         val lunchFoodList = ArrayList<FoodModel>()
@@ -151,12 +221,6 @@ class DiaryDayFragment : Fragment() {
             foodModel.setCaloriesAmount(lunchCaloriesAmountsList[i])
             lunchFoodList.add(foodModel)
         }
-
-        val lunchLayoutManager = LinearLayoutManager(activity)
-        val lunchRecyclerView = requireView().findViewById(R.id.lunchRecyclerView) as RecyclerView
-        lunchRecyclerView.layoutManager = lunchLayoutManager
-        val lunchAdapter = DiaryDayAdapter(lunchFoodList)
-        lunchRecyclerView.adapter = lunchAdapter
 
 
         //dinner
@@ -188,14 +252,6 @@ class DiaryDayFragment : Fragment() {
             dinnerFoodList.add(foodModel)
         }
 
-        val dinnerLayoutManager = LinearLayoutManager(activity)
-        val dinnerRecyclerView = requireView().findViewById(R.id.dinnerRecyclerView) as RecyclerView
-        dinnerRecyclerView.layoutManager = dinnerLayoutManager
-        val dinnerAdapter = DiaryDayAdapter(dinnerFoodList)
-        dinnerRecyclerView.adapter = dinnerAdapter
-    }
-
-    fun addFood() {
 
     }
 }
