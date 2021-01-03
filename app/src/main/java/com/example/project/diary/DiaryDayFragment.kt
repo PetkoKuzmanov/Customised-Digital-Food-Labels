@@ -109,7 +109,6 @@ class DiaryDayFragment : Fragment() {
 
                             val foodReference = snapshot.child("food").child(foodId)
 
-
                             val foodName = foodReference.child("name").value.toString()
                             val foodDescription =
                                 foodReference.child("description").value.toString()
@@ -136,6 +135,35 @@ class DiaryDayFragment : Fragment() {
                             foodModel.setCarbohydratesAmount(foodCarbohydrates)
                             foodModel.setFatsAmount(foodFats)
                             foodModel.setProteinsAmount(foodProteins)
+                            foodModel.setMeal(meal.key.toString())
+
+                            when {
+                                meal.key.toString() == "breakfast" -> {
+                                    breakfastFoodList.add(foodModel)
+                                }
+                                meal.key.toString() == "lunch" -> {
+                                    lunchFoodList.add(foodModel)
+                                }
+                                meal.key.toString() == "dinner" -> {
+                                    dinnerFoodList.add(foodModel)
+                                }
+                                meal.key.toString() == "snacks" -> {
+                                    snacksFoodList.add(foodModel)
+                                }
+                            }
+                        } else if (index.key?.contains("calories")!!) {
+                            val calories = index.value.toString()
+
+                            val foodModel = FoodModel()
+                            foodModel.setName("Quick Add")
+                            foodModel.setId(" ")
+                            foodModel.setDescription(" ")
+                            foodModel.setAmount(" ")
+                            foodModel.setMeasurement(" ")
+                            foodModel.setCaloriesAmount(calories)
+                            foodModel.setCarbohydratesAmount("0")
+                            foodModel.setFatsAmount("0")
+                            foodModel.setProteinsAmount("0")
                             foodModel.setMeal(meal.key.toString())
 
                             when {
