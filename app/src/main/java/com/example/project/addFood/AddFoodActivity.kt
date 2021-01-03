@@ -17,19 +17,24 @@ import com.example.project.R
 import com.example.project.diary.DiaryDayAdapter
 import com.example.project.diary.FoodModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 class AddFoodActivity : AppCompatActivity() {
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var database: DatabaseReference
     private val textRequestCode = 100
     private val barcodeRequestCode = 200
+    val context = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,39 +50,75 @@ class AddFoodActivity : AppCompatActivity() {
     }
 
     private fun populateList() {
-        val historyFoodList = ArrayList<FoodModel>()
+        val historyFoodModelList = ArrayList<FoodModel>()
 
-        val breakfastNamesList = arrayListOf(
-            "Oats", "Milk", "Orange juice"
+        val historyNamesList = arrayListOf<String>(
         )
-        val breakfastDescriptionsList = arrayListOf(
-            "Quaker", "Tesco", "Juicerino"
+        val historyDescriptionsList = arrayListOf<String>(
         )
-        val breakfastAmountsList = arrayListOf(
-            "50", "200", "250"
+        val historyAmountsList = arrayListOf<String>(
         )
-        val breakfastAmountMeasurementsList = arrayListOf(
-            "g", "ml", "ml"
+        val historyAmountMeasurementsList = arrayListOf<String>(
         )
-        val breakfastCaloriesAmountsList = arrayListOf(
-            "150", "150", "125"
+        val historyCaloriesAmountsList = arrayListOf<String>(
         )
 
-        for (i: Int in 0 until 3) {
-            val foodModel = FoodModel()
-            foodModel.setDate(breakfastNamesList[i])
-            foodModel.setWeight(breakfastDescriptionsList[i])
-            foodModel.setAmount(breakfastAmountsList[i])
-            foodModel.setMeasurement(breakfastAmountMeasurementsList[i])
-            foodModel.setCaloriesAmount(breakfastCaloriesAmountsList[i])
-            historyFoodList.add(foodModel)
-        }
+        database = Firebase.database.reference
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                historyFoodModelList.clear()
+                historyNamesList.clear()
+                historyDescriptionsList.clear()
+                historyAmountsList.clear()
+                historyAmountMeasurementsList.clear()
+                historyCaloriesAmountsList.clear()
 
-        val layoutManager = LinearLayoutManager(this)
-        val historyRecyclerView = findViewById<RecyclerView>(R.id.historyRecyclerView)
-        historyRecyclerView.layoutManager = layoutManager
-        val historyAdapter = DiaryDayAdapter(historyFoodList)
-        historyRecyclerView.adapter = historyAdapter
+                val foodHistoryReference = mAuth.currentUser?.let {
+                    snapshot.child("users").child(it.uid).child("history")
+                }
+
+                for (index in foodHistoryReference?.children!!) {
+
+                    val foodId = index.child("id").value.toString()
+                    val foodAmount = index.child("amount").value.toString()
+
+                    val foodReference = snapshot.child("food").child(foodId)
+
+                    val foodName = foodReference.child("name").value.toString()
+                    val foodDescription = foodReference.child("description").value.toString()
+                    val foodAmountMeasurement = foodReference.child("measurement").value.toString()
+                    val foodCalories = foodReference.child("calories").value.toString().toInt()
+
+                    val foodInstanceCalories =
+                        ((foodCalories * foodAmount.toDouble()) / 100 ).roundToInt().toString()
+
+                    historyNamesList.add(foodName)
+                    historyDescriptionsList.add(foodDescription)
+                    historyAmountsList.add(foodAmount)
+                    historyAmountMeasurementsList.add(foodAmountMeasurement)
+                    historyCaloriesAmountsList.add(foodInstanceCalories)
+                }
+
+                for (i: Int in 0 until historyNamesList.size) {
+                    val foodModel = FoodModel()
+                    foodModel.setName(historyNamesList[i])
+                    foodModel.setWeight(historyDescriptionsList[i])
+                    foodModel.setAmount(historyAmountsList[i])
+                    foodModel.setMeasurement(historyAmountMeasurementsList[i])
+                    foodModel.setCaloriesAmount(historyCaloriesAmountsList[i])
+                    historyFoodModelList.add(foodModel)
+                }
+
+                val layoutManager = LinearLayoutManager(context)
+                val historyRecyclerView = findViewById<RecyclerView>(R.id.historyRecyclerView)
+                historyRecyclerView.layoutManager = layoutManager
+                val historyAdapter = DiaryDayAdapter(historyFoodModelList)
+                historyRecyclerView.adapter = historyAdapter
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
     }
 
     fun quickAdd(item: MenuItem) {

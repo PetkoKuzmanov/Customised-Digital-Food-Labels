@@ -108,7 +108,7 @@ class DiaryDayFragment : Fragment() {
 
         for (i: Int in 0 until 3) {
             val foodModel = FoodModel()
-            foodModel.setDate(breakfastNamesList[i])
+            foodModel.setName(breakfastNamesList[i])
             foodModel.setWeight(breakfastDescriptionsList[i])
             foodModel.setAmount(breakfastAmountsList[i])
             foodModel.setMeasurement(breakfastAmountMeasurementsList[i])
@@ -144,7 +144,7 @@ class DiaryDayFragment : Fragment() {
 
         for (i: Int in 0 until 2) {
             val foodModel = FoodModel()
-            foodModel.setDate(lunchNamesList[i])
+            foodModel.setName(lunchNamesList[i])
             foodModel.setWeight(lunchDescriptionsList[i])
             foodModel.setAmount(lunchAmountsList[i])
             foodModel.setMeasurement(lunchAmountMeasurementsList[i])
@@ -180,7 +180,7 @@ class DiaryDayFragment : Fragment() {
 
         for (i: Int in 0 until 3) {
             val foodModel = FoodModel()
-            foodModel.setDate(dinnerNamesList[i])
+            foodModel.setName(dinnerNamesList[i])
             foodModel.setWeight(dinnerDescriptionsList[i])
             foodModel.setAmount(dinnerAmountsList[i])
             foodModel.setMeasurement(dinnerAmountMeasurementsList[i])

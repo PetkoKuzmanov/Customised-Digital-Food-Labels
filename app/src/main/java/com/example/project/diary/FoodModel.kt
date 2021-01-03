@@ -21,7 +21,7 @@ class FoodModel {
         return name
     }
 
-    fun setDate(name: String) {
+    fun setName(name: String) {
         this.name = name
     }
 
