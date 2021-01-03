@@ -8,9 +8,14 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.view.LayoutInflater
-import android.view.View
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.EditText
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
+import com.example.project.diary.DiaryDayAdapter
+import com.example.project.diary.FoodModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -21,7 +26,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class AddFoodActivity : AppCompatActivity() {
-
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var database: DatabaseReference
     private val textRequestCode = 100
@@ -31,9 +35,52 @@ class AddFoodActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_food)
         setSupportActionBar(findViewById(R.id.addFoodToolbar))
+
+        populateList()
     }
 
-    fun quickAdd(view: View) {
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate((R.menu.add_food_toolbar_layout), menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun populateList() {
+        val historyFoodList = ArrayList<FoodModel>()
+
+        val breakfastNamesList = arrayListOf(
+            "Oats", "Milk", "Orange juice"
+        )
+        val breakfastDescriptionsList = arrayListOf(
+            "Quaker", "Tesco", "Juicerino"
+        )
+        val breakfastAmountsList = arrayListOf(
+            "50", "200", "250"
+        )
+        val breakfastAmountMeasurementsList = arrayListOf(
+            "g", "ml", "ml"
+        )
+        val breakfastCaloriesAmountsList = arrayListOf(
+            "150", "150", "125"
+        )
+
+        for (i: Int in 0 until 3) {
+            val foodModel = FoodModel()
+            foodModel.setDate(breakfastNamesList[i])
+            foodModel.setWeight(breakfastDescriptionsList[i])
+            foodModel.setAmount(breakfastAmountsList[i])
+            foodModel.setMeasurement(breakfastAmountMeasurementsList[i])
+            foodModel.setCaloriesAmount(breakfastCaloriesAmountsList[i])
+            historyFoodList.add(foodModel)
+        }
+
+        val layoutManager = LinearLayoutManager(this)
+        val historyRecyclerView = findViewById<RecyclerView>(R.id.historyRecyclerView)
+        historyRecyclerView.layoutManager = layoutManager
+        val historyAdapter = DiaryDayAdapter(historyFoodList)
+        historyRecyclerView.adapter = historyAdapter
+    }
+
+    fun quickAdd(item: MenuItem) {
         val inflater = LayoutInflater.from(this)
         val quickAddView = inflater.inflate(R.layout.quick_add_layout, null)
         val enterCalories = quickAddView.findViewById(R.id.enterCalories) as EditText
@@ -80,7 +127,7 @@ class AddFoodActivity : AppCompatActivity() {
         builder.show()
     }
 
-    fun scanItem(view: View) {
+    fun scanItem(item: MenuItem) {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(intent, barcodeRequestCode)
     }
@@ -134,7 +181,6 @@ class AddFoodActivity : AppCompatActivity() {
             }
             .addOnFailureListener {
                 // Task failed with an exception
-                // ...
                 println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
             }
     }

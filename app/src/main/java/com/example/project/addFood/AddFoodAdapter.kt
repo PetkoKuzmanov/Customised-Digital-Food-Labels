@@ -1,4 +1,4 @@
-package com.example.project.diary
+package com.example.project.addFood
 
 import android.content.Context
 import android.content.Intent
@@ -6,13 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
-import com.example.project.addFood.AddFoodActivity
+import com.example.project.diary.FoodInfoActivity
+import com.example.project.diary.FoodModel
 
-class DiaryDayAdapter(private val imageModelArrayList: MutableList<FoodModel>) :
-    RecyclerView.Adapter<DiaryDayAdapter.ViewHolder>() {
+class AddFoodAdapter (private val imageModelArrayList: MutableList<FoodModel>) :
+    RecyclerView.Adapter<AddFoodAdapter.ViewHolder>() {
 
     var context: Context? = null
 
@@ -46,7 +47,7 @@ class DiaryDayAdapter(private val imageModelArrayList: MutableList<FoodModel>) :
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, FoodInfoActivity::class.java)
 //        intent.putExtra("id", id)
-            startActivity(holder.itemView.context, intent, null)
+            ContextCompat.startActivity(holder.itemView.context, intent, null)
         }
     }
 

@@ -19,38 +19,15 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <SearchView
+        android:id="@+id/foodSearchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        android:weightSum="10">
-
-        <SearchView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="6">
-
-        </SearchView>
-
-        <Button
-            android:id="@+id/quickAddButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:onClick="quickAdd"
-            android:text="add" />
-
-        <Button
-            android:id="@+id/scanButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:onClick="scanItem"
-            android:text="sc" />
-    </LinearLayout>
+        android:layout_margin="10dp"
+        android:queryHint="Search for food" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/historyRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp" />
