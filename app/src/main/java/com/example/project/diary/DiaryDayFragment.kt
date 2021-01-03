@@ -40,7 +40,7 @@ class DiaryDayFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         getData()
-//        processFood()
+        setCalories()
 
         val addFoodToBreakfastTextView =
             requireView().findViewById<TextView>(R.id.addFoodToBreakfastTextView)
@@ -82,13 +82,18 @@ class DiaryDayFragment : Fragment() {
         database = Firebase.database.reference
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                breakfastFoodList.clear()
+                lunchFoodList.clear()
+                dinnerFoodList.clear()
+                snacksFoodList.clear()
+
                 val caloriesGoal = mAuth.currentUser?.let {
                     snapshot.child("users").child(it.uid).child("goals")
-                        .child("calories").value.toString()
+                        .child("calories").value.toString().toInt()
                 }
 
                 val caloriesGoalTextView = requireView().findViewById<TextView>(R.id.goalCalories)
-                caloriesGoalTextView.text = caloriesGoal
+                caloriesGoalTextView.text = caloriesGoal.toString()
 
                 //Set the current date as the date
                 val current = LocalDateTime.now()
@@ -211,6 +216,53 @@ class DiaryDayFragment : Fragment() {
                 snacksRecyclerView.layoutManager = snacksLayoutManager
                 val snacksAdapter = DiaryDayAdapter(snacksFoodList)
                 snacksRecyclerView.adapter = snacksAdapter
+
+
+                //Write the calories for the meals and the day
+                var breakfastCalories = 0
+                var lunchCalories = 0
+                var dinnerCalories = 0
+                var snacksCalories = 0
+
+                for (food in breakfastFoodList) {
+                    val calories = food.getCaloriesAmount().toInt()
+                    breakfastCalories += calories
+                }
+                for (food in lunchFoodList) {
+                    val calories = food.getCaloriesAmount().toInt()
+                    lunchCalories += calories
+                }
+                for (food in dinnerFoodList) {
+                    val calories = food.getCaloriesAmount().toInt()
+                    dinnerCalories += calories
+                }
+                for (food in snacksFoodList) {
+                    val calories = food.getCaloriesAmount().toInt()
+                    snacksCalories += calories
+                }
+
+                val totalCalories = breakfastCalories + lunchCalories + dinnerCalories + snacksCalories
+                val remainingCalories = caloriesGoal!! - totalCalories
+
+                val breakfastCaloriesTextView =
+                    requireView().findViewById<TextView>(R.id.breakfastCalories)
+                val lunchCaloriesTextView =
+                    requireView().findViewById<TextView>(R.id.lunchCalories)
+                val dinnerCaloriesTextView =
+                    requireView().findViewById<TextView>(R.id.dinnerCalories)
+                val snacksCaloriesTextView =
+                    requireView().findViewById<TextView>(R.id.snacksCalories)
+                val totalCaloriesTextView =
+                    requireView().findViewById<TextView>(R.id.caloriesConsumed)
+                val remainingCaloriesTextView =
+                    requireView().findViewById<TextView>(R.id.caloriesRemaining)
+
+                breakfastCaloriesTextView.text = breakfastCalories.toString()
+                lunchCaloriesTextView.text = lunchCalories.toString()
+                dinnerCaloriesTextView.text = dinnerCalories.toString()
+                snacksCaloriesTextView.text = snacksCalories.toString()
+                totalCaloriesTextView.text = totalCalories.toString()
+                remainingCaloriesTextView.text = remainingCalories.toString()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -218,68 +270,8 @@ class DiaryDayFragment : Fragment() {
         })
     }
 
-    private fun processFood() {
-
-
-        //lunch
-        val lunchFoodList = ArrayList<FoodModel>()
-
-        val lunchNamesList = arrayListOf(
-            "Pasta", "Tomato sauce"
-        )
-        val lunchDescriptionsList = arrayListOf(
-            "Italiano", "Tesco"
-        )
-        val lunchAmountsList = arrayListOf(
-            "100", "200g"
-        )
-        val lunchAmountMeasurementsList = arrayListOf(
-            "g", "g"
-        )
-        val lunchCaloriesAmountsList = arrayListOf(
-            "350", "125"
-        )
-
-        for (i: Int in 0 until 2) {
-            val foodModel = FoodModel()
-            foodModel.setName(lunchNamesList[i])
-            foodModel.setDescription(lunchDescriptionsList[i])
-            foodModel.setAmount(lunchAmountsList[i])
-            foodModel.setMeasurement(lunchAmountMeasurementsList[i])
-            foodModel.setCaloriesAmount(lunchCaloriesAmountsList[i])
-            lunchFoodList.add(foodModel)
-        }
-
-
-        //dinner
-        val dinnerFoodList = ArrayList<FoodModel>()
-
-        val dinnerNamesList = arrayListOf(
-            "Steak", "Olive oil", "Potatoes"
-        )
-        val dinnerDescriptionsList = arrayListOf(
-            "M&S", "Greek extra virgin", "Welsh"
-        )
-        val dinnerAmountsList = arrayListOf(
-            "100", "10", "300"
-        )
-        val dinnerAmountMeasurementsList = arrayListOf(
-            "g", "ml", "g"
-        )
-        val dinnerCaloriesAmountsList = arrayListOf(
-            "250", "120", "230"
-        )
-
-        for (i: Int in 0 until 3) {
-            val foodModel = FoodModel()
-            foodModel.setName(dinnerNamesList[i])
-            foodModel.setDescription(dinnerDescriptionsList[i])
-            foodModel.setAmount(dinnerAmountsList[i])
-            foodModel.setMeasurement(dinnerAmountMeasurementsList[i])
-            foodModel.setCaloriesAmount(dinnerCaloriesAmountsList[i])
-            dinnerFoodList.add(foodModel)
-        }
-
+    private fun setCalories() {
+        val breakfastCalories = requireView().findViewById<TextView>(R.id.breakfastCalories)
 
     }
 }
