@@ -23,7 +23,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
-class DiaryDayFragment : Fragment() {
+class DiaryDayFragment(private val currentDate: String) : Fragment() {
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val database: DatabaseReference = Firebase.database.reference
     private var isListening = true
@@ -109,12 +109,12 @@ class DiaryDayFragment : Fragment() {
                     caloriesGoalTextView.text = caloriesGoal.toString()
 
                     //Set the current date as the date
-                    val current = LocalDateTime.now()
-                    val formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                    val formattedDate = current.format(formatterDate)
+//                    val current = LocalDateTime.now()
+//                    val formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+//                    val formattedDate = current.format(formatterDate)
 
                     val diaryReference = mAuth.currentUser?.let {
-                        snapshot.child("users").child(it.uid).child("dates").child(formattedDate)
+                        snapshot.child("users").child(it.uid).child("dates").child(currentDate)
                             .child("diary")
                     }
 

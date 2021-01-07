@@ -15,7 +15,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class QuickAddInfoActivity : AppCompatActivity() {
-
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var database: DatabaseReference
 
