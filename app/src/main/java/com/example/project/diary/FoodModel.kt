@@ -12,6 +12,7 @@ class FoodModel {
     private lateinit var fatsAmount: String
     private lateinit var proteinsAmount: String
     private lateinit var meal: String
+    private lateinit var key: String
 
     fun getId(): String {
         return id
@@ -91,5 +92,13 @@ class FoodModel {
 
     fun setMeal(meal: String) {
         this.meal = meal
+    }
+
+    fun getKey(): String {
+        return key
+    }
+
+    fun setKey(key: String) {
+        this.key = key
     }
 }

@@ -9,6 +9,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
 import com.example.project.diary.FoodInfoActivity
@@ -65,6 +66,7 @@ class AddFoodAdapter(private val foodModelsList: MutableList<FoodModel>) :
 
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, FoodInfoActivity::class.java)
+            intent.putExtra("menu", "addFood")
             intent.putExtra("id", id)
             intent.putExtra("name", name)
             intent.putExtra("description", description)
@@ -74,7 +76,7 @@ class AddFoodAdapter(private val foodModelsList: MutableList<FoodModel>) :
             intent.putExtra("fatsAmount", fatsAmount)
             intent.putExtra("proteinsAmount", proteinsAmount)
             intent.putExtra("meal", meal)
-            ContextCompat.startActivity(holder.itemView.context, intent, null)
+            startActivity(holder.itemView.context, intent, null)
         }
     }
 

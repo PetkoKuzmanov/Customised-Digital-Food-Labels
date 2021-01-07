@@ -3,17 +3,23 @@ package com.example.project.diary
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
 import com.example.project.addFood.AddFoodActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 
 class DiaryDayAdapter(private val imageModelArrayList: MutableList<FoodModel>) :
     RecyclerView.Adapter<DiaryDayAdapter.ViewHolder>() {
 
+    private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var database: DatabaseReference
     var context: Context? = null
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -37,15 +43,37 @@ class DiaryDayAdapter(private val imageModelArrayList: MutableList<FoodModel>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val info = imageModelArrayList[position]
 
-        holder.name.text = info.getName()
-        holder.description.text = info.getDescription()
-        holder.amount.text = info.getAmount() + info.getMeasurement()
-        holder.caloriesAmount.text = info.getCaloriesAmount()
+        val id = info.getId()
+        val name = info.getName()
+        val description = info.getDescription()
+        val amount = info.getAmount()
+        val measurement = info.getMeasurement()
+        val caloriesAmount = info.getCaloriesAmount()
+        val carbohydratesAmount = info.getCarbohydratesAmount()
+        val fatsAmount = info.getFatsAmount()
+        val proteinsAmount = info.getProteinsAmount()
+        val meal = info.getMeal()
+        val key = info.getKey()
 
-//        val id = info.getId()
+        holder.name.text = name
+        holder.description.text = description
+        holder.amount.text = amount + measurement
+        holder.caloriesAmount.text = caloriesAmount
+
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, FoodInfoActivity::class.java)
-//        intent.putExtra("id", id)
+            intent.putExtra("menu", "diary")
+            intent.putExtra("id", id)
+            intent.putExtra("name", name)
+            intent.putExtra("description", description)
+            intent.putExtra("amount", amount)
+            intent.putExtra("caloriesAmount", caloriesAmount)
+            intent.putExtra("carbohydratesAmount", carbohydratesAmount)
+            intent.putExtra("fatsAmount", fatsAmount)
+            intent.putExtra("proteinsAmount", proteinsAmount)
+            intent.putExtra("meal", meal)
+            intent.putExtra("key", key)
+
             startActivity(holder.itemView.context, intent, null)
         }
     }

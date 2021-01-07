@@ -16,7 +16,10 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.time.LocalDateTime
@@ -68,7 +71,13 @@ class FoodInfoActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate((R.menu.food_info_toolbar_layout), menu)
+        val menuString = intent.getStringExtra("menu")
+
+        if (menuString == "addFood") {
+            menuInflater.inflate((R.menu.food_info_toolbar_layout), menu)
+        } else if (menuString == "diary") {
+            menuInflater.inflate((R.menu.food_edit_info_toolbar_layout), menu)
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -76,11 +85,11 @@ class FoodInfoActivity : AppCompatActivity() {
         val numberOfServingsEditText = findViewById<EditText>(R.id.numberOfServingsEditText)
         database = Firebase.database.reference
 
+        val foodKey = intent.getStringExtra("key")
         val meal = intent.getStringExtra("meal").toString()
         val id = intent.getStringExtra("id").toString()
         val amount = numberOfServingsEditText.text.toString()
 
-        //Set the current date as the date
         val current = LocalDateTime.now()
         val formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val formatterTime = DateTimeFormatter.ofPattern("HH-mm-ss")
@@ -88,16 +97,16 @@ class FoodInfoActivity : AppCompatActivity() {
         val formattedDate = current.format(formatterDate)
         val formattedTime = current.format(formatterTime)
 
-        mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("dates").child(formattedDate)
-                .child("diary")
-                .child(meal).child("food-$formattedTime").child("id").setValue(id)
+        val databaseReference = mAuth.currentUser?.let {
+            database.child("users").child(it.uid).child("dates").child(formattedDate).child("diary")
+                .child(meal)
         }
 
-        mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("dates").child(formattedDate)
-                .child("diary")
-                .child(meal).child("food-$formattedTime").child("amount").setValue(amount)
+        if (foodKey == null) {
+            databaseReference?.child("food-$formattedTime")?.child("id")?.setValue(id)
+            databaseReference?.child("food-$formattedTime")?.child("amount")?.setValue(amount)
+        } else {
+            databaseReference?.child(foodKey)?.child("amount")?.setValue(amount)
         }
 
         this.onBackPressed()
@@ -145,7 +154,7 @@ class FoodInfoActivity : AppCompatActivity() {
         pieChart.isDrawHoleEnabled = false
         pieChart.legend.isEnabled = false
 
-        var values = ArrayList<PieEntry>()
+        val values = ArrayList<PieEntry>()
         values.add(PieEntry(carbohydratesTotalPercent.toFloat()))
         values.add(PieEntry(fatsTotalPercent.toFloat()))
         values.add(PieEntry(proteinsTotalPercent.toFloat()))
@@ -161,5 +170,47 @@ class FoodInfoActivity : AppCompatActivity() {
         pieDataSet.valueFormatter = PercentFormatter(pieChart)
 
         pieChart.animateXY(1000, 1000)
+    }
+
+    fun foodDelete(item: MenuItem) {
+        database = Firebase.database.reference
+        val meal = intent.getStringExtra("meal").toString()
+        val foodId = intent.getStringExtra("id").toString()
+        val foodAmount = intent.getStringExtra("amount").toString()
+
+        val current = LocalDateTime.now()
+        val formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val formattedDate = current.format(formatterDate)
+
+        val databaseReference = mAuth.currentUser?.let {
+            database.child("users").child(it.uid).child("dates").child(formattedDate).child("diary")
+                .child(meal)
+        }
+        databaseReference?.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var foodReference: DatabaseReference? = null
+
+                for (index in snapshot.children) {
+                    if (index.key?.contains("calories")!!) {
+                        if (index.value == foodAmount) {
+                            foodReference = index.ref
+                        }
+                    } else {
+                        if (index.child("id").value == foodId && index.child("amount").value == foodAmount) {
+                            foodReference = index.ref
+                        }
+                    }
+                }
+
+                foodReference?.removeValue()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+        this.onBackPressed()
     }
 }
