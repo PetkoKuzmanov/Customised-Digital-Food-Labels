@@ -45,7 +45,7 @@
             app:layout_constraintTop_toBottomOf="@+id/foodNameTextView" />
 
         <TextView
-            android:id="@+id/numberOfServingsTextView"
+            android:id="@+id/quickAddTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -55,7 +55,7 @@
             app:layout_constraintTop_toBottomOf="@+id/foodDescriptionTextView" />
 
         <EditText
-            android:id="@+id/numberOfServingsEditText"
+            android:id="@+id/quickAddEditText"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:inputType="numberDecimal"
@@ -72,7 +72,7 @@
             android:layout_marginTop="20dp"
             android:background="@color/blue"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/numberOfServingsTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/quickAddTextView" />
 
         <TextView
             android:id="@+id/carbohydratesInfoLabel"

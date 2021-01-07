@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project">
-        <activity android:name=".diary.FoodInfoActivity"></activity>
+        <activity android:name=".diary.QuickAddInfoActivity"></activity>
+        <activity android:name=".diary.FoodInfoActivity" />
         <activity android:name=".addFood.AddFoodInfoActivity" />
         <activity android:name=".addFood.AddFoodActivity" />
         <activity

@@ -60,21 +60,31 @@ class DiaryDayAdapter(private val imageModelArrayList: MutableList<FoodModel>) :
         holder.amount.text = amount + measurement
         holder.caloriesAmount.text = caloriesAmount
 
-        holder.itemView.setOnClickListener {
-            val intent = Intent(holder.itemView.context, FoodInfoActivity::class.java)
-            intent.putExtra("menu", "diary")
-            intent.putExtra("id", id)
-            intent.putExtra("name", name)
-            intent.putExtra("description", description)
-            intent.putExtra("amount", amount)
-            intent.putExtra("caloriesAmount", caloriesAmount)
-            intent.putExtra("carbohydratesAmount", carbohydratesAmount)
-            intent.putExtra("fatsAmount", fatsAmount)
-            intent.putExtra("proteinsAmount", proteinsAmount)
-            intent.putExtra("meal", meal)
-            intent.putExtra("key", key)
+        if (name == "Quick Add") {
+            holder.itemView.setOnClickListener {
+                val intent = Intent(holder.itemView.context, QuickAddInfoActivity::class.java)
+                intent.putExtra("caloriesAmount", caloriesAmount)
+                intent.putExtra("meal", meal)
+                intent.putExtra("key", key)
+                startActivity(holder.itemView.context, intent, null)
+            }
+        } else {
+            holder.itemView.setOnClickListener {
+                val intent = Intent(holder.itemView.context, FoodInfoActivity::class.java)
+                intent.putExtra("menu", "diary")
+                intent.putExtra("id", id)
+                intent.putExtra("name", name)
+                intent.putExtra("description", description)
+                intent.putExtra("amount", amount)
+                intent.putExtra("caloriesAmount", caloriesAmount)
+                intent.putExtra("carbohydratesAmount", carbohydratesAmount)
+                intent.putExtra("fatsAmount", fatsAmount)
+                intent.putExtra("proteinsAmount", proteinsAmount)
+                intent.putExtra("meal", meal)
+                intent.putExtra("key", key)
 
-            startActivity(holder.itemView.context, intent, null)
+                startActivity(holder.itemView.context, intent, null)
+            }
         }
     }
 

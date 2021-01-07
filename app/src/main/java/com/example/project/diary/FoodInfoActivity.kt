@@ -37,7 +37,7 @@ class FoodInfoActivity : AppCompatActivity() {
 
         val foodNameTextView = findViewById<TextView>(R.id.foodNameTextView)
         val foodDescriptionTextView = findViewById<TextView>(R.id.foodDescriptionTextView)
-        val numberOfServingsEditText = findViewById<EditText>(R.id.numberOfServingsEditText)
+        val numberOfServingsEditText = findViewById<EditText>(R.id.quickAddEditText)
 
         val foodAmount = intent.getStringExtra("amount").toString().toInt()
         val caloriesAmount = intent.getStringExtra("caloriesAmount").toString().toInt()
@@ -82,7 +82,7 @@ class FoodInfoActivity : AppCompatActivity() {
     }
 
     fun foodInfoNext(item: MenuItem) {
-        val numberOfServingsEditText = findViewById<EditText>(R.id.numberOfServingsEditText)
+        val numberOfServingsEditText = findViewById<EditText>(R.id.quickAddEditText)
         database = Firebase.database.reference
 
         val foodKey = intent.getStringExtra("key")
@@ -175,42 +175,16 @@ class FoodInfoActivity : AppCompatActivity() {
     fun foodDelete(item: MenuItem) {
         database = Firebase.database.reference
         val meal = intent.getStringExtra("meal").toString()
-        val foodId = intent.getStringExtra("id").toString()
-        val foodAmount = intent.getStringExtra("amount").toString()
+        val foodKey = intent.getStringExtra("key").toString()
 
         val current = LocalDateTime.now()
         val formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val formattedDate = current.format(formatterDate)
 
-        val databaseReference = mAuth.currentUser?.let {
+        mAuth.currentUser?.let {
             database.child("users").child(it.uid).child("dates").child(formattedDate).child("diary")
-                .child(meal)
+                .child(meal).child(foodKey).removeValue()
         }
-        databaseReference?.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                var foodReference: DatabaseReference? = null
-
-                for (index in snapshot.children) {
-                    if (index.key?.contains("calories")!!) {
-                        if (index.value == foodAmount) {
-                            foodReference = index.ref
-                        }
-                    } else {
-                        if (index.child("id").value == foodId && index.child("amount").value == foodAmount) {
-                            foodReference = index.ref
-                        }
-                    }
-                }
-
-                foodReference?.removeValue()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        })
-
         this.onBackPressed()
     }
 }

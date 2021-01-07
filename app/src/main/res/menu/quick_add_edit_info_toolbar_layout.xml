@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/actionQuickAddDelete"
+        android:icon="@drawable/ic_delete"
+        android:title="Calories Delete"
+        android:onClick="quickAddDelete"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/actionQuickAddInfoNext"
+        android:icon="@drawable/ic_check"
+        android:title="Calories Info"
+        android:onClick="quickAddInfoNext"
+        app:showAsAction="ifRoom" />
+</menu>
