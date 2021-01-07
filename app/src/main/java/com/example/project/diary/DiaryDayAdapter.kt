@@ -3,19 +3,19 @@ package com.example.project.diary
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
-import com.example.project.addFood.AddFoodActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 
-class DiaryDayAdapter(private val imageModelArrayList: MutableList<FoodModel>) :
+class DiaryDayAdapter(
+    private val imageModelArrayList: MutableList<FoodModel>,
+    private val currentDate: String
+) :
     RecyclerView.Adapter<DiaryDayAdapter.ViewHolder>() {
 
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -66,6 +66,7 @@ class DiaryDayAdapter(private val imageModelArrayList: MutableList<FoodModel>) :
                 intent.putExtra("caloriesAmount", caloriesAmount)
                 intent.putExtra("meal", meal)
                 intent.putExtra("key", key)
+                intent.putExtra("date", currentDate)
                 startActivity(holder.itemView.context, intent, null)
             }
         } else {
@@ -82,6 +83,7 @@ class DiaryDayAdapter(private val imageModelArrayList: MutableList<FoodModel>) :
                 intent.putExtra("proteinsAmount", proteinsAmount)
                 intent.putExtra("meal", meal)
                 intent.putExtra("key", key)
+                intent.putExtra("date", currentDate)
 
                 startActivity(holder.itemView.context, intent, null)
             }

@@ -42,14 +42,10 @@ class QuickAddInfoActivity : AppCompatActivity() {
         val foodKey = intent.getStringExtra("key")
         val meal = intent.getStringExtra("meal")
         val calories = quickAddEditText.text.toString().toInt()
-
-        val current = LocalDateTime.now()
-        val formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-
-        val formattedDate = current.format(formatterDate)
+        val currentDate = intent.getStringExtra("date")
 
          mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("dates").child(formattedDate).child("diary")
+            database.child("users").child(it.uid).child("dates").child(currentDate!!).child("diary")
                 .child(meal!!).child(foodKey!!)?.setValue(calories)
         }
         this.onBackPressed()
@@ -59,13 +55,10 @@ class QuickAddInfoActivity : AppCompatActivity() {
         database = Firebase.database.reference
         val meal = intent.getStringExtra("meal").toString()
         val foodKey = intent.getStringExtra("key").toString()
-
-        val current = LocalDateTime.now()
-        val formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val formattedDate = current.format(formatterDate)
+        val currentDate = intent.getStringExtra("date")
 
         mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("dates").child(formattedDate).child("diary")
+            database.child("users").child(it.uid).child("dates").child(currentDate!!).child("diary")
                 .child(meal).child(foodKey).removeValue()
         }
         this.onBackPressed()

@@ -16,10 +16,7 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.time.LocalDateTime
@@ -89,16 +86,16 @@ class FoodInfoActivity : AppCompatActivity() {
         val meal = intent.getStringExtra("meal").toString()
         val id = intent.getStringExtra("id").toString()
         val amount = numberOfServingsEditText.text.toString()
+        val currentDate = intent.getStringExtra("date").toString()
 
         val current = LocalDateTime.now()
         val formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val formatterTime = DateTimeFormatter.ofPattern("HH-mm-ss")
 
-        val formattedDate = current.format(formatterDate)
         val formattedTime = current.format(formatterTime)
 
         val databaseReference = mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("dates").child(formattedDate).child("diary")
+            database.child("users").child(it.uid).child("dates").child(currentDate).child("diary")
                 .child(meal)
         }
 
@@ -176,13 +173,11 @@ class FoodInfoActivity : AppCompatActivity() {
         database = Firebase.database.reference
         val meal = intent.getStringExtra("meal").toString()
         val foodKey = intent.getStringExtra("key").toString()
+        val currentDate = intent.getStringExtra("date").toString()
 
-        val current = LocalDateTime.now()
-        val formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val formattedDate = current.format(formatterDate)
 
         mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("dates").child(formattedDate).child("diary")
+            database.child("users").child(it.uid).child("dates").child(currentDate).child("diary")
                 .child(meal).child(foodKey).removeValue()
         }
         this.onBackPressed()

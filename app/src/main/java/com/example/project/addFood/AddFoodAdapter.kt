@@ -17,7 +17,10 @@ import com.example.project.diary.FoodModel
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AddFoodAdapter(private val foodModelsList: MutableList<FoodModel>) :
+class AddFoodAdapter(
+    private val foodModelsList: MutableList<FoodModel>,
+    private val currentDate: String
+) :
     RecyclerView.Adapter<AddFoodAdapter.ViewHolder>(), Filterable {
 
     var context: Context? = null
@@ -76,6 +79,7 @@ class AddFoodAdapter(private val foodModelsList: MutableList<FoodModel>) :
             intent.putExtra("fatsAmount", fatsAmount)
             intent.putExtra("proteinsAmount", proteinsAmount)
             intent.putExtra("meal", meal)
+            intent.putExtra("date", currentDate)
             startActivity(holder.itemView.context, intent, null)
         }
     }

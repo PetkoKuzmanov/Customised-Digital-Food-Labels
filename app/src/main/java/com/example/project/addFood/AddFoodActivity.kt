@@ -66,6 +66,7 @@ class AddFoodActivity : AppCompatActivity() {
 
     private fun populateList() {
         val historyFoodModelList = ArrayList<FoodModel>()
+        val currentDate = intent.getStringExtra("date").toString()
 
         database = Firebase.database.reference
         database.addValueEventListener(object : ValueEventListener {
@@ -110,7 +111,7 @@ class AddFoodActivity : AppCompatActivity() {
                 val layoutManager = LinearLayoutManager(context)
                 val historyRecyclerView = historyRecyclerView
                 historyRecyclerView.layoutManager = layoutManager
-                val historyAdapter = AddFoodAdapter(historyFoodModelList)
+                val historyAdapter = AddFoodAdapter(historyFoodModelList, currentDate)
                 historyRecyclerView.adapter = historyAdapter
             }
 
@@ -124,15 +125,12 @@ class AddFoodActivity : AppCompatActivity() {
         val quickAddView = inflater.inflate(R.layout.quick_add_layout, null)
         val enterCalories = quickAddView.findViewById(R.id.enterCalories) as EditText
         val meal = intent.getStringExtra("meal").toString()
+        val currentDate = intent.getStringExtra("date").toString()
 
         database = Firebase.database.reference
 
-        //Set the current date as the date
         val current = LocalDateTime.now()
-        val formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val formatterTime = DateTimeFormatter.ofPattern("HH-mm-ss")
-
-        val formattedDate = current.format(formatterDate)
         val formattedTime = current.format(formatterTime)
 
         //Create the alertDialog
@@ -153,7 +151,7 @@ class AddFoodActivity : AppCompatActivity() {
 //                }
                 val calories = input.toInt()
                 mAuth.currentUser?.let {
-                    database.child("users").child(it.uid).child("dates").child(formattedDate)
+                    database.child("users").child(it.uid).child("dates").child(currentDate)
                         .child("diary")
                         .child(meal).child("calories-$formattedTime").setValue(calories)
                 }

@@ -19,8 +19,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 class DiaryDayFragment(private val currentDate: String) : Fragment() {
@@ -53,21 +51,25 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
         addFoodToBreakfastTextView.setOnClickListener {
             val intent = Intent(requireView().context, AddFoodActivity::class.java)
             intent.putExtra("meal", "breakfast")
+            intent.putExtra("date", currentDate)
             startActivity(intent)
         }
         addFoodToLunchTextView.setOnClickListener {
             val intent = Intent(requireView().context, AddFoodActivity::class.java)
             intent.putExtra("meal", "lunch")
+            intent.putExtra("date", currentDate)
             startActivity(intent)
         }
         addFoodToDinnerTextView.setOnClickListener {
             val intent = Intent(requireView().context, AddFoodActivity::class.java)
             intent.putExtra("meal", "dinner")
+            intent.putExtra("date", currentDate)
             startActivity(intent)
         }
         addFoodToSnacksTextView.setOnClickListener {
             val intent = Intent(requireView().context, AddFoodActivity::class.java)
             intent.putExtra("meal", "snacks")
+            intent.putExtra("date", currentDate)
             startActivity(intent)
         }
     }
@@ -107,11 +109,6 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                     val caloriesGoalTextView =
                         requireView().findViewById<TextView>(R.id.goalCalories)
                     caloriesGoalTextView.text = caloriesGoal.toString()
-
-                    //Set the current date as the date
-//                    val current = LocalDateTime.now()
-//                    val formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-//                    val formattedDate = current.format(formatterDate)
 
                     val diaryReference = mAuth.currentUser?.let {
                         snapshot.child("users").child(it.uid).child("dates").child(currentDate)
@@ -208,28 +205,28 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                     val breakfastRecyclerView =
                         requireView().findViewById(R.id.breakfastRecyclerView) as RecyclerView
                     breakfastRecyclerView.layoutManager = breakfastLayoutManager
-                    val breakfastAdapter = DiaryDayAdapter(breakfastFoodList)
+                    val breakfastAdapter = DiaryDayAdapter(breakfastFoodList, currentDate)
                     breakfastRecyclerView.adapter = breakfastAdapter
 
                     val lunchLayoutManager = LinearLayoutManager(activity)
                     val lunchRecyclerView =
                         requireView().findViewById(R.id.lunchRecyclerView) as RecyclerView
                     lunchRecyclerView.layoutManager = lunchLayoutManager
-                    val lunchAdapter = DiaryDayAdapter(lunchFoodList)
+                    val lunchAdapter = DiaryDayAdapter(lunchFoodList, currentDate)
                     lunchRecyclerView.adapter = lunchAdapter
 
                     val dinnerLayoutManager = LinearLayoutManager(activity)
                     val dinnerRecyclerView =
                         requireView().findViewById(R.id.dinnerRecyclerView) as RecyclerView
                     dinnerRecyclerView.layoutManager = dinnerLayoutManager
-                    val dinnerAdapter = DiaryDayAdapter(dinnerFoodList)
+                    val dinnerAdapter = DiaryDayAdapter(dinnerFoodList, currentDate)
                     dinnerRecyclerView.adapter = dinnerAdapter
 
                     val snacksLayoutManager = LinearLayoutManager(activity)
                     val snacksRecyclerView =
                         requireView().findViewById(R.id.snacksRecyclerView) as RecyclerView
                     snacksRecyclerView.layoutManager = snacksLayoutManager
-                    val snacksAdapter = DiaryDayAdapter(snacksFoodList)
+                    val snacksAdapter = DiaryDayAdapter(snacksFoodList, currentDate)
                     snacksRecyclerView.adapter = snacksAdapter
 
 
