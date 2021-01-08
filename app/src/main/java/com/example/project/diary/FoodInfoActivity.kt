@@ -27,6 +27,10 @@ class FoodInfoActivity : AppCompatActivity() {
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var database: DatabaseReference
 
+    private var carbohydratesTotalPercent: Int? = null
+    private var fatsTotalPercent: Int? = null
+    private var proteinsTotalPercent: Int? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food_info)
@@ -44,19 +48,17 @@ class FoodInfoActivity : AppCompatActivity() {
         numberOfServingsEditText.text =
             Editable.Factory.getInstance().newEditable(foodAmount.toString())
 
-        updateMacronutrients(numberOfServingsEditText.text)
-
         val carbohydratesAmount = intent.getStringExtra("carbohydratesAmount").toString().toInt()
         val fatsAmount = intent.getStringExtra("fatsAmount").toString().toInt()
         val proteinsAmount = intent.getStringExtra("proteinsAmount").toString().toInt()
 
-        val carbohydratesTotalPercent =
+        carbohydratesTotalPercent =
             (((carbohydratesAmount * 4.0) / caloriesAmount) * 100).roundToInt()
-        val fatsTotalPercent = (((fatsAmount * 9.0) / caloriesAmount) * 100).roundToInt()
-        val proteinsTotalPercent = (((proteinsAmount * 4.0) / caloriesAmount) * 100).roundToInt()
+        fatsTotalPercent = (((fatsAmount * 9.0) / caloriesAmount) * 100).roundToInt()
+        proteinsTotalPercent = (((proteinsAmount * 4.0) / caloriesAmount) * 100).roundToInt()
 
         val pieChart = findViewById<PieChart>(R.id.foodInfoPieChart)
-        setPieChart(pieChart, carbohydratesTotalPercent, fatsTotalPercent, proteinsTotalPercent)
+        setPieChart(pieChart, caloriesAmount)
 
         numberOfServingsEditText.doAfterTextChanged { editable ->
             if (editable?.isNotEmpty()!!) {
@@ -65,6 +67,8 @@ class FoodInfoActivity : AppCompatActivity() {
                 updateMacronutrientsToZero()
             }
         }
+
+        updateMacronutrients(numberOfServingsEditText.text)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -89,9 +93,7 @@ class FoodInfoActivity : AppCompatActivity() {
         val currentDate = intent.getStringExtra("date").toString()
 
         val current = LocalDateTime.now()
-        val formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val formatterTime = DateTimeFormatter.ofPattern("HH-mm-ss")
-
         val formattedTime = current.format(formatterTime)
 
         val databaseReference = mAuth.currentUser?.let {
@@ -116,17 +118,20 @@ class FoodInfoActivity : AppCompatActivity() {
 
         val foodAmount = amountEditable.toString().toDouble()
         val carbohydratesAmount = (intent.getStringExtra("carbohydratesAmount")
-            ?.toInt()!! * foodAmount / 100).toString()
+            ?.toInt()!! * foodAmount / 100)
         val fatsAmount =
             (intent.getStringExtra("fatsAmount")?.toInt()!! * foodAmount / 100)
-                .toString()
         val proteinsAmount =
             (intent.getStringExtra("proteinsAmount")?.toInt()!! * foodAmount / 100)
-                .toString()
 
-        carbohydratesInfoAmount.text = carbohydratesAmount + "g"
-        fatsInfoAmount.text = fatsAmount + "g"
-        proteinsInfoAmount.text = proteinsAmount + "g"
+        carbohydratesInfoAmount.text = carbohydratesAmount.toString() + "g"
+        fatsInfoAmount.text = fatsAmount.toString() + "g"
+        proteinsInfoAmount.text = proteinsAmount.toString() + "g"
+
+        val calories = carbohydratesAmount * 4 + fatsAmount * 9 + proteinsAmount * 4
+
+        val pieChart = findViewById<PieChart>(R.id.foodInfoPieChart)
+        setPieChart(pieChart, calories.toInt())
     }
 
     private fun updateMacronutrientsToZero() {
@@ -134,27 +139,29 @@ class FoodInfoActivity : AppCompatActivity() {
         val fatsInfoAmount = findViewById<TextView>(R.id.fatsInfoAmount)
         val proteinsInfoAmount = findViewById<TextView>(R.id.proteinsInfoAmount)
 
-        carbohydratesInfoAmount.text = "0g"
-        fatsInfoAmount.text = "0g"
-        proteinsInfoAmount.text = "0g"
+        carbohydratesInfoAmount.text = "0.0g"
+        fatsInfoAmount.text = "0.0g"
+        proteinsInfoAmount.text = "0.0g"
+
+        val pieChart = findViewById<PieChart>(R.id.foodInfoPieChart)
+        setPieChart(pieChart, 0)
     }
 
     private fun setPieChart(
         pieChart: PieChart,
-        carbohydratesTotalPercent: Int,
-        fatsTotalPercent: Int,
-        proteinsTotalPercent: Int
+        calories: Int
     ) {
-        pieChart.setUsePercentValues(true)
-
         pieChart.description.isEnabled = false
-        pieChart.isDrawHoleEnabled = false
         pieChart.legend.isEnabled = false
+        pieChart.isDrawHoleEnabled = true
+        pieChart.holeRadius = 80f
+        pieChart.centerText = "$calories\nCal"
+        pieChart.setCenterTextSize(25f)
 
         val values = ArrayList<PieEntry>()
-        values.add(PieEntry(carbohydratesTotalPercent.toFloat()))
-        values.add(PieEntry(fatsTotalPercent.toFloat()))
-        values.add(PieEntry(proteinsTotalPercent.toFloat()))
+        values.add(PieEntry(carbohydratesTotalPercent!!.toFloat()))
+        values.add(PieEntry(fatsTotalPercent!!.toFloat()))
+        values.add(PieEntry(proteinsTotalPercent!!.toFloat()))
 
         val pieDataSet = PieDataSet(values, "Macronutrients")
         val pieData = PieData(pieDataSet)
@@ -163,8 +170,7 @@ class FoodInfoActivity : AppCompatActivity() {
         val colors =
             arrayListOf(Color.rgb(66, 146, 227), Color.rgb(235, 73, 73), Color.rgb(99, 230, 129))
         pieDataSet.colors = colors
-        pieDataSet.valueTextSize = 20f
-        pieDataSet.valueFormatter = PercentFormatter(pieChart)
+        pieDataSet.valueTextSize = 0f
 
         pieChart.animateXY(1000, 1000)
     }

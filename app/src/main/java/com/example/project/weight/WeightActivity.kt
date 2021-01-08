@@ -67,10 +67,11 @@ class WeightActivity : AppCompatActivity() {
                 for (index in snapshot.children) {
                     val dateSnapshot = index.child("weight")
 
-                    val date = index.key.toString()
-                    val weight = dateSnapshot.value.toString().toDouble()
-                    mutableMap[date] = weight
-
+                    if (dateSnapshot.exists()) {
+                        val date = index.key.toString()
+                        val weight = dateSnapshot.value.toString().toDouble()
+                        mutableMap[date] = weight
+                    }
                 }
 
                 if (mutableMap.isNotEmpty()) {
