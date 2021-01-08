@@ -17,7 +17,6 @@ import com.example.project.weight.WeightActivity
 import com.google.firebase.auth.FirebaseAuth
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 class DiaryActivity : AppCompatActivity() {
     private lateinit var currentDate: LocalDateTime

@@ -48,12 +48,6 @@ class WeightAdapter(private val weightModelsList: MutableList<WeightModel>) :
 
     fun addItem(weight: Double, date: String) {
         database = Firebase.database.reference
-
-//        mAuth.currentUser?.let {
-//            database.child("users").child(it.uid).child("weight").child(date)
-//                .setValue(weight)
-//        }
-
         mAuth.currentUser?.let {
             database.child("users").child(it.uid).child("dates").child(date).child("weight")
                 .setValue(weight)

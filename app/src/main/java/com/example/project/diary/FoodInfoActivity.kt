@@ -14,7 +14,6 @@ import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.formatter.PercentFormatter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -180,7 +179,6 @@ class FoodInfoActivity : AppCompatActivity() {
         val meal = intent.getStringExtra("meal").toString()
         val foodKey = intent.getStringExtra("key").toString()
         val currentDate = intent.getStringExtra("date").toString()
-
 
         mAuth.currentUser?.let {
             database.child("users").child(it.uid).child("dates").child(currentDate).child("diary")

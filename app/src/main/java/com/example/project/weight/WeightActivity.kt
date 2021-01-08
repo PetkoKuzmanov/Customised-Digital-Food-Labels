@@ -33,7 +33,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.roundToInt
+import kotlin.math.*
 
 
 class WeightActivity : AppCompatActivity() {
@@ -84,7 +84,7 @@ class WeightActivity : AppCompatActivity() {
                 }
 
                 val lineChart = findViewById<LineChart>(R.id.weightLineChart)
-                setLineChart(lineChart)
+                setLineChart(lineChart, mutableMap)
 
                 val recyclerView = findViewById<RecyclerView>(R.id.weightRecyclerView)
                 val layoutManager = LinearLayoutManager(context)
@@ -126,9 +126,17 @@ class WeightActivity : AppCompatActivity() {
                 this,
                 { _, year, month, dayOfMonth ->
                     if (dayOfMonth < 10) {
-                        dateTextView.text = ("$year-" + (month + 1) + "-0$dayOfMonth")
+                        if (month + 1 < 10) {
+                            dateTextView.text = ("$year-" + "0" + (month + 1) + "-0$dayOfMonth")
+                        } else {
+                            dateTextView.text = ("$year-" + (month + 1) + "-0$dayOfMonth")
+                        }
                     } else {
-                        dateTextView.text = ("$year-" + (month + 1) + "-$dayOfMonth")
+                        if (month + 1 < 10) {
+                            dateTextView.text = ("$year-" + "0" + (month + 1) + "-$dayOfMonth")
+                        } else {
+                            dateTextView.text = ("$year-" + (month + 1) + "-$dayOfMonth")
+                        }
                     }
                 },
                 year,
@@ -167,10 +175,9 @@ class WeightActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private fun setLineChart(lineChart: LineChart) {
+    private fun setLineChart(lineChart: LineChart, mutableMap: MutableMap<String, Double>) {
         lineChart.setTouchEnabled(true)
         lineChart.setPinchZoom(true)
-
         lineChart.description.isEnabled = false
         lineChart.legend.isEnabled = false
 
@@ -192,34 +199,43 @@ class WeightActivity : AppCompatActivity() {
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         lineChart.axisRight.isEnabled = false
 
+        val dateList = arrayListOf<String>()
+        val weightList = arrayListOf<Double>()
 
-        val dates = arrayListOf(
-            "2020-10-29",
-            "2020-10-30",
-            "2020-10-31",
-            "2020-11-01",
-        )
+        for (index in mutableMap) {
+            dateList.add(index.key)
+            weightList.add(index.value)
+        }
 
-        xAxis.valueFormatter = ClaimsXAxisValueFormatter(dates)
+        var weightMin = weightList[0]
+        var weightMax = weightList[0]
+
+        for (index in weightList) {
+            if (index < weightMin) {
+                weightMin = index
+            } else if (index > weightMax) {
+                weightMax = index
+            }
+        }
+
+        xAxis.valueFormatter = ClaimsXAxisValueFormatter(dateList)
         leftAxis.valueFormatter = ClaimsYAxisValueFormatter()
 
         xAxis.setDrawGridLines(false)
-//        xAxis.axisMaximum = 15f
-//        xAxis.axisMinimum = 0f
+        xAxis.axisMaximum = dateList.size.toFloat() - 1
+        xAxis.granularity = 1f
 
-        leftAxis.axisMinimum = 62f
-        leftAxis.axisMaximum = 68f
+        leftAxis.granularity = 1f
+        leftAxis.axisMinimum = (weightMin - 0.5).toFloat()
+        leftAxis.axisMaximum = (weightMax + 0.5).toFloat()
         leftAxis.enableGridDashedLine(10f, 10f, 0f)
         leftAxis.setDrawZeroLine(false)
         leftAxis.setDrawLimitLinesBehindData(false)
 
-        var values = ArrayList<Entry>()
-
-        values.add(Entry(1f, 64.3f))
-        values.add(Entry(2f, 63.5f))
-        values.add(Entry(3f, 63.7f))
-        values.add(Entry(4f, 63.9f))
-
+        val values = ArrayList<Entry>()
+        for (i in 0 until weightList.size) {
+            values.add(Entry(i.toFloat(), weightList[i].toFloat()))
+        }
 
         val lineDataSet = LineDataSet(values, "Weight")
         val lineData = LineData(lineDataSet)
@@ -232,8 +248,7 @@ class WeightActivity : AppCompatActivity() {
     class ClaimsXAxisValueFormatter(var datesList: List<String>) :
         ValueFormatter() {
         override fun getAxisLabel(value: Float, axis: AxisBase): String {
-
-            var position = Math.round(value)
+            var position = value.roundToInt()
             val sdf = SimpleDateFormat("MMM dd")
             if (value > 1 && value < 2) {
                 position = 0
@@ -248,7 +263,7 @@ class WeightActivity : AppCompatActivity() {
                 return sdf.format(
                     Date(
                         (getDateInMilliSeconds(
-                            datesList.get(position),
+                            datesList[position],
                             "yyyy-MM-dd"
                         ))
                     )
@@ -256,7 +271,7 @@ class WeightActivity : AppCompatActivity() {
             return "";
         }
 
-        fun getDateInMilliSeconds(givenDateString: String?, format: String): Long {
+        private fun getDateInMilliSeconds(givenDateString: String?, format: String): Long {
             val sdf = SimpleDateFormat(format, Locale.US)
             var timeInMilliseconds: Long = 1
             try {
