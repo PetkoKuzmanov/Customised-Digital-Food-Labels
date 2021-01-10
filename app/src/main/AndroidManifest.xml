@@ -9,14 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project">
-        <activity android:name=".diary.QuickAddInfoActivity"></activity>
+        <activity android:name=".diary.QuickAddInfoActivity" />
         <activity android:name=".diary.FoodInfoActivity" />
         <activity android:name=".addFood.AddFoodInfoActivity" />
         <activity android:name=".addFood.AddFoodActivity" />
         <activity
             android:name=".weight.WeightActivity"
             android:label="Weight" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -119,4 +119,12 @@ class DiaryActivity : AppCompatActivity() {
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val closeAppIntent = Intent(Intent.ACTION_MAIN)
+        closeAppIntent.addCategory(Intent.CATEGORY_HOME)
+        closeAppIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(closeAppIntent)
+    }
 }

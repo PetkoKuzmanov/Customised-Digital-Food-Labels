@@ -1,13 +1,15 @@
 package com.example.project.diary
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import com.example.project.R
 import com.github.mikephil.charting.charts.PieChart
@@ -107,7 +109,9 @@ class FoodInfoActivity : AppCompatActivity() {
             databaseReference?.child(foodKey)?.child("amount")?.setValue(amount)
         }
 
-        this.onBackPressed()
+        val intent = Intent()
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 
     private fun updateMacronutrients(amountEditable: Editable) {
@@ -184,6 +188,10 @@ class FoodInfoActivity : AppCompatActivity() {
             database.child("users").child(it.uid).child("dates").child(currentDate).child("diary")
                 .child(meal).child(foodKey).removeValue()
         }
+
+        val intent = Intent()
+        setResult(Activity.RESULT_OK, intent)
+        finish()
         this.onBackPressed()
     }
 }

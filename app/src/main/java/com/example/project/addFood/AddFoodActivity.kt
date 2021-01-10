@@ -35,6 +35,7 @@ class AddFoodActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private val textRequestCode = 100
     private val barcodeRequestCode = 200
+    private val addFoodRequestCode = 123
     val context = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -191,6 +192,12 @@ class AddFoodActivity : AppCompatActivity() {
             if (resultCode == RESULT_OK) {
                 val photo = data?.extras?.get("data") as Bitmap
                 barcodeRecognition(photo)
+            }
+        }
+
+        if (requestCode == addFoodRequestCode) {
+            if (resultCode == RESULT_OK) {
+                this.onBackPressed()
             }
         }
     }

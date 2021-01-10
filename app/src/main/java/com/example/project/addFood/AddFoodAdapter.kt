@@ -1,5 +1,6 @@
 package com.example.project.addFood
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -80,7 +82,7 @@ class AddFoodAdapter(
             intent.putExtra("proteinsAmount", proteinsAmount)
             intent.putExtra("meal", meal)
             intent.putExtra("date", currentDate)
-            startActivity(holder.itemView.context, intent, null)
+            startActivityForResult(holder.itemView.context as Activity, intent, 123, null)
         }
     }
 
@@ -118,6 +120,7 @@ class AddFoodAdapter(
             result.values = filteredList
             return result
         }
+
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             filteredFoodModelsList = results?.values as ArrayList<FoodModel>

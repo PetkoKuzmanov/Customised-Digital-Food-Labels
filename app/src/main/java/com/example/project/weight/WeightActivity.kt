@@ -20,6 +20,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -155,18 +156,18 @@ class WeightActivity : AppCompatActivity() {
             val fab = findViewById<FloatingActionButton>(R.id.fab)
             var weight = 0.0
 
-//            val snackbar = Snackbar.make(
-//                this, "You have to input a number",
-//                Snackbar.LENGTH_LONG
-//            )
-//            snackbar.anchorView = fab
+            val snackbar = Snackbar.make(
+                fab, "Please input a number",
+                Snackbar.LENGTH_LONG
+            )
+            snackbar.anchorView = fab
 
             //Check if the topic can be added
             if (!TextUtils.isEmpty(input)) {
                 weight = input.toDouble()
                 mAdapter.addItem(weight, dateTextView.text.toString())
             } else {
-//                snackbar.show()
+                snackbar.show()
             }
         }
         builder.setNegativeButton("CANCEL") { _, _ ->
@@ -180,18 +181,6 @@ class WeightActivity : AppCompatActivity() {
         lineChart.setPinchZoom(true)
         lineChart.description.isEnabled = false
         lineChart.legend.isEnabled = false
-
-//        val limitLineOne = LimitLine(30f, "Title")
-//
-//        limitLineOne.lineColor = Color.rgb(66, 146, 227)
-//        limitLineOne.lineWidth = 4f
-//        limitLineOne.enableDashedLine(10f, 10f, 0f)
-//        limitLineOne.labelPosition = LimitLine.LimitLabelPosition.RIGHT_BOTTOM
-//        limitLineOne.textSize = 10f
-//
-//        val limitLineTwo = LimitLine(35f, "")
-//        limitLineTwo.lineWidth = 4f
-//        limitLineOne.enableDashedLine(10f, 10f, 0f)
 
         val xAxis = lineChart.xAxis
         val leftAxis = lineChart.axisLeft

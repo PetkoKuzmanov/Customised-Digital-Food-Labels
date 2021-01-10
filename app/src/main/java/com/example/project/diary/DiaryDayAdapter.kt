@@ -84,7 +84,6 @@ class DiaryDayAdapter(
                 intent.putExtra("meal", meal)
                 intent.putExtra("key", key)
                 intent.putExtra("date", currentDate)
-
                 startActivity(holder.itemView.context, intent, null)
             }
         }

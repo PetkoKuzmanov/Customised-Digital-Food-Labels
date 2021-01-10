@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +25,6 @@ import kotlin.math.roundToInt
 class DiaryDayFragment(private val currentDate: String) : Fragment() {
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val database: DatabaseReference = Firebase.database.reference
-    private var isListening = true
     val context = this
 
     override fun onCreateView(
@@ -74,16 +74,10 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        isListening = false
-        println("onPause")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        isListening = true
-        println("onStart")
+    override fun onResume() {
+        super.onResume()
+        println("onResume")
+        getData()
     }
 
     private fun getData() {
@@ -92,10 +86,10 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
         val dinnerFoodList = ArrayList<FoodModel>()
         val snacksFoodList = ArrayList<FoodModel>()
 
-        database.addValueEventListener(object : ValueEventListener {
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 println("QQQQQQQQ")
-                if (isListening) {
+                    println("EEEEEEEEEEEEEEEEEEEEEE")
                     breakfastFoodList.clear()
                     lunchFoodList.clear()
                     dinnerFoodList.clear()
@@ -279,7 +273,6 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
 
 
                 }
-            }
 
             override fun onCancelled(error: DatabaseError) {
             }
