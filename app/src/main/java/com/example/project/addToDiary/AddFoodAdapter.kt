@@ -1,4 +1,4 @@
-package com.example.project.addFood
+package com.example.project.addToDiary
 
 import android.app.Activity
 import android.content.Context
@@ -10,8 +10,6 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
 import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
 import com.example.project.diary.FoodInfoActivity

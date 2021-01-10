@@ -1,4 +1,4 @@
-package com.example.project.addFood
+package com.example.project.addToDiary
 
 import android.app.AlertDialog
 import android.content.Intent

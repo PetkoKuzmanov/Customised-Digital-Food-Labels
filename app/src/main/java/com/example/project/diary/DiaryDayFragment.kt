@@ -10,7 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
-import com.example.project.addFood.AddFoodActivity
+import com.example.project.addToDiary.AddExerciseActivity
+import com.example.project.addToDiary.AddFoodActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -73,9 +74,9 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
             startActivity(intent)
         }
         addExerciseTextView.setOnClickListener {
-            val intent = Intent(requireView().context, AddFoodActivity::class.java)
-//            intent.putExtra("meal", "snacks")
-//            intent.putExtra("date", currentDate)
+            val intent = Intent(requireView().context, AddExerciseActivity::class.java)
+            intent.putExtra("date", currentDate)
+            intent.putExtra("menu", "add")
             startActivity(intent)
         }
     }
@@ -91,7 +92,7 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
         val lunchFoodList = ArrayList<FoodModel>()
         val dinnerFoodList = ArrayList<FoodModel>()
         val snacksFoodList = ArrayList<FoodModel>()
-        val exerciseList = ArrayList<String>()
+        val exerciseList = ArrayList<ExerciseModel>()
 
         database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -119,8 +120,12 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                 for (meal in diaryReference?.children!!) {
                     if (meal.key == "exercise") {
                         for (index in meal.children) {
-                            val exerciseString = index.value.toString()
-                            exerciseList.add(exerciseString)
+                            val exercise = index.value.toString()
+
+                            val exerciseModel = ExerciseModel()
+                            exerciseModel.setExercise(exercise)
+                            exerciseModel.setKey(index.key!!)
+                            exerciseList.add(exerciseModel)
                         }
                     } else {
                         for (index in meal.children) {
@@ -242,7 +247,7 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                 exerciseRecyclerView.layoutManager = exerciseLayoutManager
                 val exerciseAdapter = ExerciseAdapter(exerciseList, currentDate)
                 exerciseRecyclerView.adapter = exerciseAdapter
-                
+
                 //Write the calories for the meals and the day
                 var breakfastCalories = 0
                 var lunchCalories = 0

@@ -1,4 +1,4 @@
-package com.example.project.addFood
+package com.example.project.addToDiary
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

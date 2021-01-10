@@ -192,6 +192,5 @@ class FoodInfoActivity : AppCompatActivity() {
         val intent = Intent()
         setResult(Activity.RESULT_OK, intent)
         finish()
-        this.onBackPressed()
     }
 }

@@ -9,9 +9,10 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
+import com.example.project.addToDiary.AddExerciseActivity
 
 class ExerciseAdapter(
-    private val exerciseArrayList: MutableList<String>,
+    private val exerciseArrayList: MutableList<ExerciseModel>,
     private val currentDate: String
 ) :
     RecyclerView.Adapter<ExerciseAdapter.ViewHolder>() {
@@ -35,15 +36,18 @@ class ExerciseAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val info = exerciseArrayList[position]
 
-        holder.exercise.text = info
+        val exercise = info.getExercise()
+        val key = info.getKey()
+        holder.exercise.text = exercise
 
-//        holder.itemView.setOnClickListener {
-//            val intent = Intent(holder.itemView.context, QuickAddInfoActivity::class.java)
-//
-//            intent.putExtra("date", currentDate)
-//            startActivity(holder.itemView.context, intent, null)
-//        }
-
+        holder.itemView.setOnClickListener {
+            val intent = Intent(holder.itemView.context, AddExerciseActivity::class.java)
+            intent.putExtra("exercise", exercise)
+            intent.putExtra("key", key)
+            intent.putExtra("date", currentDate)
+            intent.putExtra("menu", "edit")
+            startActivity(holder.itemView.context, intent, null)
+        }
     }
 
     override fun getItemCount(): Int {

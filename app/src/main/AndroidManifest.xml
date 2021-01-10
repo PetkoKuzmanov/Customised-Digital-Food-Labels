@@ -9,18 +9,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project">
-        <activity android:name=".diary.QuickAddInfoActivity" />
-        <activity android:name=".diary.FoodInfoActivity" />
-        <activity android:name=".addFood.AddFoodInfoActivity" />
-        <activity android:name=".addFood.AddFoodActivity" />
+        <activity android:name=".addToDiary.AddExerciseActivity"
+            android:label="Exercise"/>
+        <activity android:name=".diary.QuickAddInfoActivity"
+            android:label="Quick Add"/>
+        <activity android:name=".diary.FoodInfoActivity"
+            android:label="Food Info"/>
+        <activity android:name=".addToDiary.AddFoodInfoActivity"
+            android:label="Add Food Info"/>
+        <activity android:name=".addToDiary.AddFoodActivity"
+            android:label="Add Food"/>
         <activity
             android:name=".weight.WeightActivity"
             android:label="Weight" />
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
