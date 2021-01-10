@@ -145,11 +145,6 @@ class AddFoodActivity : AppCompatActivity() {
 
             //Check if the topic can be added
             if (!TextUtils.isEmpty(input)) {
-//                mAdapter.addItem(weight, dateTextView.text.toString())
-//                mAuth.currentUser?.let {
-//                    database.child("users").child(it.uid).child(formattedDate).child("diary")
-//                        .child(section).child(formattedTime).child("id").setValue(id)
-//                }
                 val calories = input.toInt()
                 mAuth.currentUser?.let {
                     database.child("users").child(it.uid).child("dates").child(currentDate)
@@ -218,14 +213,21 @@ class AddFoodActivity : AppCompatActivity() {
                         val corners = barcode.cornerPoints
 
                         val rawValue = barcode.rawValue
-                        println("AAAAAAAAAAAAAAAAAAAAAAAAAA" + rawValue)
+                        println("AAAAAAAAAAAAAAAAAAAAAAAAAA " + rawValue)
 
+                        val meal = intent.getStringExtra("meal").toString()
+                        val currentDate = intent.getStringExtra("date").toString()
+
+                        val intent = Intent(applicationContext, AddFoodInfoActivity::class.java)
+                        intent.putExtra("barcode", rawValue)
+                        intent.putExtra("meal", meal)
+                        intent.putExtra("currentDate", currentDate)
+                        startActivityForResult(intent, addFoodRequestCode)
                     }
                 }
             }
             .addOnFailureListener {
                 // Task failed with an exception
-                println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
             }
     }
 
@@ -237,6 +239,9 @@ class AddFoodActivity : AppCompatActivity() {
         val inflater = LayoutInflater.from(this)
         val addBarcodeView = inflater.inflate(R.layout.add_barcode_manually_layout, null)
         val enterBarcode = addBarcodeView.findViewById(R.id.enterBarcode) as EditText
+
+        val meal = intent.getStringExtra("meal").toString()
+        val currentDate = intent.getStringExtra("date").toString()
 
         //Create the alertDialog
         val builder = AlertDialog.Builder(this)
@@ -250,7 +255,9 @@ class AddFoodActivity : AppCompatActivity() {
             if (!TextUtils.isEmpty(input)) {
                 val intent = Intent(applicationContext, AddFoodInfoActivity::class.java)
                 intent.putExtra("barcode", input)
-                startActivity(intent)
+                intent.putExtra("meal", meal)
+                intent.putExtra("currentDate", currentDate)
+                startActivityForResult(intent, addFoodRequestCode)
             } else {
                 //input is empty
             }

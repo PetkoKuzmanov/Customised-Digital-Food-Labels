@@ -211,7 +211,7 @@ class WeightActivity : AppCompatActivity() {
         leftAxis.valueFormatter = ClaimsYAxisValueFormatter()
 
         xAxis.setDrawGridLines(false)
-        xAxis.axisMaximum = dateList.size.toFloat() - 1
+//        xAxis.axisMaximum = dateList.size.toFloat() - 1
         xAxis.granularity = 1f
 
         leftAxis.granularity = 1f

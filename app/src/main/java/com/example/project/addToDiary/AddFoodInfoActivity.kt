@@ -1,5 +1,7 @@
 package com.example.project.addToDiary
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -7,7 +9,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import com.example.project.R
+import com.example.project.diary.FoodInfoActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -16,6 +20,7 @@ import com.google.firebase.ktx.Firebase
 class AddFoodInfoActivity : AppCompatActivity() {
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var database: DatabaseReference
+    private val addFoodRequestCode = 123
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +36,9 @@ class AddFoodInfoActivity : AppCompatActivity() {
     }
 
     fun addFoodInfo(item: MenuItem) {
+        val id = intent.getStringExtra("barcode")
+        val meal = intent.getStringExtra("meal").toString()
+        val currentDate = intent.getStringExtra("currentDate").toString()
         val name = findViewById<EditText>(R.id.nameEditText).text.toString()
         val description = findViewById<EditText>(R.id.descriptionEditText).text.toString()
         val measurement = findViewById<EditText>(R.id.measurementEditText).text.toString()
@@ -51,7 +59,21 @@ class AddFoodInfoActivity : AppCompatActivity() {
             addSingleFoodInfo("fats", fatsText)
             addSingleFoodInfo("proteins", proteinsText)
             addSingleFoodInfo("calories", caloriesText)
-            this.onBackPressed()
+
+            //Open add food to diary
+            val intent = Intent(this, FoodInfoActivity::class.java)
+            intent.putExtra("menu", "addFood")
+            intent.putExtra("id", id)
+            intent.putExtra("name", name)
+            intent.putExtra("description", description)
+            intent.putExtra("amount", "0")
+            intent.putExtra("caloriesAmount", caloriesText.toString())
+            intent.putExtra("carbohydratesAmount", carbohydratesText.toString())
+            intent.putExtra("fatsAmount", fatsText.toString())
+            intent.putExtra("proteinsAmount", proteinsText.toString())
+            intent.putExtra("meal", meal)
+            intent.putExtra("date", currentDate)
+            ActivityCompat.startActivityForResult(this, intent, addFoodRequestCode, null)
         } else {
             val toast = Toast.makeText(
                 applicationContext,
@@ -62,6 +84,16 @@ class AddFoodInfoActivity : AppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == addFoodRequestCode) {
+            if (resultCode == RESULT_OK) {
+                val intent = Intent()
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
+        }
+    }
     private fun addSingleFoodInfo(infoName: String, info: String) {
         val id = intent.getStringExtra("barcode")
         mAuth.currentUser?.let {
