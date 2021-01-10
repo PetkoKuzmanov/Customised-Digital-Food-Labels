@@ -13,13 +13,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 
 class DiaryDayAdapter(
-    private val imageModelArrayList: MutableList<FoodModel>,
+    private val foodModelArrayList: MutableList<FoodModel>,
     private val currentDate: String
 ) :
     RecyclerView.Adapter<DiaryDayAdapter.ViewHolder>() {
-
-    private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    private lateinit var database: DatabaseReference
     var context: Context? = null
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -41,7 +38,7 @@ class DiaryDayAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val info = imageModelArrayList[position]
+        val info = foodModelArrayList[position]
 
         val id = info.getId()
         val name = info.getName()
@@ -90,6 +87,6 @@ class DiaryDayAdapter(
     }
 
     override fun getItemCount(): Int {
-        return imageModelArrayList.size
+        return foodModelArrayList.size
     }
 }
