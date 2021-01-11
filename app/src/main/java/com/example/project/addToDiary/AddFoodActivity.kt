@@ -13,7 +13,6 @@ import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Filterable
 import androidx.appcompat.widget.SearchView
-import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.R
 import com.example.project.diary.FoodInfoActivity
@@ -277,43 +276,37 @@ class AddFoodActivity : AppCompatActivity() {
         database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val foodReference = snapshot.child("food")
-                var isInDatabase = false
 
                 val meal = intent.getStringExtra("meal").toString()
                 val currentDate = intent.getStringExtra("date").toString()
 
-                for (index in foodReference.children) {
-                    if (index.key == barcode) {
-                        isInDatabase = true
-                        //open food
-                        val name = index.child("name").value.toString()
-                        val description =
-                            index.child("description").value.toString()
-                        val calories =
-                            index.child("calories").value.toString()
-                        val carbohydrates =
-                            index.child("carbohydrates").value.toString()
-                        val fats = index.child("fats").value.toString()
-                        val proteins =
-                            index.child("proteins").value.toString()
-                        
-                        val intent = Intent(context, FoodInfoActivity::class.java)
-                        intent.putExtra("menu", "addFood")
-                        intent.putExtra("id", barcode)
-                        intent.putExtra("name", name)
-                        intent.putExtra("description", description)
-                        intent.putExtra("amount", "100")
-                        intent.putExtra("caloriesAmount", calories)
-                        intent.putExtra("carbohydratesAmount", carbohydrates)
-                        intent.putExtra("fatsAmount", fats)
-                        intent.putExtra("proteinsAmount", proteins)
-                        intent.putExtra("meal", meal)
-                        intent.putExtra("date", currentDate)
-                        startActivityForResult(intent, addFoodRequestCode)
-                    }
-                }
+                val food = foodReference.child(barcode)
+                if (food.exists()) {
+                    val name = food.child("name").value.toString()
+                    val description =
+                        food.child("description").value.toString()
+                    val calories =
+                        food.child("calories").value.toString()
+                    val carbohydrates =
+                        food.child("carbohydrates").value.toString()
+                    val fats = food.child("fats").value.toString()
+                    val proteins =
+                        food.child("proteins").value.toString()
 
-                if (!isInDatabase) {
+                    val intent = Intent(context, FoodInfoActivity::class.java)
+                    intent.putExtra("menu", "addFood")
+                    intent.putExtra("id", barcode)
+                    intent.putExtra("name", name)
+                    intent.putExtra("description", description)
+                    intent.putExtra("amount", "100")
+                    intent.putExtra("caloriesAmount", calories)
+                    intent.putExtra("carbohydratesAmount", carbohydrates)
+                    intent.putExtra("fatsAmount", fats)
+                    intent.putExtra("proteinsAmount", proteins)
+                    intent.putExtra("meal", meal)
+                    intent.putExtra("date", currentDate)
+                    startActivityForResult(intent, addFoodRequestCode)
+                } else {
                     val intent =
                         Intent(applicationContext, AddFoodInfoActivity::class.java)
                     intent.putExtra("barcode", barcode)
@@ -321,7 +314,6 @@ class AddFoodActivity : AppCompatActivity() {
                     intent.putExtra("currentDate", currentDate)
                     startActivityForResult(intent, addFoodRequestCode)
                 }
-
             }
 
             override fun onCancelled(error: DatabaseError) {
