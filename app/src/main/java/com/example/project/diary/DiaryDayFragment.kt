@@ -147,9 +147,9 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                                 val foodFats = foodReference.child("fats").value.toString()
                                 val foodProteins = foodReference.child("proteins").value.toString()
 
-                                val foodInstanceCalories =
-                                    ((foodCalories * foodAmount.toDouble()) / 100).roundToInt()
-                                        .toString()
+//                                val foodInstanceCalories =
+//                                    ((foodCalories * foodAmount.toDouble()) / 100).roundToInt()
+//                                        .toString()
 
                                 val foodModel = FoodModel()
                                 foodModel.setName(foodName)
@@ -157,7 +157,7 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                                 foodModel.setDescription(foodDescription)
                                 foodModel.setAmount(foodAmount)
                                 foodModel.setMeasurement(foodAmountMeasurement)
-                                foodModel.setCaloriesAmount(foodInstanceCalories)
+                                foodModel.setCaloriesAmount(foodCalories.toString())
                                 foodModel.setCarbohydratesAmount(foodCarbohydrates)
                                 foodModel.setFatsAmount(foodFats)
                                 foodModel.setProteinsAmount(foodProteins)

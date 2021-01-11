@@ -65,7 +65,7 @@ class AddFoodAdapter(
         holder.name.text = name
         holder.description.text = description
         holder.amount.text = amount + measurement
-        holder.caloriesAmount.text = caloriesAmount
+        holder.caloriesAmount.text = ((caloriesAmount.toInt() * amount.toInt()) / 100).toString()
 
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, FoodInfoActivity::class.java)

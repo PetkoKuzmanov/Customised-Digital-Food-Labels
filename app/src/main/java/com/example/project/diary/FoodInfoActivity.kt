@@ -126,13 +126,13 @@ class FoodInfoActivity : AppCompatActivity() {
             (intent.getStringExtra("fatsAmount")?.toInt()!! * foodAmount / 100)
         val proteinsAmount =
             (intent.getStringExtra("proteinsAmount")?.toInt()!! * foodAmount / 100)
+        val caloriesAmount = intent.getStringExtra("caloriesAmount").toString().toInt()
 
         carbohydratesInfoAmount.text = carbohydratesAmount.toString() + "g"
         fatsInfoAmount.text = fatsAmount.toString() + "g"
         proteinsInfoAmount.text = proteinsAmount.toString() + "g"
 
-        val calories = carbohydratesAmount * 4 + fatsAmount * 9 + proteinsAmount * 4
-
+        val calories = (caloriesAmount * foodAmount) / 100
         val pieChart = findViewById<PieChart>(R.id.foodInfoPieChart)
         setPieChart(pieChart, calories.toInt())
     }

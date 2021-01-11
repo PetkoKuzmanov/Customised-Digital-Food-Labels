@@ -55,7 +55,12 @@ class DiaryDayAdapter(
         holder.name.text = name
         holder.description.text = description
         holder.amount.text = amount + measurement
-        holder.caloriesAmount.text = caloriesAmount
+        if (amount.isNotBlank()) {
+            holder.caloriesAmount.text =
+                ((caloriesAmount.toInt() * amount.toInt()) / 100).toString()
+        } else {
+            holder.caloriesAmount.text = caloriesAmount
+        }
 
         if (name == "Quick Add") {
             holder.itemView.setOnClickListener {

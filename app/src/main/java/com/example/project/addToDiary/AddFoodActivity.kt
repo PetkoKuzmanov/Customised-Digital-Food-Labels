@@ -13,9 +13,12 @@ import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Filterable
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.R
+import com.example.project.diary.FoodInfoActivity
 import com.example.project.diary.FoodModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -28,7 +31,6 @@ import com.google.mlkit.vision.common.InputImage
 import kotlinx.android.synthetic.main.activity_add_food.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import kotlin.math.roundToInt
 
 class AddFoodActivity : AppCompatActivity() {
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -92,8 +94,8 @@ class AddFoodActivity : AppCompatActivity() {
                     val foodFats = foodReference.child("fats").value.toString()
                     val foodProteins = foodReference.child("proteins").value.toString()
 
-                    val foodInstanceCalories =
-                        ((foodCalories * foodAmount.toDouble()) / 100).roundToInt().toString()
+//                    val foodInstanceCalories =
+//                        ((foodCalories * foodAmount.toDouble()) / 100).roundToInt().toString()
 
                     val foodModel = FoodModel()
                     foodModel.setName(foodName)
@@ -101,7 +103,7 @@ class AddFoodActivity : AppCompatActivity() {
                     foodModel.setDescription(foodDescription)
                     foodModel.setAmount(foodAmount)
                     foodModel.setMeasurement(foodAmountMeasurement)
-                    foodModel.setCaloriesAmount(foodInstanceCalories)
+                    foodModel.setCaloriesAmount(foodCalories.toString())
                     foodModel.setCarbohydratesAmount(foodCarbohydrates)
                     foodModel.setFatsAmount(foodFats)
                     foodModel.setProteinsAmount(foodProteins)
@@ -142,7 +144,6 @@ class AddFoodActivity : AppCompatActivity() {
         builder.setPositiveButton("ADD") { _, _ ->
             val input = enterCalories.text.toString()
 
-
             //Check if the topic can be added
             if (!TextUtils.isEmpty(input)) {
                 val calories = input.toInt()
@@ -152,6 +153,12 @@ class AddFoodActivity : AppCompatActivity() {
                         .child(meal).child("calories-$formattedTime").setValue(calories)
                 }
                 this.onBackPressed()
+            } else {
+                val snackbar = Snackbar.make(
+                    historyRecyclerView, "Please input a number",
+                    Snackbar.LENGTH_LONG
+                )
+                snackbar.show()
             }
         }
         builder.setNegativeButton("CANCEL") { _, _ ->
@@ -215,14 +222,9 @@ class AddFoodActivity : AppCompatActivity() {
                         val rawValue = barcode.rawValue
                         println("AAAAAAAAAAAAAAAAAAAAAAAAAA " + rawValue)
 
-                        val meal = intent.getStringExtra("meal").toString()
-                        val currentDate = intent.getStringExtra("date").toString()
+                        //Check if food is in the database
 
-                        val intent = Intent(applicationContext, AddFoodInfoActivity::class.java)
-                        intent.putExtra("barcode", rawValue)
-                        intent.putExtra("meal", meal)
-                        intent.putExtra("currentDate", currentDate)
-                        startActivityForResult(intent, addFoodRequestCode)
+                        addFoodInDatabase(rawValue)
                     }
                 }
             }
@@ -251,20 +253,79 @@ class AddFoodActivity : AppCompatActivity() {
         builder.setPositiveButton("ADD") { _, _ ->
             val input = enterBarcode.text.toString()
 
+
             //Check if the topic can be added
             if (!TextUtils.isEmpty(input)) {
-                val intent = Intent(applicationContext, AddFoodInfoActivity::class.java)
-                intent.putExtra("barcode", input)
-                intent.putExtra("meal", meal)
-                intent.putExtra("currentDate", currentDate)
-                startActivityForResult(intent, addFoodRequestCode)
+                addFoodInDatabase(input)
             } else {
                 //input is empty
+                val snackbar = Snackbar.make(
+                    historyRecyclerView, "Please input a barcode",
+                    Snackbar.LENGTH_LONG
+                )
+                snackbar.show()
             }
         }
         builder.setNegativeButton("CANCEL") { _, _ ->
             //Cancels the adding of the weight even if this is left empty
         }
         builder.show()
+    }
+
+    private fun addFoodInDatabase(barcode: String) {
+        database = Firebase.database.reference
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val foodReference = snapshot.child("food")
+                var isInDatabase = false
+
+                val meal = intent.getStringExtra("meal").toString()
+                val currentDate = intent.getStringExtra("date").toString()
+
+                for (index in foodReference.children) {
+                    if (index.key == barcode) {
+                        isInDatabase = true
+                        //open food
+                        val name = index.child("name").value.toString()
+                        val description =
+                            index.child("description").value.toString()
+                        val calories =
+                            index.child("calories").value.toString()
+                        val carbohydrates =
+                            index.child("carbohydrates").value.toString()
+                        val fats = index.child("fats").value.toString()
+                        val proteins =
+                            index.child("proteins").value.toString()
+                        
+                        val intent = Intent(context, FoodInfoActivity::class.java)
+                        intent.putExtra("menu", "addFood")
+                        intent.putExtra("id", barcode)
+                        intent.putExtra("name", name)
+                        intent.putExtra("description", description)
+                        intent.putExtra("amount", "100")
+                        intent.putExtra("caloriesAmount", calories)
+                        intent.putExtra("carbohydratesAmount", carbohydrates)
+                        intent.putExtra("fatsAmount", fats)
+                        intent.putExtra("proteinsAmount", proteins)
+                        intent.putExtra("meal", meal)
+                        intent.putExtra("date", currentDate)
+                        startActivityForResult(intent, addFoodRequestCode)
+                    }
+                }
+
+                if (!isInDatabase) {
+                    val intent =
+                        Intent(applicationContext, AddFoodInfoActivity::class.java)
+                    intent.putExtra("barcode", barcode)
+                    intent.putExtra("meal", meal)
+                    intent.putExtra("currentDate", currentDate)
+                    startActivityForResult(intent, addFoodRequestCode)
+                }
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
     }
 }
