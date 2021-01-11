@@ -17,7 +17,10 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.time.LocalDateTime
@@ -97,18 +100,47 @@ class FoodInfoActivity : AppCompatActivity() {
         val formatterTime = DateTimeFormatter.ofPattern("HH-mm-ss")
         val formattedTime = current.format(formatterTime)
 
-        val databaseReference = mAuth.currentUser?.let {
+        val currentDateReference = mAuth.currentUser?.let {
             database.child("users").child(it.uid).child("dates").child(currentDate).child("diary")
                 .child(meal)
         }
 
         if (foodKey == null) {
-            databaseReference?.child("food-$formattedTime")?.child("id")?.setValue(id)
-            databaseReference?.child("food-$formattedTime")?.child("amount")?.setValue(amount)
+            currentDateReference?.child("food-$formattedTime")?.child("id")?.setValue(id)
+            currentDateReference?.child("food-$formattedTime")?.child("amount")?.setValue(amount)
         } else {
-            databaseReference?.child(foodKey)?.child("amount")?.setValue(amount)
+            currentDateReference?.child(foodKey)?.child("amount")?.setValue(amount)
         }
 
+        val historyReference = mAuth.currentUser?.let {
+            database.child("users").child(it.uid).child("history")
+        }
+
+        historyReference?.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var foodInHistory: DatabaseReference? = null
+
+                for (index in snapshot.children) {
+                    if (index.child("id").value.toString() == id) {
+                        foodInHistory = index.ref
+
+                    }
+                }
+
+                if (foodInHistory != null) {
+                    foodInHistory.child("amount").setValue(amount)
+                } else {
+                    historyReference.child("history-$currentDate-$formattedTime").child("id")
+                        .setValue(id)
+                    historyReference.child("history-$currentDate-$formattedTime").child("amount")
+                        .setValue(amount)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+        
         val intent = Intent()
         setResult(Activity.RESULT_OK, intent)
         finish()

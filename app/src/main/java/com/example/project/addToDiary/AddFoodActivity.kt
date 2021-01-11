@@ -275,12 +275,10 @@ class AddFoodActivity : AppCompatActivity() {
         database = Firebase.database.reference
         database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val foodReference = snapshot.child("food")
-
                 val meal = intent.getStringExtra("meal").toString()
                 val currentDate = intent.getStringExtra("date").toString()
 
-                val food = foodReference.child(barcode)
+                val food = snapshot.child("food").child(barcode)
                 if (food.exists()) {
                     val name = food.child("name").value.toString()
                     val description =
