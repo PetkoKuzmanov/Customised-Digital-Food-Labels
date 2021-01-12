@@ -27,6 +27,8 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
+import com.google.zxing.integration.android.IntentIntegrator
+import com.google.zxing.integration.android.IntentResult
 import kotlinx.android.synthetic.main.activity_add_food.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -34,10 +36,10 @@ import java.time.format.DateTimeFormatter
 class AddFoodActivity : AppCompatActivity() {
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var database: DatabaseReference
-    private val textRequestCode = 100
-    private val barcodeRequestCode = 200
     private val addFoodRequestCode = 123
     val context = this
+
+    private var historyFoodModelList = ArrayList<FoodModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +51,9 @@ class AddFoodActivity : AppCompatActivity() {
         val searchView = findViewById<SearchView>(R.id.foodSearchView)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                println("TEXT SUBMIT")
+                historyFoodModelList = getAllFoodData()
+                historyRecyclerView.adapter?.notifyDataSetChanged()
+
                 (historyRecyclerView.adapter as Filterable).filter.filter(query)
                 return true
             }
@@ -67,11 +71,10 @@ class AddFoodActivity : AppCompatActivity() {
     }
 
     private fun populateList() {
-        val historyFoodModelList = ArrayList<FoodModel>()
         val currentDate = intent.getStringExtra("date").toString()
 
         database = Firebase.database.reference
-        database.addValueEventListener(object : ValueEventListener {
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 historyFoodModelList.clear()
 
@@ -167,32 +170,24 @@ class AddFoodActivity : AppCompatActivity() {
     }
 
     fun scanItem(item: MenuItem) {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, barcodeRequestCode)
+        run {
+            IntentIntegrator(this).initiateScan();
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == textRequestCode) {
-            when (resultCode) {
-                RESULT_OK -> {
-                    val photo = data?.extras?.get("data") as Bitmap
-                    textRecognition(photo)
-                }
-                RESULT_CANCELED -> {
-                    println("Operation cancelled by user")
-                }
-                else -> {
-                    println("Failed to capture image")
-                }
-            }
-        }
+        val result: IntentResult? =
+            IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == barcodeRequestCode) {
-            if (resultCode == RESULT_OK) {
-                val photo = data?.extras?.get("data") as Bitmap
-                barcodeRecognition(photo)
+        if (result != null) {
+            if (result.contents != null) {
+                println("OOOOOOOOO " + result.contents)
+                addFoodInDatabase(result.contents)
+            } else {
+                println("SCAN FAILED")
+                addBarcodeManuallyAlert()
             }
         }
 
@@ -203,46 +198,10 @@ class AddFoodActivity : AppCompatActivity() {
         }
     }
 
-    private fun barcodeRecognition(photo: Bitmap) {
-        val image = InputImage.fromBitmap(photo, 0)
-        val scanner = BarcodeScanning.getClient()
-
-        val result = scanner.process(image)
-            .addOnSuccessListener { barcodes ->
-                // Task completed successfully
-                if (barcodes.size == 0) {
-                    println("WWWWWWWWWWWWWW")
-                    addBarcodeManuallyAlert()
-                } else {
-                    for (barcode in barcodes) {
-                        val bounds = barcode.boundingBox
-                        val corners = barcode.cornerPoints
-
-                        val rawValue = barcode.rawValue
-                        println("AAAAAAAAAAAAAAAAAAAAAAAAAA " + rawValue)
-
-                        //Check if food is in the database
-
-                        addFoodInDatabase(rawValue)
-                    }
-                }
-            }
-            .addOnFailureListener {
-                // Task failed with an exception
-            }
-    }
-
-    private fun textRecognition(photo: Bitmap) {
-
-    }
-
     private fun addBarcodeManuallyAlert() {
         val inflater = LayoutInflater.from(this)
         val addBarcodeView = inflater.inflate(R.layout.add_barcode_manually_layout, null)
         val enterBarcode = addBarcodeView.findViewById(R.id.enterBarcode) as EditText
-
-        val meal = intent.getStringExtra("meal").toString()
-        val currentDate = intent.getStringExtra("date").toString()
 
         //Create the alertDialog
         val builder = AlertDialog.Builder(this)
@@ -317,5 +276,51 @@ class AddFoodActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {
             }
         })
+    }
+
+    private fun getAllFoodData(): ArrayList<FoodModel> {
+        val foodModelList = ArrayList<FoodModel>()
+
+        database = Firebase.database.reference
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                foodModelList.clear()
+
+                val foodListReference = mAuth.currentUser?.let {
+                    snapshot.child("food")
+                }
+
+                for (index in foodListReference?.children!!) {
+                    val meal = intent.getStringExtra("meal").toString()
+
+                    val foodId = index.key.toString()
+                    val foodName = index.child("name").value.toString()
+                    val foodDescription = index.child("description").value.toString()
+                    val foodAmountMeasurement = index.child("measurement").value.toString()
+                    val foodCalories = index.child("calories").value.toString()
+                    val foodCarbohydrates = index.child("carbohydrates").value.toString()
+                    val foodFats = index.child("fats").value.toString()
+                    val foodProteins = index.child("proteins").value.toString()
+
+                    val foodModel = FoodModel()
+                    foodModel.setName(foodName)
+                    foodModel.setId(foodId)
+                    foodModel.setDescription(foodDescription)
+                    foodModel.setAmount("100")
+                    foodModel.setMeasurement(foodAmountMeasurement)
+                    foodModel.setCaloriesAmount(foodCalories)
+                    foodModel.setCarbohydratesAmount(foodCarbohydrates)
+                    foodModel.setFatsAmount(foodFats)
+                    foodModel.setProteinsAmount(foodProteins)
+                    foodModel.setMeal(meal)
+                    foodModelList.add(foodModel)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+
+        return foodModelList
     }
 }

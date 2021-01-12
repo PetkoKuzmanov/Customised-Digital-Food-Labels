@@ -14,14 +14,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
 import com.example.project.diary.FoodInfoActivity
 import com.example.project.diary.FoodModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AddFoodAdapter(
+class SearchAllFoodAdapter(
     private val foodModelsList: MutableList<FoodModel>,
-    private val currentDate: String
+    private val currentDate: String,
+    private val meal: String
 ) :
-    RecyclerView.Adapter<AddFoodAdapter.ViewHolder>(), Filterable {
+    RecyclerView.Adapter<SearchAllFoodAdapter.ViewHolder>(), Filterable {
+
+    private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var database: DatabaseReference
 
     var context: Context? = null
     var filteredFoodModelsList = ArrayList<FoodModel>()
@@ -125,5 +136,49 @@ class AddFoodAdapter(
             filteredFoodModelsList = results?.values as ArrayList<FoodModel>
             notifyDataSetChanged()
         }
+    }
+
+    private fun getAllFoodData(): ArrayList<FoodModel> {
+        val foodModelList = ArrayList<FoodModel>()
+
+        database = Firebase.database.reference
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                foodModelList.clear()
+
+                val foodListReference = mAuth.currentUser?.let {
+                    snapshot.child("food")
+                }
+
+                for (index in foodListReference?.children!!) {
+                    val foodId = index.key.toString()
+                    val foodName = index.child("name").value.toString()
+                    val foodDescription = index.child("description").value.toString()
+                    val foodAmountMeasurement = index.child("measurement").value.toString()
+                    val foodCalories = index.child("calories").value.toString()
+                    val foodCarbohydrates = index.child("carbohydrates").value.toString()
+                    val foodFats = index.child("fats").value.toString()
+                    val foodProteins = index.child("proteins").value.toString()
+
+                    val foodModel = FoodModel()
+                    foodModel.setName(foodName)
+                    foodModel.setId(foodId)
+                    foodModel.setDescription(foodDescription)
+                    foodModel.setAmount("100")
+                    foodModel.setMeasurement(foodAmountMeasurement)
+                    foodModel.setCaloriesAmount(foodCalories)
+                    foodModel.setCarbohydratesAmount(foodCarbohydrates)
+                    foodModel.setFatsAmount(foodFats)
+                    foodModel.setProteinsAmount(foodProteins)
+                    foodModel.setMeal(meal)
+                    foodModelList.add(foodModel)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+
+        return foodModelList
     }
 }

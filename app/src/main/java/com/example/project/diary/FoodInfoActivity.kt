@@ -123,7 +123,6 @@ class FoodInfoActivity : AppCompatActivity() {
                 for (index in snapshot.children) {
                     if (index.child("id").value.toString() == id) {
                         foodInHistory = index.ref
-
                     }
                 }
 
@@ -140,7 +139,7 @@ class FoodInfoActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {
             }
         })
-        
+
         val intent = Intent()
         setResult(Activity.RESULT_OK, intent)
         finish()
