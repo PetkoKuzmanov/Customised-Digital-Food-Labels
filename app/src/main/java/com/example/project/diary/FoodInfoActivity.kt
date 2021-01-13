@@ -215,10 +215,8 @@ class FoodInfoActivity : AppCompatActivity() {
         val foodKey = intent.getStringExtra("key").toString()
         val currentDate = intent.getStringExtra("date").toString()
 
-        mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("dates").child(currentDate).child("diary")
-                .child(meal).child(foodKey).removeValue()
-        }
+        database.child("users").child(mAuth.uid!!).child("dates").child(currentDate).child("diary")
+            .child(meal).child(foodKey).removeValue()
 
         val intent = Intent()
         setResult(Activity.RESULT_OK, intent)

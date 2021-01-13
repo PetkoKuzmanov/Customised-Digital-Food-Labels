@@ -19,6 +19,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 class MacronutrientsActivity : AppCompatActivity() {
@@ -30,7 +32,14 @@ class MacronutrientsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_macronutrients)
         setSupportActionBar(findViewById(R.id.macronutrientsToolbar))
+    }
 
+    override fun onResume() {
+        super.onResume()
+        getData()
+    }
+
+    private fun getData() {
         database = Firebase.database.reference
 
         val carbohydratesAmount = findViewById<TextView>(R.id.carbohydratesAmount)
@@ -45,43 +54,18 @@ class MacronutrientsActivity : AppCompatActivity() {
         val fatsGoal = findViewById<TextView>(R.id.fatsGoal)
         val proteinsGoal = findViewById<TextView>(R.id.proteinsGoal)
 
-        val caloriesTotalDouble = 1225.0
-        val carbohydratesTotalInt = 175
-        val fatsTotalInt = 25
-        val proteinsTotalInt = 75
-
-        val carbohydratesCalories = carbohydratesTotalInt.toInt() * 4
-        val fatsCalories = fatsTotalInt.toInt() * 9
-        val proteinsCalories = proteinsTotalInt.toInt() * 4
-
-        carbohydratesAmount.text = carbohydratesTotalInt.toString() + "g"
-        fatsAmount.text = fatsTotalInt.toString() + "g"
-        proteinsAmount.text = proteinsTotalInt.toString() + "g"
-
-        val carbohydratesTotalPercent =
-            ((carbohydratesCalories / caloriesTotalDouble) * 100).roundToInt()
-        val fatsTotalPercent = ((fatsCalories / caloriesTotalDouble) * 100).roundToInt()
-        val proteinsTotalPercent = ((proteinsCalories / caloriesTotalDouble) * 100).roundToInt()
-
-        carbohydratesTotalTextView.text = "$carbohydratesTotalPercent%"
-        fatsTotalTextView.text = "$fatsTotalPercent%"
-        proteinsTotalTextView.text = "$proteinsTotalPercent%"
-
-        val databaseReference = mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("goals")
-        }
-
         var carbohydrates = ""
         var fats = ""
         var proteins = ""
 
-        databaseReference?.addValueEventListener(object : ValueEventListener {
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.hasChildren()) {
-                    var calories = snapshot.child("calories").value.toString().toDouble()
-                    carbohydrates = snapshot.child("carbohydrates").value.toString()
-                    fats = snapshot.child("fats").value.toString()
-                    proteins = snapshot.child("proteins").value.toString()
+                val goalsSnapshot = snapshot.child("users").child(mAuth.uid!!).child("goals")
+                if (goalsSnapshot.hasChildren()) {
+                    var calories = goalsSnapshot.child("calories").value.toString().toDouble()
+                    carbohydrates = goalsSnapshot.child("carbohydrates").value.toString()
+                    fats = goalsSnapshot.child("fats").value.toString()
+                    proteins = goalsSnapshot.child("proteins").value.toString()
 
                     val carbohydratesGoalCalories = carbohydrates.toInt() * 4
                     val fatsGoalCalories = fats.toInt() * 9
@@ -99,6 +83,7 @@ class MacronutrientsActivity : AppCompatActivity() {
                     carbohydratesGoal.text = "$carbohydratesGoalPercent%"
                     fatsGoal.text = "$fatsGoalPercent%"
                     proteinsGoal.text = "$proteinsGoalPercent%"
+
                 } else {
                     carbohydratesGoal.text = "0%"
                     fatsGoal.text = "0%"
@@ -108,15 +93,95 @@ class MacronutrientsActivity : AppCompatActivity() {
                     fats = "0"
                     proteins = "0"
                 }
+
+                //Get the total for today
+                val currentDate = LocalDateTime.now()
+                val formatterDate: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                val formattedDate = currentDate.format(formatterDate)
+                val todaySnapshot =
+                    snapshot.child("users").child(mAuth.uid!!).child("dates").child(formattedDate)
+                        .child("diary")
+
+                var caloriesTotalDouble = 0.0
+                var carbohydratesTotalInt = 0
+                var fatsTotalInt = 0
+                var proteinsTotalInt = 0
+
+                if (todaySnapshot.hasChildren()) {
+                    for (meal in todaySnapshot.children) {
+                        if (meal.key != "exercise") {
+                            for (food in meal.children) {
+                                if (food.key.toString().contains("food")) {
+
+                                    val id = food.child("id").value.toString()
+                                    val amount = food.child("amount").value.toString().toInt()
+
+                                    val foodSnapshot = snapshot.child("food").child(id)
+
+                                    println(foodSnapshot)
+                                    val caloriesPerHundred =
+                                        foodSnapshot.child("calories").value.toString().toInt()
+                                    val carbohydratesPerHundred =
+                                        foodSnapshot.child("carbohydrates").value.toString().toInt()
+                                    val fatsPerHundred =
+                                        foodSnapshot.child("fats").value.toString().toInt()
+                                    val proteinsPerHundred =
+                                        foodSnapshot.child("proteins").value.toString().toInt()
+
+                                    val calories = (caloriesPerHundred * amount) / 100
+                                    val foodCarbohydrates = (carbohydratesPerHundred * amount) / 100
+                                    val foodFats = (fatsPerHundred * amount) / 100
+                                    val foodProteins = (proteinsPerHundred * amount) / 100
+
+                                    caloriesTotalDouble += calories
+                                    carbohydratesTotalInt += foodCarbohydrates
+                                    fatsTotalInt += foodFats
+                                    proteinsTotalInt += foodProteins
+
+                                    println(calories)
+                                    println(foodCarbohydrates)
+                                    println(foodFats)
+                                    println(foodProteins)
+
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    caloriesTotalDouble = 1.0
+
+                    val carbohydratesCalories = carbohydratesTotalInt * 4
+                    val fatsCalories = fatsTotalInt * 9
+                    val proteinsCalories = proteinsTotalInt * 4
+
+                    carbohydratesAmount.text = carbohydratesTotalInt.toString() + "g"
+                    fatsAmount.text = fatsTotalInt.toString() + "g"
+                    proteinsAmount.text = proteinsTotalInt.toString() + "g"
+
+                    val carbohydratesTotalPercent =
+                        ((carbohydratesCalories / caloriesTotalDouble) * 100).roundToInt()
+                    val fatsTotalPercent = ((fatsCalories / caloriesTotalDouble) * 100).roundToInt()
+                    val proteinsTotalPercent =
+                        ((proteinsCalories / caloriesTotalDouble) * 100).roundToInt()
+
+                    carbohydratesTotalTextView.text = "$carbohydratesTotalPercent%"
+                    fatsTotalTextView.text = "$fatsTotalPercent%"
+                    proteinsTotalTextView.text = "$proteinsTotalPercent%"
+
+                    val pieChart = findViewById<PieChart>(R.id.macronutrientsChart)
+                    setPieChart(
+                        pieChart,
+                        carbohydratesTotalPercent,
+                        fatsTotalPercent,
+                        proteinsTotalPercent
+                    )
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
 
             }
         })
-
-        val pieChart = findViewById<PieChart>(R.id.macronutrientsChart)
-        setPieChart(pieChart, carbohydratesTotalPercent, fatsTotalPercent, proteinsTotalPercent)
 
         val goalsButton = findViewById<Button>(R.id.goalsButton)
         goalsButton.setOnClickListener {
@@ -140,7 +205,7 @@ class MacronutrientsActivity : AppCompatActivity() {
         pieChart.isDrawHoleEnabled = false
         pieChart.legend.isEnabled = false
 
-        var values = ArrayList<PieEntry>()
+        val values = ArrayList<PieEntry>()
         values.add(PieEntry(carbohydratesTotalPercent.toFloat()))
         values.add(PieEntry(fatsTotalPercent.toFloat()))
         values.add(PieEntry(proteinsTotalPercent.toFloat()))
@@ -158,12 +223,4 @@ class MacronutrientsActivity : AppCompatActivity() {
         pieChart.animateXY(1000, 1000)
     }
 
-//    class MyValueFormatter(pieChart: PieChart) : PercentFormatter() {
-//        private lateinit var pieChart: PieChart
-//
-//        fun MyValueFormatter() {
-//            mFormat = DecimalFormat("##")
-//        }
-//
-//    }
 }

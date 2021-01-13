@@ -102,200 +102,206 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                 snacksFoodList.clear()
                 exerciseList.clear()
 
-                val caloriesGoal = mAuth.currentUser?.let {
-                    snapshot.child("users").child(it.uid).child("goals")
-                        .child("calories").value.toString().toInt()
-                }
+                if (snapshot.child("users").child(mAuth.uid!!).exists()) {
+                    val caloriesGoal = mAuth.currentUser?.let {
+                        snapshot.child("users").child(it.uid).child("goals")
+                            .child("calories").value.toString().toInt()
+                    }
 
-                val caloriesGoalTextView =
-                    requireView().findViewById<TextView>(R.id.goalCalories)
-                caloriesGoalTextView.text = caloriesGoal.toString()
+                    val caloriesGoalTextView =
+                        requireView().findViewById<TextView>(R.id.goalCalories)
+                    caloriesGoalTextView.text = caloriesGoal.toString()
 
-                val diaryReference = mAuth.currentUser?.let {
-                    snapshot.child("users").child(it.uid).child("dates").child(currentDate)
-                        .child("diary")
-                }
+                    val diaryReference = mAuth.currentUser?.let {
+                        snapshot.child("users").child(it.uid).child("dates").child(currentDate)
+                            .child("diary")
+                    }
 
-                //Get the data for the meals
-                for (meal in diaryReference?.children!!) {
-                    if (meal.key == "exercise") {
-                        for (index in meal.children) {
-                            val exercise = index.value.toString()
+                    //Get the data for the meals
+                    for (meal in diaryReference?.children!!) {
+                        if (meal.key == "exercise") {
+                            for (index in meal.children) {
+                                val exercise = index.value.toString()
 
-                            val exerciseModel = ExerciseModel()
-                            exerciseModel.setExercise(exercise)
-                            exerciseModel.setKey(index.key!!)
-                            exerciseList.add(exerciseModel)
-                        }
-                    } else {
-                        for (index in meal.children) {
-                            if (index.key?.contains("food")!!) {
-                                val foodId = index.child("id").value.toString()
-                                val foodAmount = index.child("amount").value.toString()
+                                val exerciseModel = ExerciseModel()
+                                exerciseModel.setExercise(exercise)
+                                exerciseModel.setKey(index.key!!)
+                                exerciseList.add(exerciseModel)
+                            }
+                        } else {
+                            for (index in meal.children) {
+                                if (index.key?.contains("food")!!) {
+                                    val foodId = index.child("id").value.toString()
+                                    val foodAmount = index.child("amount").value.toString()
 
-                                val foodReference = snapshot.child("food").child(foodId)
+                                    val foodReference = snapshot.child("food").child(foodId)
 
-                                val foodName = foodReference.child("name").value.toString()
-                                val foodDescription =
-                                    foodReference.child("description").value.toString()
-                                val foodAmountMeasurement =
-                                    foodReference.child("measurement").value.toString()
-                                val foodCalories =
-                                    foodReference.child("calories").value.toString().toInt()
-                                val foodCarbohydrates =
-                                    foodReference.child("carbohydrates").value.toString()
-                                val foodFats = foodReference.child("fats").value.toString()
-                                val foodProteins = foodReference.child("proteins").value.toString()
+                                    val foodName = foodReference.child("name").value.toString()
+                                    val foodDescription =
+                                        foodReference.child("description").value.toString()
+                                    val foodAmountMeasurement =
+                                        foodReference.child("measurement").value.toString()
+                                    val foodCalories =
+                                        foodReference.child("calories").value.toString().toInt()
+                                    val foodCarbohydrates =
+                                        foodReference.child("carbohydrates").value.toString()
+                                    val foodFats = foodReference.child("fats").value.toString()
+                                    val foodProteins =
+                                        foodReference.child("proteins").value.toString()
 
 //                                val foodInstanceCalories =
 //                                    ((foodCalories * foodAmount.toDouble()) / 100).roundToInt()
 //                                        .toString()
 
-                                val foodModel = FoodModel()
-                                foodModel.setName(foodName)
-                                foodModel.setId(foodId)
-                                foodModel.setDescription(foodDescription)
-                                foodModel.setAmount(foodAmount)
-                                foodModel.setMeasurement(foodAmountMeasurement)
-                                foodModel.setCaloriesAmount(foodCalories.toString())
-                                foodModel.setCarbohydratesAmount(foodCarbohydrates)
-                                foodModel.setFatsAmount(foodFats)
-                                foodModel.setProteinsAmount(foodProteins)
-                                foodModel.setMeal(meal.key.toString())
-                                foodModel.setKey(index.key!!)
+                                    val foodModel = FoodModel()
+                                    foodModel.setName(foodName)
+                                    foodModel.setId(foodId)
+                                    foodModel.setDescription(foodDescription)
+                                    foodModel.setAmount(foodAmount)
+                                    foodModel.setMeasurement(foodAmountMeasurement)
+                                    foodModel.setCaloriesAmount(foodCalories.toString())
+                                    foodModel.setCarbohydratesAmount(foodCarbohydrates)
+                                    foodModel.setFatsAmount(foodFats)
+                                    foodModel.setProteinsAmount(foodProteins)
+                                    foodModel.setMeal(meal.key.toString())
+                                    foodModel.setKey(index.key!!)
 
-                                when {
-                                    meal.key.toString() == "breakfast" -> {
-                                        breakfastFoodList.add(foodModel)
+                                    when {
+                                        meal.key.toString() == "breakfast" -> {
+                                            breakfastFoodList.add(foodModel)
+                                        }
+                                        meal.key.toString() == "lunch" -> {
+                                            lunchFoodList.add(foodModel)
+                                        }
+                                        meal.key.toString() == "dinner" -> {
+                                            dinnerFoodList.add(foodModel)
+                                        }
+                                        meal.key.toString() == "snacks" -> {
+                                            snacksFoodList.add(foodModel)
+                                        }
                                     }
-                                    meal.key.toString() == "lunch" -> {
-                                        lunchFoodList.add(foodModel)
-                                    }
-                                    meal.key.toString() == "dinner" -> {
-                                        dinnerFoodList.add(foodModel)
-                                    }
-                                    meal.key.toString() == "snacks" -> {
-                                        snacksFoodList.add(foodModel)
-                                    }
-                                }
-                            } else if (index.key?.contains("calories")!!) {
-                                val calories = index.value.toString()
+                                } else if (index.key?.contains("calories")!!) {
+                                    val calories = index.value.toString()
 
-                                val foodModel = FoodModel()
-                                foodModel.setName("Quick Add")
-                                foodModel.setId("Quick Add")
-                                foodModel.setDescription(" ")
-                                foodModel.setAmount(" ")
-                                foodModel.setMeasurement(" ")
-                                foodModel.setCaloriesAmount(calories)
-                                foodModel.setCarbohydratesAmount("0")
-                                foodModel.setFatsAmount("0")
-                                foodModel.setProteinsAmount("0")
-                                foodModel.setMeal(meal.key.toString())
-                                foodModel.setKey(index.key!!)
+                                    val foodModel = FoodModel()
+                                    foodModel.setName("Quick Add")
+                                    foodModel.setId("Quick Add")
+                                    foodModel.setDescription(" ")
+                                    foodModel.setAmount(" ")
+                                    foodModel.setMeasurement(" ")
+                                    foodModel.setCaloriesAmount(calories)
+                                    foodModel.setCarbohydratesAmount("0")
+                                    foodModel.setFatsAmount("0")
+                                    foodModel.setProteinsAmount("0")
+                                    foodModel.setMeal(meal.key.toString())
+                                    foodModel.setKey(index.key!!)
 
-                                when {
-                                    meal.key.toString() == "breakfast" -> {
-                                        breakfastFoodList.add(foodModel)
-                                    }
-                                    meal.key.toString() == "lunch" -> {
-                                        lunchFoodList.add(foodModel)
-                                    }
-                                    meal.key.toString() == "dinner" -> {
-                                        dinnerFoodList.add(foodModel)
-                                    }
-                                    meal.key.toString() == "snacks" -> {
-                                        snacksFoodList.add(foodModel)
+                                    when {
+                                        meal.key.toString() == "breakfast" -> {
+                                            breakfastFoodList.add(foodModel)
+                                        }
+                                        meal.key.toString() == "lunch" -> {
+                                            lunchFoodList.add(foodModel)
+                                        }
+                                        meal.key.toString() == "dinner" -> {
+                                            dinnerFoodList.add(foodModel)
+                                        }
+                                        meal.key.toString() == "snacks" -> {
+                                            snacksFoodList.add(foodModel)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+
+                    val breakfastLayoutManager = LinearLayoutManager(activity)
+                    val breakfastRecyclerView =
+                        requireView().findViewById(R.id.breakfastRecyclerView) as RecyclerView
+                    breakfastRecyclerView.layoutManager = breakfastLayoutManager
+                    val breakfastAdapter = DiaryDayAdapter(breakfastFoodList, currentDate)
+                    breakfastRecyclerView.adapter = breakfastAdapter
+
+                    val lunchLayoutManager = LinearLayoutManager(activity)
+                    val lunchRecyclerView =
+                        requireView().findViewById(R.id.lunchRecyclerView) as RecyclerView
+                    lunchRecyclerView.layoutManager = lunchLayoutManager
+                    val lunchAdapter = DiaryDayAdapter(lunchFoodList, currentDate)
+                    lunchRecyclerView.adapter = lunchAdapter
+
+                    val dinnerLayoutManager = LinearLayoutManager(activity)
+                    val dinnerRecyclerView =
+                        requireView().findViewById(R.id.dinnerRecyclerView) as RecyclerView
+                    dinnerRecyclerView.layoutManager = dinnerLayoutManager
+                    val dinnerAdapter = DiaryDayAdapter(dinnerFoodList, currentDate)
+                    dinnerRecyclerView.adapter = dinnerAdapter
+
+                    val snacksLayoutManager = LinearLayoutManager(activity)
+                    val snacksRecyclerView =
+                        requireView().findViewById(R.id.snacksRecyclerView) as RecyclerView
+                    snacksRecyclerView.layoutManager = snacksLayoutManager
+                    val snacksAdapter = DiaryDayAdapter(snacksFoodList, currentDate)
+                    snacksRecyclerView.adapter = snacksAdapter
+
+                    val exerciseLayoutManager = LinearLayoutManager(activity)
+                    val exerciseRecyclerView =
+                        requireView().findViewById(R.id.exerciseRecyclerView) as RecyclerView
+                    exerciseRecyclerView.layoutManager = exerciseLayoutManager
+                    val exerciseAdapter = ExerciseAdapter(exerciseList, currentDate)
+                    exerciseRecyclerView.adapter = exerciseAdapter
+
+                    //Write the calories for the meals and the day
+                    var breakfastCalories = 0
+                    var lunchCalories = 0
+                    var dinnerCalories = 0
+                    var snacksCalories = 0
+
+                    for (food in breakfastFoodList) {
+                        val calories =
+                            food.getCaloriesAmount().toInt() * food.getAmount().toInt() / 100
+                        breakfastCalories += calories
+                    }
+                    for (food in lunchFoodList) {
+                        val calories =
+                            food.getCaloriesAmount().toInt() * food.getAmount().toInt() / 100
+                        lunchCalories += calories
+                    }
+                    for (food in dinnerFoodList) {
+                        val calories =
+                            food.getCaloriesAmount().toInt() * food.getAmount().toInt() / 100
+                        dinnerCalories += calories
+                    }
+                    for (food in snacksFoodList) {
+                        val calories =
+                            food.getCaloriesAmount().toInt() * food.getAmount().toInt() / 100
+                        snacksCalories += calories
+                    }
+
+                    val totalCalories =
+                        breakfastCalories + lunchCalories + dinnerCalories + snacksCalories
+                    val remainingCalories = caloriesGoal!! - totalCalories
+
+                    val breakfastCaloriesTextView =
+                        requireView().findViewById<TextView>(R.id.breakfastCalories)
+                    val lunchCaloriesTextView =
+                        requireView().findViewById<TextView>(R.id.lunchCalories)
+                    val dinnerCaloriesTextView =
+                        requireView().findViewById<TextView>(R.id.dinnerCalories)
+                    val snacksCaloriesTextView =
+                        requireView().findViewById<TextView>(R.id.snacksCalories)
+                    val totalCaloriesTextView =
+                        requireView().findViewById<TextView>(R.id.caloriesConsumed)
+                    val remainingCaloriesTextView =
+                        requireView().findViewById<TextView>(R.id.caloriesRemaining)
+
+                    breakfastCaloriesTextView.text = breakfastCalories.toString()
+                    lunchCaloriesTextView.text = lunchCalories.toString()
+                    dinnerCaloriesTextView.text = dinnerCalories.toString()
+                    snacksCaloriesTextView.text = snacksCalories.toString()
+                    totalCaloriesTextView.text = totalCalories.toString()
+                    remainingCaloriesTextView.text = remainingCalories.toString()
+
                 }
-
-                val breakfastLayoutManager = LinearLayoutManager(activity)
-                val breakfastRecyclerView =
-                    requireView().findViewById(R.id.breakfastRecyclerView) as RecyclerView
-                breakfastRecyclerView.layoutManager = breakfastLayoutManager
-                val breakfastAdapter = DiaryDayAdapter(breakfastFoodList, currentDate)
-                breakfastRecyclerView.adapter = breakfastAdapter
-
-                val lunchLayoutManager = LinearLayoutManager(activity)
-                val lunchRecyclerView =
-                    requireView().findViewById(R.id.lunchRecyclerView) as RecyclerView
-                lunchRecyclerView.layoutManager = lunchLayoutManager
-                val lunchAdapter = DiaryDayAdapter(lunchFoodList, currentDate)
-                lunchRecyclerView.adapter = lunchAdapter
-
-                val dinnerLayoutManager = LinearLayoutManager(activity)
-                val dinnerRecyclerView =
-                    requireView().findViewById(R.id.dinnerRecyclerView) as RecyclerView
-                dinnerRecyclerView.layoutManager = dinnerLayoutManager
-                val dinnerAdapter = DiaryDayAdapter(dinnerFoodList, currentDate)
-                dinnerRecyclerView.adapter = dinnerAdapter
-
-                val snacksLayoutManager = LinearLayoutManager(activity)
-                val snacksRecyclerView =
-                    requireView().findViewById(R.id.snacksRecyclerView) as RecyclerView
-                snacksRecyclerView.layoutManager = snacksLayoutManager
-                val snacksAdapter = DiaryDayAdapter(snacksFoodList, currentDate)
-                snacksRecyclerView.adapter = snacksAdapter
-
-                val exerciseLayoutManager = LinearLayoutManager(activity)
-                val exerciseRecyclerView =
-                    requireView().findViewById(R.id.exerciseRecyclerView) as RecyclerView
-                exerciseRecyclerView.layoutManager = exerciseLayoutManager
-                val exerciseAdapter = ExerciseAdapter(exerciseList, currentDate)
-                exerciseRecyclerView.adapter = exerciseAdapter
-
-                //Write the calories for the meals and the day
-                var breakfastCalories = 0
-                var lunchCalories = 0
-                var dinnerCalories = 0
-                var snacksCalories = 0
-
-                for (food in breakfastFoodList) {
-                    val calories = food.getCaloriesAmount().toInt()
-                    breakfastCalories += calories
-                }
-                for (food in lunchFoodList) {
-                    val calories = food.getCaloriesAmount().toInt()
-                    lunchCalories += calories
-                }
-                for (food in dinnerFoodList) {
-                    val calories = food.getCaloriesAmount().toInt()
-                    dinnerCalories += calories
-                }
-                for (food in snacksFoodList) {
-                    val calories = food.getCaloriesAmount().toInt()
-                    snacksCalories += calories
-                }
-
-                val totalCalories =
-                    breakfastCalories + lunchCalories + dinnerCalories + snacksCalories
-                val remainingCalories = caloriesGoal!! - totalCalories
-
-                val breakfastCaloriesTextView =
-                    requireView().findViewById<TextView>(R.id.breakfastCalories)
-                val lunchCaloriesTextView =
-                    requireView().findViewById<TextView>(R.id.lunchCalories)
-                val dinnerCaloriesTextView =
-                    requireView().findViewById<TextView>(R.id.dinnerCalories)
-                val snacksCaloriesTextView =
-                    requireView().findViewById<TextView>(R.id.snacksCalories)
-                val totalCaloriesTextView =
-                    requireView().findViewById<TextView>(R.id.caloriesConsumed)
-                val remainingCaloriesTextView =
-                    requireView().findViewById<TextView>(R.id.caloriesRemaining)
-
-                breakfastCaloriesTextView.text = breakfastCalories.toString()
-                lunchCaloriesTextView.text = lunchCalories.toString()
-                dinnerCaloriesTextView.text = dinnerCalories.toString()
-                snacksCaloriesTextView.text = snacksCalories.toString()
-                totalCaloriesTextView.text = totalCalories.toString()
-                remainingCaloriesTextView.text = remainingCalories.toString()
-
-
             }
 
             override fun onCancelled(error: DatabaseError) {

@@ -13,9 +13,6 @@
         android:icon="@drawable/ic_line_chart"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_settings"
-        android:title="Settings" />
-    <item
         android:id="@+id/action_logout"
         android:title="Log Out" />
 </menu>

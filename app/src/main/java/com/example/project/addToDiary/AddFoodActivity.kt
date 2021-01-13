@@ -51,9 +51,6 @@ class AddFoodActivity : AppCompatActivity() {
         val searchView = findViewById<SearchView>(R.id.foodSearchView)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                historyFoodModelList = getAllFoodData()
-                historyRecyclerView.adapter?.notifyDataSetChanged()
-
                 (historyRecyclerView.adapter as Filterable).filter.filter(query)
                 return true
             }
@@ -95,9 +92,6 @@ class AddFoodActivity : AppCompatActivity() {
                     val foodCarbohydrates = foodReference.child("carbohydrates").value.toString()
                     val foodFats = foodReference.child("fats").value.toString()
                     val foodProteins = foodReference.child("proteins").value.toString()
-
-//                    val foodInstanceCalories =
-//                        ((foodCalories * foodAmount.toDouble()) / 100).roundToInt().toString()
 
                     val foodModel = FoodModel()
                     foodModel.setName(foodName)
@@ -278,49 +272,49 @@ class AddFoodActivity : AppCompatActivity() {
         })
     }
 
-    private fun getAllFoodData(): ArrayList<FoodModel> {
-        val foodModelList = ArrayList<FoodModel>()
-
-        database = Firebase.database.reference
-        database.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                foodModelList.clear()
-
-                val foodListReference = mAuth.currentUser?.let {
-                    snapshot.child("food")
-                }
-
-                for (index in foodListReference?.children!!) {
-                    val meal = intent.getStringExtra("meal").toString()
-
-                    val foodId = index.key.toString()
-                    val foodName = index.child("name").value.toString()
-                    val foodDescription = index.child("description").value.toString()
-                    val foodAmountMeasurement = index.child("measurement").value.toString()
-                    val foodCalories = index.child("calories").value.toString()
-                    val foodCarbohydrates = index.child("carbohydrates").value.toString()
-                    val foodFats = index.child("fats").value.toString()
-                    val foodProteins = index.child("proteins").value.toString()
-
-                    val foodModel = FoodModel()
-                    foodModel.setName(foodName)
-                    foodModel.setId(foodId)
-                    foodModel.setDescription(foodDescription)
-                    foodModel.setAmount("100")
-                    foodModel.setMeasurement(foodAmountMeasurement)
-                    foodModel.setCaloriesAmount(foodCalories)
-                    foodModel.setCarbohydratesAmount(foodCarbohydrates)
-                    foodModel.setFatsAmount(foodFats)
-                    foodModel.setProteinsAmount(foodProteins)
-                    foodModel.setMeal(meal)
-                    foodModelList.add(foodModel)
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
-
-        return foodModelList
-    }
+//    private fun getAllFoodData(): ArrayList<FoodModel> {
+//        val foodModelList = ArrayList<FoodModel>()
+//
+//        database = Firebase.database.reference
+//        database.addValueEventListener(object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                foodModelList.clear()
+//
+//                val foodListReference = mAuth.currentUser?.let {
+//                    snapshot.child("food")
+//                }
+//
+//                for (index in foodListReference?.children!!) {
+//                    val meal = intent.getStringExtra("meal").toString()
+//
+//                    val foodId = index.key.toString()
+//                    val foodName = index.child("name").value.toString()
+//                    val foodDescription = index.child("description").value.toString()
+//                    val foodAmountMeasurement = index.child("measurement").value.toString()
+//                    val foodCalories = index.child("calories").value.toString()
+//                    val foodCarbohydrates = index.child("carbohydrates").value.toString()
+//                    val foodFats = index.child("fats").value.toString()
+//                    val foodProteins = index.child("proteins").value.toString()
+//
+//                    val foodModel = FoodModel()
+//                    foodModel.setName(foodName)
+//                    foodModel.setId(foodId)
+//                    foodModel.setDescription(foodDescription)
+//                    foodModel.setAmount("100")
+//                    foodModel.setMeasurement(foodAmountMeasurement)
+//                    foodModel.setCaloriesAmount(foodCalories)
+//                    foodModel.setCarbohydratesAmount(foodCarbohydrates)
+//                    foodModel.setFatsAmount(foodFats)
+//                    foodModel.setProteinsAmount(foodProteins)
+//                    foodModel.setMeal(meal)
+//                    foodModelList.add(foodModel)
+//                }
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//            }
+//        })
+//
+//        return foodModelList
+//    }
 }

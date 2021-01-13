@@ -82,10 +82,12 @@ class WeightActivity : AppCompatActivity() {
                         weightModel.setWeight(index.value)
                         weightModelList.add(weightModel)
                     }
+
+                    val lineChart = findViewById<LineChart>(R.id.weightLineChart)
+                    setLineChart(lineChart, mutableMap)
                 }
 
-                val lineChart = findViewById<LineChart>(R.id.weightLineChart)
-                setLineChart(lineChart, mutableMap)
+
 
                 val recyclerView = findViewById<RecyclerView>(R.id.weightRecyclerView)
                 val layoutManager = LinearLayoutManager(context)
@@ -195,6 +197,7 @@ class WeightActivity : AppCompatActivity() {
             dateList.add(index.key)
             weightList.add(index.value)
         }
+
 
         var weightMin = weightList[0]
         var weightMax = weightList[0]
