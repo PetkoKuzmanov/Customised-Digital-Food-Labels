@@ -187,7 +187,7 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                                     foodModel.setName("Quick Add")
                                     foodModel.setId("Quick Add")
                                     foodModel.setDescription(" ")
-                                    foodModel.setAmount(" ")
+                                    foodModel.setAmount("")
                                     foodModel.setMeasurement(" ")
                                     foodModel.setCaloriesAmount(calories)
                                     foodModel.setCarbohydratesAmount("0")
@@ -257,23 +257,35 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                     var snacksCalories = 0
 
                     for (food in breakfastFoodList) {
-                        val calories =
+                        val calories = if (food.getName() == "Quick Add") {
+                            food.getCaloriesAmount().toInt()
+                        } else {
                             food.getCaloriesAmount().toInt() * food.getAmount().toInt() / 100
+                        }
                         breakfastCalories += calories
                     }
                     for (food in lunchFoodList) {
-                        val calories =
+                        val calories = if (food.getName() == "Quick Add") {
+                            food.getCaloriesAmount().toInt()
+                        } else {
                             food.getCaloriesAmount().toInt() * food.getAmount().toInt() / 100
+                        }
                         lunchCalories += calories
                     }
                     for (food in dinnerFoodList) {
-                        val calories =
+                        val calories = if (food.getName() == "Quick Add") {
+                            food.getCaloriesAmount().toInt()
+                        } else {
                             food.getCaloriesAmount().toInt() * food.getAmount().toInt() / 100
+                        }
                         dinnerCalories += calories
                     }
                     for (food in snacksFoodList) {
-                        val calories =
+                        val calories = if (food.getName() == "Quick Add") {
+                            food.getCaloriesAmount().toInt()
+                        } else {
                             food.getCaloriesAmount().toInt() * food.getAmount().toInt() / 100
+                        }
                         snacksCalories += calories
                     }
 
