@@ -88,7 +88,6 @@ class WeightActivity : AppCompatActivity() {
                 }
 
 
-
                 val recyclerView = findViewById<RecyclerView>(R.id.weightRecyclerView)
                 val layoutManager = LinearLayoutManager(context)
                 recyclerView.layoutManager = layoutManager
@@ -242,7 +241,9 @@ class WeightActivity : AppCompatActivity() {
         override fun getAxisLabel(value: Float, axis: AxisBase): String {
             var position = value.roundToInt()
             val sdf = SimpleDateFormat("MMM dd")
-            if (value > 1 && value < 2) {
+            if (value < 1) {
+                position = 0
+            } else if (value > 1 && value < 2) {
                 position = 0
             } else if (value > 2 && value < 3) {
                 position = 1
@@ -259,8 +260,8 @@ class WeightActivity : AppCompatActivity() {
                             "yyyy-MM-dd"
                         ))
                     )
-                );
-            return "";
+                )
+            return ""
         }
 
         private fun getDateInMilliSeconds(givenDateString: String?, format: String): Long {
