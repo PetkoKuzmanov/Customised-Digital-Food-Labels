@@ -2,6 +2,7 @@ package com.example.project.diary
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -31,6 +32,7 @@ class DiaryActivity : AppCompatActivity() {
 
         val mToolbar = findViewById<Toolbar>(R.id.diaryToolbar)
         setSupportActionBar(mToolbar)
+        mToolbar.setTitleTextColor(Color.WHITE)
 
         currentDate = LocalDateTime.now()
         formattedDate = currentDate.format(formatterDate)

@@ -3,9 +3,11 @@ package com.example.project.macronutrients
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Menu
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.example.project.R
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
@@ -31,7 +33,7 @@ class MacronutrientsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_macronutrients)
-        setSupportActionBar(findViewById(R.id.macronutrientsToolbar))
+        setSupportActionBar(findViewById(R.id.macronutrientsToolBar))
     }
 
     override fun onResume() {
@@ -118,7 +120,6 @@ class MacronutrientsActivity : AppCompatActivity() {
 
                                     val foodSnapshot = snapshot.child("food").child(id)
 
-                                    println(foodSnapshot)
                                     val caloriesPerHundred =
                                         foodSnapshot.child("calories").value.toString().toInt()
                                     val carbohydratesPerHundred =
@@ -133,49 +134,42 @@ class MacronutrientsActivity : AppCompatActivity() {
                                     val foodFats = (fatsPerHundred * amount) / 100
                                     val foodProteins = (proteinsPerHundred * amount) / 100
 
-                                    caloriesTotalDouble += calories
+                                    caloriesTotalDouble += foodCarbohydrates * 4 + foodFats * 9 + foodProteins * 4
                                     carbohydratesTotalInt += foodCarbohydrates
                                     fatsTotalInt += foodFats
                                     proteinsTotalInt += foodProteins
-
-                                    println(calories)
-                                    println(foodCarbohydrates)
-                                    println(foodFats)
-                                    println(foodProteins)
-
                                 }
                             }
                         }
                     }
                 } else {
                     caloriesTotalDouble = 1.0
-
-                    val carbohydratesCalories = carbohydratesTotalInt * 4
-                    val fatsCalories = fatsTotalInt * 9
-                    val proteinsCalories = proteinsTotalInt * 4
-
-                    carbohydratesAmount.text = carbohydratesTotalInt.toString() + "g"
-                    fatsAmount.text = fatsTotalInt.toString() + "g"
-                    proteinsAmount.text = proteinsTotalInt.toString() + "g"
-
-                    val carbohydratesTotalPercent =
-                        ((carbohydratesCalories / caloriesTotalDouble) * 100).roundToInt()
-                    val fatsTotalPercent = ((fatsCalories / caloriesTotalDouble) * 100).roundToInt()
-                    val proteinsTotalPercent =
-                        ((proteinsCalories / caloriesTotalDouble) * 100).roundToInt()
-
-                    carbohydratesTotalTextView.text = "$carbohydratesTotalPercent%"
-                    fatsTotalTextView.text = "$fatsTotalPercent%"
-                    proteinsTotalTextView.text = "$proteinsTotalPercent%"
-
-                    val pieChart = findViewById<PieChart>(R.id.macronutrientsChart)
-                    setPieChart(
-                        pieChart,
-                        carbohydratesTotalPercent,
-                        fatsTotalPercent,
-                        proteinsTotalPercent
-                    )
                 }
+                val carbohydratesCalories = carbohydratesTotalInt * 4
+                val fatsCalories = fatsTotalInt * 9
+                val proteinsCalories = proteinsTotalInt * 4
+
+                carbohydratesAmount.text = carbohydratesTotalInt.toString() + "g"
+                fatsAmount.text = fatsTotalInt.toString() + "g"
+                proteinsAmount.text = proteinsTotalInt.toString() + "g"
+
+                val carbohydratesTotalPercent =
+                    ((carbohydratesCalories / caloriesTotalDouble) * 100).roundToInt()
+                val fatsTotalPercent = ((fatsCalories / caloriesTotalDouble) * 100).roundToInt()
+                val proteinsTotalPercent =
+                    ((proteinsCalories / caloriesTotalDouble) * 100).roundToInt()
+
+                carbohydratesTotalTextView.text = "$carbohydratesTotalPercent%"
+                fatsTotalTextView.text = "$fatsTotalPercent%"
+                proteinsTotalTextView.text = "$proteinsTotalPercent%"
+
+                val pieChart = findViewById<PieChart>(R.id.macronutrientsChart)
+                setPieChart(
+                    pieChart,
+                    carbohydratesTotalPercent,
+                    fatsTotalPercent,
+                    proteinsTotalPercent
+                )
             }
 
             override fun onCancelled(error: DatabaseError) {

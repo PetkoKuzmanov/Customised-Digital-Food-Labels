@@ -140,7 +140,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/border_with_white_background">
+                    android:background="@drawable/border_with_off_white_background">
 
                     <TextView
                         android:id="@+id/breakfastLabel"
@@ -175,7 +175,7 @@
                     android:id="@+id/addFoodToBreakfastTextView"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:background="@color/lightGrey"
+                    android:background="@color/light_grey"
                     android:paddingStart="15dp"
                     android:paddingTop="5dp"
                     android:text="@string/add_food"
@@ -194,7 +194,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/border_with_white_background">
+                    android:background="@drawable/border_with_off_white_background">
 
                     <TextView
                         android:id="@+id/lunchLabel"
@@ -229,7 +229,7 @@
                     android:id="@+id/addFoodToLunchTextView"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:background="@color/lightGrey"
+                    android:background="@color/light_grey"
                     android:paddingStart="15dp"
                     android:paddingTop="5dp"
                     android:text="@string/add_food"
@@ -248,7 +248,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/border_with_white_background">
+                    android:background="@drawable/border_with_off_white_background">
 
                     <TextView
                         android:id="@+id/dinnerLabel"
@@ -283,7 +283,7 @@
                     android:id="@+id/addFoodToDinnerTextView"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:background="@color/lightGrey"
+                    android:background="@color/light_grey"
                     android:paddingStart="15dp"
                     android:paddingTop="5dp"
                     android:text="@string/add_food"
@@ -302,7 +302,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/border_with_white_background">
+                    android:background="@drawable/border_with_off_white_background">
 
                     <TextView
                         android:id="@+id/snacksLabel"
@@ -337,7 +337,7 @@
                     android:id="@+id/addFoodToSnacksTextView"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:background="@color/lightGrey"
+                    android:background="@color/light_grey"
                     android:paddingStart="15dp"
                     android:paddingTop="5dp"
                     android:text="@string/add_food"
@@ -356,7 +356,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/border_with_white_background">
+                    android:background="@drawable/border_with_off_white_background">
 
                     <TextView
                         android:id="@+id/exerciseLabel"
@@ -380,7 +380,7 @@
                     android:id="@+id/addExerciseTextView"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:background="@color/lightGrey"
+                    android:background="@color/light_grey"
                     android:paddingStart="15dp"
                     android:paddingTop="5dp"
                     android:text="@string/add_exercise"
