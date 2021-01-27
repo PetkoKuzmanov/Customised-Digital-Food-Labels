@@ -36,7 +36,7 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        getData()
+//        getData()
 
         val addFoodToBreakfastTextView =
             requireView().findViewById<TextView>(R.id.addFoodToBreakfastTextView)
@@ -83,7 +83,6 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        println("onResume")
         getData()
     }
 
