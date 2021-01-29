@@ -107,10 +107,6 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                             .child("calories").value.toString().toInt()
                     }
 
-                    val caloriesGoalTextView =
-                        requireView().findViewById<TextView>(R.id.goalCalories)
-                    caloriesGoalTextView.text = caloriesGoal.toString()
-
                     val diaryReference = mAuth.currentUser?.let {
                         snapshot.child("users").child(it.uid).child("dates").child(currentDate)
                             .child("diary")
@@ -304,6 +300,8 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                         requireView().findViewById<TextView>(R.id.caloriesConsumed)
                     val remainingCaloriesTextView =
                         requireView().findViewById<TextView>(R.id.caloriesRemaining)
+                    val caloriesGoalTextView =
+                        requireView().findViewById<TextView>(R.id.goalCalories)
 
                     breakfastCaloriesTextView.text = breakfastCalories.toString()
                     lunchCaloriesTextView.text = lunchCalories.toString()
@@ -311,7 +309,7 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                     snacksCaloriesTextView.text = snacksCalories.toString()
                     totalCaloriesTextView.text = totalCalories.toString()
                     remainingCaloriesTextView.text = remainingCalories.toString()
-
+                    caloriesGoalTextView.text = caloriesGoal.toString()
                 }
             }
 
