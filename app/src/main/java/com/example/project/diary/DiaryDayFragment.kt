@@ -102,18 +102,24 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                 exerciseList.clear()
 
                 if (snapshot.child("users").child(mAuth.uid!!).exists()) {
-                    val caloriesGoal = mAuth.currentUser?.let {
-                        snapshot.child("users").child(it.uid).child("goals")
+
+                    val caloriesReference =
+                        snapshot.child("users").child(mAuth.uid!!).child("goals")
+                            .child("calories")
+
+                    var caloriesGoal = 0
+                    if (caloriesReference.exists()) {
+                        caloriesGoal = snapshot.child("users").child(mAuth.uid!!).child("goals")
                             .child("calories").value.toString().toInt()
                     }
 
-                    val diaryReference = mAuth.currentUser?.let {
-                        snapshot.child("users").child(it.uid).child("dates").child(currentDate)
+                    val diaryReference =
+                        snapshot.child("users").child(mAuth.uid!!).child("dates").child(currentDate)
                             .child("diary")
-                    }
+
 
                     //Get the data for the meals
-                    for (meal in diaryReference?.children!!) {
+                    for (meal in diaryReference.children) {
                         if (meal.key == "exercise") {
                             for (index in meal.children) {
                                 val exercise = index.value.toString()

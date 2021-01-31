@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
+import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
@@ -183,6 +184,8 @@ class WeightActivity : AppCompatActivity() {
         lineChart.description.isEnabled = false
         lineChart.legend.isEnabled = false
 
+        lineChart.animateX(0, Easing.EaseInExpo)
+
         val xAxis = lineChart.xAxis
         val leftAxis = lineChart.axisLeft
 
@@ -196,7 +199,6 @@ class WeightActivity : AppCompatActivity() {
             dateList.add(index.key)
             weightList.add(index.value)
         }
-
 
         var weightMin = weightList[0]
         var weightMax = weightList[0]
@@ -243,24 +245,26 @@ class WeightActivity : AppCompatActivity() {
             val sdf = SimpleDateFormat("MMM dd")
             if (value < 1) {
                 position = 0
-            } else if (value > 1 && value < 2) {
-                position = 0
-            } else if (value > 2 && value < 3) {
-                position = 1
-            } else if (value > 3 && value < 4) {
-                position = 2
-            } else if (value > 4 && value <= 5) {
-                position = 3
             }
-            if (position < datesList.size)
+//            } else if (value > 1 && value < 2) {
+//                position = 0
+//            } else if (value > 2 && value < 3) {
+//                position = 1
+//            } else if (value > 3 && value < 4) {
+//                position = 2
+//            } else if (value > 4 && value <= 5) {
+//                position = 3
+//            }
+            if (position < datesList.size) {
                 return sdf.format(
                     Date(
                         (getDateInMilliSeconds(
                             datesList[position],
-                            "yyyy-MM-dd"
+                            "yyyy-MM-dd",
                         ))
                     )
                 )
+            }
             return ""
         }
 
