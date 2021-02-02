@@ -26,7 +26,7 @@ class AddExerciseActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_exercise)
         setSupportActionBar(findViewById(R.id.exerciseToolbar))
 
-        val exercise = intent.getStringExtra("exercise")
+        val exercise = intent.getStringExtra(getString(R.string.exercise).toLowerCase())
         if (exercise != null) {
             val exerciseEditText = findViewById<EditText>(R.id.exerciseEditText)
             exerciseEditText.text =
@@ -35,11 +35,11 @@ class AddExerciseActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val menuString = intent.getStringExtra("menu")
+        val menuString = intent.getStringExtra(getString(R.string.menu).toLowerCase())
 
-        if (menuString == "add") {
+        if (menuString == getString(R.string.add).toLowerCase()) {
             menuInflater.inflate((R.menu.add_exercise_toolbar_layout), menu)
-        } else if (menuString == "edit") {
+        } else if (menuString == getString(R.string.edit).toLowerCase()) {
             menuInflater.inflate((R.menu.exercise_edit_info_toolbar_layout), menu)
         }
 
@@ -51,21 +51,23 @@ class AddExerciseActivity : AppCompatActivity() {
         val exercise = exerciseEditText.text.toString()
 
         if (exercise.isNotBlank()) {
-            val currentDate = intent.getStringExtra("date").toString()
-            val exerciseKey = intent.getStringExtra("key")
+            val currentDate =
+                intent.getStringExtra(getString(R.string.date).toLowerCase()).toString()
+            val exerciseKey = intent.getStringExtra(getString(R.string.key).toLowerCase())
 
             val current = LocalDateTime.now()
-            val formatterTime = DateTimeFormatter.ofPattern("HH-mm-ss")
+            val formatterTime = DateTimeFormatter.ofPattern(getString(R.string.date_time_format))
             val formattedTime = current.format(formatterTime)
 
             val databaseReference = mAuth.currentUser?.let {
-                database.child("users").child(it.uid).child("dates").child(currentDate)
-                    .child("diary")
-                    .child("exercise")
+                database.child(getString(R.string.users).toLowerCase()).child(it.uid)
+                    .child(getString(R.string.dates).toLowerCase()).child(currentDate)
+                    .child(getString(R.string.diary).toLowerCase())
+                    .child(getString(R.string.exercise).toLowerCase())
             }
 
             if (exerciseKey == null) {
-                databaseReference?.child("exercise-$formattedTime")
+                databaseReference?.child(getString(R.string.exercise).toLowerCase() + "-$formattedTime")
                     ?.setValue(exercise)
             } else {
                 databaseReference?.child(exerciseKey)?.setValue(exerciseEditText.text.toString())
@@ -76,7 +78,8 @@ class AddExerciseActivity : AppCompatActivity() {
             finish()
         } else {
             val snackbar = Snackbar.make(
-                findViewById(R.id.addExerciseConstrainLayout), "Please input exercise",
+                findViewById(R.id.addExerciseConstrainLayout),
+                getString(R.string.please_input_exercise),
                 Snackbar.LENGTH_LONG
             )
             snackbar.show()
@@ -84,12 +87,14 @@ class AddExerciseActivity : AppCompatActivity() {
     }
 
     fun exerciseDelete(item: MenuItem) {
-        val foodKey = intent.getStringExtra("key").toString()
-        val currentDate = intent.getStringExtra("date").toString()
+        val foodKey = intent.getStringExtra(getString(R.string.key).toLowerCase()).toString()
+        val currentDate = intent.getStringExtra(getString(R.string.date).toLowerCase()).toString()
 
         mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("dates").child(currentDate).child("diary")
-                .child("exercise").child(foodKey).removeValue()
+            database.child(getString(R.string.users).toLowerCase()).child(it.uid)
+                .child(getString(R.string.dates).toLowerCase()).child(currentDate)
+                .child(getString(R.string.diary).toLowerCase())
+                .child(getString(R.string.exercise).toLowerCase()).child(foodKey).removeValue()
         }
 
         val intent = Intent()

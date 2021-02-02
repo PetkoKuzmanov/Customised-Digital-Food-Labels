@@ -26,6 +26,49 @@
     <string name="exercise">Exercise</string>
     <string name="add_exercise">+ Add Exercise</string>
     <string name="title_activity_weight">WeightActivity</string>
+    <string name="menu">Menu</string>
+    <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="date">Date</string>
+    <string name="key">Key</string>
+    <string name="date_time_format">HH-mm-ss</string>
+    <string name="users">Users</string>
+    <string name="dates">Dates</string>
+    <string name="diary">Diary</string>
+    <string name="please_input_exercise">Please input exercise</string>
+    <string name="history">History</string>
+    <string name="id">Id</string>
+    <string name="measurement">Measurement</string>
+    <string name="calories">Calories</string>
+    <string name="carbohydrates">Carbohydrates</string>
+    <string name="fats">Fats</string>
+    <string name="proteins">Proteins</string>
+    <string name="meal">Meal</string>
+    <string name="quick_add">Quick add</string>
+    <string name="please_input_a_number">Please input a number</string>
+    <string name="cancel">Cancel</string>
+    <string name="could_not_find_barcode">Could not find barcode</string>
+    <string name="please_input_a_barcode">Please input a barcode</string>
+    <string name="addFood">addFood</string>
+    <string name="one_hundred">100</string>
+    <string name="caloriesAmount">caloriesAmount</string>
+    <string name="carbohydratesAmount">carbohydratesAmount</string>
+    <string name="fatsAmount">fatsAmount</string>
+    <string name="proteinsAmount">proteinsAmount</string>
+    <string name="barcode">Barcode</string>
+    <string name="currentDate">currentDate</string>
+    <string name="zero">0</string>
+    <string name="please_fill_name_description_measurement">Please fill in the name, description and measurement</string>
+
+
+
+
+
+
+
+
+
+
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>

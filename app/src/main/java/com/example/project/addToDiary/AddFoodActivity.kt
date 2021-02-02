@@ -68,7 +68,7 @@ class AddFoodActivity : AppCompatActivity() {
     }
 
     private fun populateList() {
-        val currentDate = intent.getStringExtra("date").toString()
+        val currentDate = intent.getStringExtra(getString(R.string.date).toLowerCase()).toString()
 
         database = Firebase.database.reference
         database.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -76,22 +76,33 @@ class AddFoodActivity : AppCompatActivity() {
                 historyFoodModelList.clear()
 
                 val foodHistoryReference = mAuth.currentUser?.let {
-                    snapshot.child("users").child(it.uid).child("history")
+                    snapshot.child(getString(R.string.users).toLowerCase()).child(it.uid)
+                        .child(getString(R.string.history).toLowerCase())
                 }
 
                 for (index in foodHistoryReference?.children!!) {
-                    val foodId = index.child("id").value.toString()
-                    val foodAmount = index.child("amount").value.toString()
+                    val foodId = index.child(getString(R.string.id).toLowerCase()).value.toString()
+                    val foodAmount =
+                        index.child(getString(R.string.amount).toLowerCase()).value.toString()
 
-                    val foodReference = snapshot.child("food").child(foodId)
+                    val foodReference =
+                        snapshot.child(getString(R.string.food).toLowerCase()).child(foodId)
 
-                    val foodName = foodReference.child("name").value.toString()
-                    val foodDescription = foodReference.child("description").value.toString()
-                    val foodAmountMeasurement = foodReference.child("measurement").value.toString()
-                    val foodCalories = foodReference.child("calories").value.toString().toInt()
-                    val foodCarbohydrates = foodReference.child("carbohydrates").value.toString()
-                    val foodFats = foodReference.child("fats").value.toString()
-                    val foodProteins = foodReference.child("proteins").value.toString()
+                    val foodName =
+                        foodReference.child(getString(R.string.name).toLowerCase()).value.toString()
+                    val foodDescription =
+                        foodReference.child(getString(R.string.description).toLowerCase()).value.toString()
+                    val foodAmountMeasurement =
+                        foodReference.child(getString(R.string.measurement).toLowerCase()).value.toString()
+                    val foodCalories =
+                        foodReference.child(getString(R.string.calories).toLowerCase()).value.toString()
+                            .toInt()
+                    val foodCarbohydrates =
+                        foodReference.child(getString(R.string.carbohydrates).toLowerCase()).value.toString()
+                    val foodFats =
+                        foodReference.child(getString(R.string.fats).toLowerCase()).value.toString()
+                    val foodProteins =
+                        foodReference.child(getString(R.string.proteins).toLowerCase()).value.toString()
 
                     val foodModel = FoodModel()
                     foodModel.setName(foodName)
@@ -103,7 +114,7 @@ class AddFoodActivity : AppCompatActivity() {
                     foodModel.setCarbohydratesAmount(foodCarbohydrates)
                     foodModel.setFatsAmount(foodFats)
                     foodModel.setProteinsAmount(foodProteins)
-                    foodModel.setMeal(intent?.getStringExtra("meal")!!)
+                    foodModel.setMeal(intent?.getStringExtra(getString(R.string.meal).toLowerCase())!!)
                     historyFoodModelList.add(foodModel)
                 }
 
@@ -123,41 +134,44 @@ class AddFoodActivity : AppCompatActivity() {
         val inflater = LayoutInflater.from(this)
         val quickAddView = inflater.inflate(R.layout.quick_add_layout, null)
         val enterCalories = quickAddView.findViewById(R.id.enterCalories) as EditText
-        val meal = intent.getStringExtra("meal").toString()
-        val currentDate = intent.getStringExtra("date").toString()
+        val meal = intent.getStringExtra(getString(R.string.meal).toLowerCase()).toString()
+        val currentDate = intent.getStringExtra(getString(R.string.date).toLowerCase()).toString()
 
         database = Firebase.database.reference
 
         val current = LocalDateTime.now()
-        val formatterTime = DateTimeFormatter.ofPattern("HH-mm-ss")
+        val formatterTime = DateTimeFormatter.ofPattern(getString(R.string.date_time_format))
         val formattedTime = current.format(formatterTime)
 
         //Create the alertDialog
         val builder = AlertDialog.Builder(this)
             .setView(quickAddView)
-            .setTitle("Quick add")
+            .setTitle(getString(R.string.quick_add))
         builder.create()
-        builder.setPositiveButton("ADD") { _, _ ->
+        builder.setPositiveButton(getString(R.string.add).toUpperCase()) { _, _ ->
             val input = enterCalories.text.toString()
 
             //Check if the topic can be added
             if (!TextUtils.isEmpty(input)) {
                 val calories = input.toInt()
                 mAuth.currentUser?.let {
-                    database.child("users").child(it.uid).child("dates").child(currentDate)
-                        .child("diary")
-                        .child(meal).child("calories-$formattedTime").setValue(calories)
+                    database.child(getString(R.string.users).toLowerCase()).child(it.uid)
+                        .child(getString(R.string.dates).toLowerCase()).child(currentDate)
+                        .child(getString(R.string.diary).toLowerCase())
+                        .child(meal)
+                        .child(getString(R.string.calories).toLowerCase() + "-$formattedTime")
+                        .setValue(calories)
                 }
                 this.onBackPressed()
             } else {
                 val snackbar = Snackbar.make(
-                    historyRecyclerView, "Please input a number",
+                    historyRecyclerView, getString(R.string.please_input_a_number),
                     Snackbar.LENGTH_LONG
                 )
                 snackbar.show()
             }
         }
-        builder.setNegativeButton("CANCEL") { _, _ ->
+        builder.setNegativeButton(getString(R.string.cancel).toUpperCase()) { _, _ ->
             //Cancels the adding of the weight even if this is left empty
         }
         builder.show()
@@ -177,10 +191,8 @@ class AddFoodActivity : AppCompatActivity() {
 
         if (result != null) {
             if (result.contents != null) {
-                println("OOOOOOOOO " + result.contents)
                 addFoodInDatabase(result.contents)
             } else {
-                println("SCAN FAILED")
                 addBarcodeManuallyAlert()
             }
         }
@@ -200,9 +212,9 @@ class AddFoodActivity : AppCompatActivity() {
         //Create the alertDialog
         val builder = AlertDialog.Builder(this)
             .setView(addBarcodeView)
-            .setTitle("Could not find barcode")
+            .setTitle(getString(R.string.could_not_find_barcode))
         builder.create()
-        builder.setPositiveButton("ADD") { _, _ ->
+        builder.setPositiveButton(getString(R.string.add).toUpperCase()) { _, _ ->
             val input = enterBarcode.text.toString()
 
 
@@ -212,13 +224,13 @@ class AddFoodActivity : AppCompatActivity() {
             } else {
                 //input is empty
                 val snackbar = Snackbar.make(
-                    historyRecyclerView, "Please input a barcode",
+                    historyRecyclerView, getString(R.string.please_input_a_barcode),
                     Snackbar.LENGTH_LONG
                 )
                 snackbar.show()
             }
         }
-        builder.setNegativeButton("CANCEL") { _, _ ->
+        builder.setNegativeButton(getString(R.string.calories).toUpperCase()) { _, _ ->
             //Cancels the adding of the weight even if this is left empty
         }
         builder.show()
@@ -228,41 +240,48 @@ class AddFoodActivity : AppCompatActivity() {
         database = Firebase.database.reference
         database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val meal = intent.getStringExtra("meal").toString()
-                val currentDate = intent.getStringExtra("date").toString()
+                val meal = intent.getStringExtra(getString(R.string.meal).toLowerCase()).toString()
+                val currentDate =
+                    intent.getStringExtra(getString(R.string.date).toLowerCase()).toString()
 
-                val food = snapshot.child("food").child(barcode)
+                val food = snapshot.child(getString(R.string.food).toLowerCase()).child(barcode)
                 if (food.exists()) {
-                    val name = food.child("name").value.toString()
+                    val name = food.child(getString(R.string.name).toLowerCase()).value.toString()
                     val description =
-                        food.child("description").value.toString()
+                        food.child(getString(R.string.description).toLowerCase()).value.toString()
                     val calories =
-                        food.child("calories").value.toString()
+                        food.child(getString(R.string.calories).toLowerCase()).value.toString()
                     val carbohydrates =
-                        food.child("carbohydrates").value.toString()
-                    val fats = food.child("fats").value.toString()
+                        food.child(getString(R.string.carbohydrates).toLowerCase()).value.toString()
+                    val fats = food.child(getString(R.string.fats).toLowerCase()).value.toString()
                     val proteins =
-                        food.child("proteins").value.toString()
+                        food.child(getString(R.string.proteins).toLowerCase()).value.toString()
 
                     val intent = Intent(context, FoodInfoActivity::class.java)
-                    intent.putExtra("menu", "addFood")
-                    intent.putExtra("id", barcode)
-                    intent.putExtra("name", name)
-                    intent.putExtra("description", description)
-                    intent.putExtra("amount", "100")
-                    intent.putExtra("caloriesAmount", calories)
-                    intent.putExtra("carbohydratesAmount", carbohydrates)
-                    intent.putExtra("fatsAmount", fats)
-                    intent.putExtra("proteinsAmount", proteins)
-                    intent.putExtra("meal", meal)
-                    intent.putExtra("date", currentDate)
+                    intent.putExtra(
+                        getString(R.string.menu).toLowerCase(),
+                        getString(R.string.addFood)
+                    )
+                    intent.putExtra(getString(R.string.id).toLowerCase(), barcode)
+                    intent.putExtra(getString(R.string.name).toLowerCase(), name)
+                    intent.putExtra(getString(R.string.description).toLowerCase(), description)
+                    intent.putExtra(
+                        getString(R.string.amount).toLowerCase(),
+                        getString(R.string.one_hundred).toLowerCase()
+                    )
+                    intent.putExtra(getString(R.string.caloriesAmount), calories)
+                    intent.putExtra(getString(R.string.carbohydratesAmount), carbohydrates)
+                    intent.putExtra(getString(R.string.fatsAmount), fats)
+                    intent.putExtra(getString(R.string.proteinsAmount), proteins)
+                    intent.putExtra(getString(R.string.meal).toLowerCase(), meal)
+                    intent.putExtra(getString(R.string.date).toLowerCase(), currentDate)
                     startActivityForResult(intent, addFoodRequestCode)
                 } else {
                     val intent =
                         Intent(applicationContext, AddFoodInfoActivity::class.java)
-                    intent.putExtra("barcode", barcode)
-                    intent.putExtra("meal", meal)
-                    intent.putExtra("currentDate", currentDate)
+                    intent.putExtra(getString(R.string.barcode).toLowerCase(), barcode)
+                    intent.putExtra(getString(R.string.meal).toLowerCase(), meal)
+                    intent.putExtra(getString(R.string.currentDate), currentDate)
                     startActivityForResult(intent, addFoodRequestCode)
                 }
             }
@@ -271,50 +290,4 @@ class AddFoodActivity : AppCompatActivity() {
             }
         })
     }
-
-//    private fun getAllFoodData(): ArrayList<FoodModel> {
-//        val foodModelList = ArrayList<FoodModel>()
-//
-//        database = Firebase.database.reference
-//        database.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                foodModelList.clear()
-//
-//                val foodListReference = mAuth.currentUser?.let {
-//                    snapshot.child("food")
-//                }
-//
-//                for (index in foodListReference?.children!!) {
-//                    val meal = intent.getStringExtra("meal").toString()
-//
-//                    val foodId = index.key.toString()
-//                    val foodName = index.child("name").value.toString()
-//                    val foodDescription = index.child("description").value.toString()
-//                    val foodAmountMeasurement = index.child("measurement").value.toString()
-//                    val foodCalories = index.child("calories").value.toString()
-//                    val foodCarbohydrates = index.child("carbohydrates").value.toString()
-//                    val foodFats = index.child("fats").value.toString()
-//                    val foodProteins = index.child("proteins").value.toString()
-//
-//                    val foodModel = FoodModel()
-//                    foodModel.setName(foodName)
-//                    foodModel.setId(foodId)
-//                    foodModel.setDescription(foodDescription)
-//                    foodModel.setAmount("100")
-//                    foodModel.setMeasurement(foodAmountMeasurement)
-//                    foodModel.setCaloriesAmount(foodCalories)
-//                    foodModel.setCarbohydratesAmount(foodCarbohydrates)
-//                    foodModel.setFatsAmount(foodFats)
-//                    foodModel.setProteinsAmount(foodProteins)
-//                    foodModel.setMeal(meal)
-//                    foodModelList.add(foodModel)
-//                }
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//            }
-//        })
-//
-//        return foodModelList
-//    }
 }

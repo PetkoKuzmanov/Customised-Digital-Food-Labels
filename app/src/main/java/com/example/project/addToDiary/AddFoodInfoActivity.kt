@@ -36,9 +36,9 @@ class AddFoodInfoActivity : AppCompatActivity() {
     }
 
     fun addFoodInfo(item: MenuItem) {
-        val id = intent.getStringExtra("barcode")
-        val meal = intent.getStringExtra("meal").toString()
-        val currentDate = intent.getStringExtra("currentDate").toString()
+        val id = intent.getStringExtra(getString(R.string.barcode).toLowerCase())
+        val meal = intent.getStringExtra(getString(R.string.meal).toLowerCase()).toString()
+        val currentDate = intent.getStringExtra(getString(R.string.currentDate)).toString()
         val name = findViewById<EditText>(R.id.nameEditText).text.toString()
         val description = findViewById<EditText>(R.id.descriptionEditText).text.toString()
         val measurement = findViewById<EditText>(R.id.measurementEditText).text.toString()
@@ -52,32 +52,32 @@ class AddFoodInfoActivity : AppCompatActivity() {
             && description.isNotEmpty()
             && measurement.isNotEmpty()
         ) {
-            addSingleFoodInfo("name", name)
-            addSingleFoodInfo("description", description)
-            addSingleFoodInfo("measurement", measurement)
-            addSingleFoodInfo("carbohydrates", carbohydratesText)
-            addSingleFoodInfo("fats", fatsText)
-            addSingleFoodInfo("proteins", proteinsText)
-            addSingleFoodInfo("calories", caloriesText)
+            addSingleFoodInfo(getString(R.string.name).toLowerCase(), name)
+            addSingleFoodInfo(getString(R.string.description).toLowerCase(), description)
+            addSingleFoodInfo(getString(R.string.measurement).toLowerCase(), measurement)
+            addSingleFoodInfo(getString(R.string.carbohydrates).toLowerCase(), carbohydratesText)
+            addSingleFoodInfo(getString(R.string.fats).toLowerCase(), fatsText)
+            addSingleFoodInfo(getString(R.string.proteins).toLowerCase(), proteinsText)
+            addSingleFoodInfo(getString(R.string.calories).toLowerCase(), caloriesText)
 
             //Open add food to diary
             val intent = Intent(this, FoodInfoActivity::class.java)
-            intent.putExtra("menu", "addFood")
-            intent.putExtra("id", id)
-            intent.putExtra("name", name)
-            intent.putExtra("description", description)
-            intent.putExtra("amount", "0")
-            intent.putExtra("caloriesAmount", caloriesText.toString())
-            intent.putExtra("carbohydratesAmount", carbohydratesText.toString())
-            intent.putExtra("fatsAmount", fatsText.toString())
-            intent.putExtra("proteinsAmount", proteinsText.toString())
-            intent.putExtra("meal", meal)
-            intent.putExtra("date", currentDate)
+            intent.putExtra(getString(R.string.menu).toLowerCase(), getString(R.string.addFood))
+            intent.putExtra(getString(R.string.id).toLowerCase(), id)
+            intent.putExtra(getString(R.string.name).toLowerCase(), name)
+            intent.putExtra(getString(R.string.description).toLowerCase(), description)
+            intent.putExtra(getString(R.string.amount).toLowerCase(), getString(R.string.zero))
+            intent.putExtra(getString(R.string.caloriesAmount), caloriesText.toString())
+            intent.putExtra(getString(R.string.carbohydratesAmount), carbohydratesText.toString())
+            intent.putExtra(getString(R.string.fatsAmount), fatsText.toString())
+            intent.putExtra(getString(R.string.proteinsAmount), proteinsText.toString())
+            intent.putExtra(getString(R.string.meal).toLowerCase(), meal)
+            intent.putExtra(getString(R.string.date).toLowerCase(), currentDate)
             ActivityCompat.startActivityForResult(this, intent, addFoodRequestCode, null)
         } else {
             val toast = Toast.makeText(
                 applicationContext,
-                "Please fill in the name, description and measurement",
+                getString(R.string.please_fill_name_description_measurement),
                 Toast.LENGTH_LONG
             )
             toast.show()
@@ -94,15 +94,17 @@ class AddFoodInfoActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun addSingleFoodInfo(infoName: String, info: String) {
-        val id = intent.getStringExtra("barcode")
+        val id = intent.getStringExtra(getString(R.string.barcode).toLowerCase())
         mAuth.currentUser?.let {
-            database.child("food").child(id!!).child(infoName).setValue(info)
+            database.child(getString(R.string.food).toLowerCase()).child(id!!).child(infoName)
+                .setValue(info)
         }
     }
 
     private fun addSingleFoodInfo(infoName: String, editable: Editable) {
-        val id = intent.getStringExtra("barcode")
+        val id = intent.getStringExtra(getString(R.string.barcode).toLowerCase())
 
         var info = 0
         if (editable.isNotEmpty()) {
@@ -110,7 +112,8 @@ class AddFoodInfoActivity : AppCompatActivity() {
         }
 
         mAuth.currentUser?.let {
-            database.child("food").child(id!!).child(infoName).setValue(info)
+            database.child(getString(R.string.food).toLowerCase()).child(id!!).child(infoName)
+                .setValue(info)
         }
     }
 }
