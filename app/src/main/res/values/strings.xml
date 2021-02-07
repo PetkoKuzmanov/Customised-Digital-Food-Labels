@@ -70,6 +70,9 @@
     <string name="zero_grams">0.0g</string>
     <string name="cal">Cal</string>
     <string name="macronutrients">Macronutrients</string>
+    <string name="fatsCalories">fatsCalories</string>
+    <string name="percent_sign">%</string>
+    <string name="zero_percent">0%</string>
 
 
 

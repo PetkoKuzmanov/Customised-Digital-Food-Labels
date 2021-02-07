@@ -62,12 +62,19 @@ class MacronutrientsActivity : AppCompatActivity() {
 
         database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val goalsSnapshot = snapshot.child("users").child(mAuth.uid!!).child("goals")
+                val goalsSnapshot =
+                    snapshot.child(getString(R.string.users).toLowerCase()).child(mAuth.uid!!)
+                        .child(getString(R.string.goals).toLowerCase())
                 if (goalsSnapshot.hasChildren()) {
-                    var calories = goalsSnapshot.child("calories").value.toString().toDouble()
-                    carbohydrates = goalsSnapshot.child("carbohydrates").value.toString()
-                    fats = goalsSnapshot.child("fats").value.toString()
-                    proteins = goalsSnapshot.child("proteins").value.toString()
+                    var calories =
+                        goalsSnapshot.child(getString(R.string.calories).toLowerCase()).value.toString()
+                            .toDouble()
+                    carbohydrates =
+                        goalsSnapshot.child(getString(R.string.carbohydrates).toLowerCase()).value.toString()
+                    fats =
+                        goalsSnapshot.child(getString(R.string.fats).toLowerCase()).value.toString()
+                    proteins =
+                        goalsSnapshot.child(getString(R.string.proteins).toLowerCase()).value.toString()
 
                     val carbohydratesGoalCalories = carbohydrates.toInt() * 4
                     val fatsGoalCalories = fats.toInt() * 9
@@ -82,27 +89,31 @@ class MacronutrientsActivity : AppCompatActivity() {
                     val proteinsGoalPercent: Int =
                         ((proteinsGoalCalories / calories) * 100).roundToInt()
 
-                    carbohydratesGoal.text = "$carbohydratesGoalPercent%"
-                    fatsGoal.text = "$fatsGoalPercent%"
-                    proteinsGoal.text = "$proteinsGoalPercent%"
+                    carbohydratesGoal.text =
+                        carbohydratesGoalPercent.toString() + getString(R.string.percent_sign)
+                    fatsGoal.text = fatsGoalPercent.toString() + getString(R.string.percent_sign)
+                    proteinsGoal.text =
+                        proteinsGoalPercent.toString() + getString(R.string.percent_sign)
 
                 } else {
-                    carbohydratesGoal.text = "0%"
-                    fatsGoal.text = "0%"
-                    proteinsGoal.text = "0%"
+                    carbohydratesGoal.text = getString(R.string.zero_percent)
+                    fatsGoal.text = getString(R.string.zero_percent)
+                    proteinsGoal.text = getString(R.string.zero_percent)
 
-                    carbohydrates = "0"
-                    fats = "0"
-                    proteins = "0"
+                    carbohydrates = getString(R.string.zero)
+                    fats = getString(R.string.zero)
+                    proteins = getString(R.string.zero)
                 }
 
                 //Get the total for today
                 val currentDate = LocalDateTime.now()
-                val formatterDate: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                val formatterDate: DateTimeFormatter =
+                    DateTimeFormatter.ofPattern(getString(R.string.date_format))
                 val formattedDate = currentDate.format(formatterDate)
                 val todaySnapshot =
-                    snapshot.child("users").child(mAuth.uid!!).child("dates").child(formattedDate)
-                        .child("diary")
+                    snapshot.child(getString(R.string.users).toLowerCase()).child(mAuth.uid!!)
+                        .child(getString(R.string.dates).toLowerCase()).child(formattedDate)
+                        .child(getString(R.string.diary).toLowerCase())
 
                 var caloriesTotalDouble = 0.0
                 var carbohydratesTotalInt = 0
@@ -111,25 +122,32 @@ class MacronutrientsActivity : AppCompatActivity() {
 
                 if (todaySnapshot.hasChildren()) {
                     for (meal in todaySnapshot.children) {
-                        if (meal.key != "exercise") {
+                        if (meal.key != getString(R.string.exercise).toLowerCase()) {
                             for (food in meal.children) {
-                                if (food.key.toString().contains("food")) {
+                                if (food.key.toString()
+                                        .contains(getString(R.string.food).toLowerCase())
+                                ) {
 
-                                    val id = food.child("id").value.toString()
-                                    val amount = food.child("amount").value.toString().toInt()
+                                    val id =
+                                        food.child(getString(R.string.id).toLowerCase()).value.toString()
+                                    val amount =
+                                        food.child(getString(R.string.amount).toLowerCase()).value.toString()
+                                            .toInt()
 
-                                    val foodSnapshot = snapshot.child("food").child(id)
+                                    val foodSnapshot =
+                                        snapshot.child(getString(R.string.food).toLowerCase())
+                                            .child(id)
 
-                                    val caloriesPerHundred =
-                                        foodSnapshot.child("calories").value.toString().toInt()
                                     val carbohydratesPerHundred =
-                                        foodSnapshot.child("carbohydrates").value.toString().toInt()
+                                        foodSnapshot.child(getString(R.string.carbohydrates).toLowerCase()).value.toString()
+                                            .toInt()
                                     val fatsPerHundred =
-                                        foodSnapshot.child("fats").value.toString().toInt()
+                                        foodSnapshot.child(getString(R.string.fats).toLowerCase()).value.toString()
+                                            .toInt()
                                     val proteinsPerHundred =
-                                        foodSnapshot.child("proteins").value.toString().toInt()
+                                        foodSnapshot.child(getString(R.string.proteins).toLowerCase()).value.toString()
+                                            .toInt()
 
-                                    val calories = (caloriesPerHundred * amount) / 100
                                     val foodCarbohydrates = (carbohydratesPerHundred * amount) / 100
                                     val foodFats = (fatsPerHundred * amount) / 100
                                     val foodProteins = (proteinsPerHundred * amount) / 100
@@ -149,9 +167,10 @@ class MacronutrientsActivity : AppCompatActivity() {
                 val fatsCalories = fatsTotalInt * 9
                 val proteinsCalories = proteinsTotalInt * 4
 
-                carbohydratesAmount.text = carbohydratesTotalInt.toString() + "g"
-                fatsAmount.text = fatsTotalInt.toString() + "g"
-                proteinsAmount.text = proteinsTotalInt.toString() + "g"
+                carbohydratesAmount.text =
+                    carbohydratesTotalInt.toString() + getString(R.string.grams_short)
+                fatsAmount.text = fatsTotalInt.toString() + getString(R.string.grams_short)
+                proteinsAmount.text = proteinsTotalInt.toString() + getString(R.string.grams_short)
 
                 val carbohydratesTotalPercent =
                     ((carbohydratesCalories / caloriesTotalDouble) * 100).roundToInt()
@@ -159,9 +178,12 @@ class MacronutrientsActivity : AppCompatActivity() {
                 val proteinsTotalPercent =
                     ((proteinsCalories / caloriesTotalDouble) * 100).roundToInt()
 
-                carbohydratesTotalTextView.text = "$carbohydratesTotalPercent%"
-                fatsTotalTextView.text = "$fatsTotalPercent%"
-                proteinsTotalTextView.text = "$proteinsTotalPercent%"
+                carbohydratesTotalTextView.text =
+                    carbohydratesTotalPercent.toString() + getString(R.string.percent_sign)
+                fatsTotalTextView.text =
+                    fatsTotalPercent.toString() + getString(R.string.percent_sign)
+                proteinsTotalTextView.text =
+                    proteinsTotalPercent.toString() + getString(R.string.percent_sign)
 
                 val pieChart = findViewById<PieChart>(R.id.macronutrientsChart)
                 setPieChart(
@@ -180,9 +202,9 @@ class MacronutrientsActivity : AppCompatActivity() {
         val goalsButton = findViewById<Button>(R.id.goalsButton)
         goalsButton.setOnClickListener {
             val intent = Intent(applicationContext, GoalsActivity::class.java)
-            intent.putExtra("carbohydrates", carbohydrates)
-            intent.putExtra("fats", fats)
-            intent.putExtra("proteins", proteins)
+            intent.putExtra(getString(R.string.carbohydrates).toLowerCase(), carbohydrates)
+            intent.putExtra(getString(R.string.fats).toLowerCase(), fats)
+            intent.putExtra(getString(R.string.proteins).toLowerCase(), proteins)
             startActivity(intent)
         }
     }
@@ -204,7 +226,7 @@ class MacronutrientsActivity : AppCompatActivity() {
         values.add(PieEntry(fatsTotalPercent.toFloat()))
         values.add(PieEntry(proteinsTotalPercent.toFloat()))
 
-        val pieDataSet = PieDataSet(values, "Macronutrients")
+        val pieDataSet = PieDataSet(values, getString(R.string.macronutrients))
         val pieData = PieData(pieDataSet)
         pieChart.data = pieData
 

@@ -24,7 +24,8 @@ class QuickAddInfoActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.quickAddInfoToolbar))
 
         val quickAddEditText = findViewById<EditText>(R.id.quickAddEditText)
-        val caloriesAmount = intent.getStringExtra(getString(R.string.caloriesAmount)).toString().toInt()
+        val caloriesAmount =
+            intent.getStringExtra(getString(R.string.caloriesAmount)).toString().toInt()
 
         quickAddEditText.text =
             Editable.Factory.getInstance().newEditable(caloriesAmount.toString())
@@ -44,8 +45,10 @@ class QuickAddInfoActivity : AppCompatActivity() {
         val calories = quickAddEditText.text.toString().toInt()
         val currentDate = intent.getStringExtra(getString(R.string.date).toLowerCase())
 
-         mAuth.currentUser?.let {
-            database.child(getString(R.string.users).toLowerCase()).child(it.uid).child(getString(R.string.dates).toLowerCase()).child(currentDate!!).child(getString(R.string.diary).toLowerCase())
+        mAuth.currentUser?.let {
+            database.child(getString(R.string.users).toLowerCase()).child(it.uid)
+                .child(getString(R.string.dates).toLowerCase()).child(currentDate!!)
+                .child(getString(R.string.diary).toLowerCase())
                 .child(meal!!).child(foodKey!!).setValue(calories)
         }
         this.onBackPressed()
@@ -58,7 +61,9 @@ class QuickAddInfoActivity : AppCompatActivity() {
         val currentDate = intent.getStringExtra(getString(R.string.date).toLowerCase())
 
         mAuth.currentUser?.let {
-            database.child(getString(R.string.users).toLowerCase()).child(it.uid).child(getString(R.string.dates).toLowerCase()).child(currentDate!!).child(getString(R.string.diary).toLowerCase())
+            database.child(getString(R.string.users).toLowerCase()).child(it.uid)
+                .child(getString(R.string.dates).toLowerCase()).child(currentDate!!)
+                .child(getString(R.string.diary).toLowerCase())
                 .child(meal).child(foodKey).removeValue()
         }
         this.onBackPressed()

@@ -44,17 +44,22 @@ class FoodInfoActivity : AppCompatActivity() {
         val foodDescriptionTextView = findViewById<TextView>(R.id.foodDescriptionTextView)
         val numberOfServingsEditText = findViewById<EditText>(R.id.quickAddEditText)
 
-        val foodAmount = intent.getStringExtra(getString(R.string.amount).toLowerCase()).toString().toInt()
-        val caloriesAmount = intent.getStringExtra(getString(R.string.caloriesAmount)).toString().toInt()
+        val foodAmount =
+            intent.getStringExtra(getString(R.string.amount).toLowerCase()).toString().toInt()
+        val caloriesAmount =
+            intent.getStringExtra(getString(R.string.caloriesAmount)).toString().toInt()
 
         foodNameTextView.text = intent.getStringExtra(getString(R.string.name).toLowerCase())
-        foodDescriptionTextView.text = intent.getStringExtra(getString(R.string.description).toLowerCase())
+        foodDescriptionTextView.text =
+            intent.getStringExtra(getString(R.string.description).toLowerCase())
         numberOfServingsEditText.text =
             Editable.Factory.getInstance().newEditable(foodAmount.toString())
 
-        val carbohydratesAmount = intent.getStringExtra(getString(R.string.carbohydratesAmount)).toString().toInt()
+        val carbohydratesAmount =
+            intent.getStringExtra(getString(R.string.carbohydratesAmount)).toString().toInt()
         val fatsAmount = intent.getStringExtra(getString(R.string.fatsAmount)).toString().toInt()
-        val proteinsAmount = intent.getStringExtra(getString(R.string.proteinsAmount)).toString().toInt()
+        val proteinsAmount =
+            intent.getStringExtra(getString(R.string.proteinsAmount)).toString().toInt()
 
         carbohydratesTotalPercent =
             (((carbohydratesAmount * 4.0) / caloriesAmount) * 100).roundToInt()
@@ -101,19 +106,25 @@ class FoodInfoActivity : AppCompatActivity() {
         val formattedTime = current.format(formatterTime)
 
         val currentDateReference = mAuth.currentUser?.let {
-            database.child(getString(R.string.users).toLowerCase()).child(it.uid).child(getString(R.string.dates).toLowerCase()).child(currentDate).child(getString(R.string.diary).toLowerCase())
+            database.child(getString(R.string.users).toLowerCase()).child(it.uid)
+                .child(getString(R.string.dates).toLowerCase()).child(currentDate)
+                .child(getString(R.string.diary).toLowerCase())
                 .child(meal)
         }
 
         if (foodKey == null) {
-            currentDateReference?.child(getString(R.string.food).toLowerCase() + "-$formattedTime")?.child(getString(R.string.id).toLowerCase())?.setValue(id)
-            currentDateReference?.child(getString(R.string.food).toLowerCase() + "-$formattedTime")?.child(getString(R.string.amount).toLowerCase())?.setValue(amount)
+            currentDateReference?.child(getString(R.string.food).toLowerCase() + "-$formattedTime")
+                ?.child(getString(R.string.id).toLowerCase())?.setValue(id)
+            currentDateReference?.child(getString(R.string.food).toLowerCase() + "-$formattedTime")
+                ?.child(getString(R.string.amount).toLowerCase())?.setValue(amount)
         } else {
-            currentDateReference?.child(foodKey)?.child(getString(R.string.amount).toLowerCase())?.setValue(amount)
+            currentDateReference?.child(foodKey)?.child(getString(R.string.amount).toLowerCase())
+                ?.setValue(amount)
         }
 
         val historyReference = mAuth.currentUser?.let {
-            database.child(getString(R.string.users).toLowerCase()).child(it.uid).child(getString(R.string.history).toLowerCase())
+            database.child(getString(R.string.users).toLowerCase()).child(it.uid)
+                .child(getString(R.string.history).toLowerCase())
         }
 
         historyReference?.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -129,9 +140,11 @@ class FoodInfoActivity : AppCompatActivity() {
                 if (foodInHistory != null) {
                     foodInHistory.child(getString(R.string.amount).toLowerCase()).setValue(amount)
                 } else {
-                    historyReference.child(getString(R.string.history).toLowerCase() + "-$currentDate-$formattedTime").child(getString(R.string.id).toLowerCase())
+                    historyReference.child(getString(R.string.history).toLowerCase() + "-$currentDate-$formattedTime")
+                        .child(getString(R.string.id).toLowerCase())
                         .setValue(id)
-                    historyReference.child(getString(R.string.history).toLowerCase() + "-$currentDate-$formattedTime").child(getString(R.string.amount).toLowerCase())
+                    historyReference.child(getString(R.string.history).toLowerCase() + "-$currentDate-$formattedTime")
+                        .child(getString(R.string.amount).toLowerCase())
                         .setValue(amount)
                 }
             }
@@ -156,10 +169,13 @@ class FoodInfoActivity : AppCompatActivity() {
         val fatsAmount =
             (intent.getStringExtra(getString(R.string.fatsAmount))?.toInt()!! * foodAmount / 100)
         val proteinsAmount =
-            (intent.getStringExtra(getString(R.string.proteinsAmount))?.toInt()!! * foodAmount / 100)
-        val caloriesAmount = intent.getStringExtra(getString(R.string.caloriesAmount)).toString().toInt()
+            (intent.getStringExtra(getString(R.string.proteinsAmount))
+                ?.toInt()!! * foodAmount / 100)
+        val caloriesAmount =
+            intent.getStringExtra(getString(R.string.caloriesAmount)).toString().toInt()
 
-        carbohydratesInfoAmount.text = carbohydratesAmount.toString() + getString(R.string.grams_short)
+        carbohydratesInfoAmount.text =
+            carbohydratesAmount.toString() + getString(R.string.grams_short)
         fatsInfoAmount.text = fatsAmount.toString() + getString(R.string.grams_short)
         proteinsInfoAmount.text = proteinsAmount.toString() + getString(R.string.grams_short)
 
@@ -215,7 +231,9 @@ class FoodInfoActivity : AppCompatActivity() {
         val foodKey = intent.getStringExtra(getString(R.string.key).toLowerCase()).toString()
         val currentDate = intent.getStringExtra(getString(R.string.date).toLowerCase()).toString()
 
-        database.child(getString(R.string.users).toLowerCase()).child(mAuth.uid!!).child(getString(R.string.dates).toLowerCase()).child(currentDate).child(getString(R.string.diary).toLowerCase())
+        database.child(getString(R.string.users).toLowerCase()).child(mAuth.uid!!)
+            .child(getString(R.string.dates).toLowerCase()).child(currentDate)
+            .child(getString(R.string.diary).toLowerCase())
             .child(meal).child(foodKey).removeValue()
 
         val intent = Intent()

@@ -35,9 +35,10 @@ class GoalsActivity : AppCompatActivity() {
         val fatsCalories = findViewById<TextView>(R.id.fatsCalories)
         val proteinsCalories = findViewById<TextView>(R.id.proteinsCalories)
 
-        val carbohydrates = intent.getStringExtra("carbohydrates").toString()
-        val fats = intent.getStringExtra("fats").toString()
-        val proteins = intent.getStringExtra("proteins").toString()
+        val carbohydrates =
+            intent.getStringExtra(getString(R.string.carbohydrates).toLowerCase()).toString()
+        val fats = intent.getStringExtra(getString(R.string.fats).toLowerCase()).toString()
+        val proteins = intent.getStringExtra(getString(R.string.proteins).toLowerCase()).toString()
 
         //Set the texts of the edit and text views if the user already has a goal
         carbohydratesGoalAmount.setText(carbohydrates, TextView.BufferType.EDITABLE)
@@ -56,7 +57,7 @@ class GoalsActivity : AppCompatActivity() {
             if (editable?.isNotEmpty()!!) {
                 updateCaloriesForMacronutrient(carbohydratesCalories, editable)
             } else {
-                carbohydratesCalories.text = "0"
+                carbohydratesCalories.text = getString(R.string.zero)
             }
             updateCalories(carbohydratesCalories.text, fatsCalories.text, proteinsCalories.text)
         }
@@ -65,7 +66,7 @@ class GoalsActivity : AppCompatActivity() {
             if (editable?.isNotEmpty()!!) {
                 updateCaloriesForMacronutrient(fatsCalories, editable)
             } else {
-                fatsCalories.text = "0"
+                fatsCalories.text = getString(R.string.zero)
             }
             updateCalories(carbohydratesCalories.text, fatsCalories.text, proteinsCalories.text)
         }
@@ -74,7 +75,7 @@ class GoalsActivity : AppCompatActivity() {
             if (editable?.isNotEmpty()!!) {
                 updateCaloriesForMacronutrient(proteinsCalories, editable)
             } else {
-                proteinsCalories.text = "0"
+                proteinsCalories.text = getString(R.string.zero)
             }
             updateCalories(carbohydratesCalories.text, fatsCalories.text, proteinsCalories.text)
         }
@@ -107,7 +108,7 @@ class GoalsActivity : AppCompatActivity() {
         textView: TextView,
         macronutrientEditable: Editable
     ) {
-        if (resources.getResourceEntryName(textView.id) == "fatsCalories") {
+        if (resources.getResourceEntryName(textView.id) == getString(R.string.fatsCalories)) {
             textView.text = (macronutrientEditable.toString().toInt() * 9).toString()
         } else {
             textView.text = (macronutrientEditable.toString().toInt() * 4).toString()
@@ -116,7 +117,8 @@ class GoalsActivity : AppCompatActivity() {
 
     private fun addMacronutrientsToDatabase(macronutrient: String, amount: Int) {
         mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("goals").child(macronutrient)
+            database.child(getString(R.string.users).toLowerCase()).child(it.uid)
+                .child(getString(R.string.goals).toLowerCase()).child(macronutrient)
                 .setValue(amount)
         }
     }
@@ -133,22 +135,30 @@ class GoalsActivity : AppCompatActivity() {
         val caloriesInt = caloriesGoalAmountTextView.text.toString().toInt()
 
         mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("goals").child("carbohydrates")
+            database.child(getString(R.string.users).toLowerCase()).child(it.uid)
+                .child(getString(R.string.goals).toLowerCase())
+                .child(getString(R.string.carbohydrates).toLowerCase())
                 .setValue(carbohydratesInt)
         }
 
         mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("goals").child("fats")
+            database.child(getString(R.string.users).toLowerCase()).child(it.uid)
+                .child(getString(R.string.goals).toLowerCase())
+                .child(getString(R.string.fats).toLowerCase())
                 .setValue(fatsInt)
         }
 
         mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("goals").child("proteins")
+            database.child(getString(R.string.users).toLowerCase()).child(it.uid)
+                .child(getString(R.string.goals).toLowerCase())
+                .child(getString(R.string.proteins).toLowerCase())
                 .setValue(proteinsInt)
         }
 
         mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("goals").child("calories")
+            database.child(getString(R.string.users).toLowerCase()).child(it.uid)
+                .child(getString(R.string.goals).toLowerCase())
+                .child(getString(R.string.calories).toLowerCase())
                 .setValue(caloriesInt)
         }
         this.onBackPressed()
