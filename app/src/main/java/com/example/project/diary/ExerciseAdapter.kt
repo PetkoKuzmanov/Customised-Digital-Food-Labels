@@ -42,10 +42,10 @@ class ExerciseAdapter(
 
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, AddExerciseActivity::class.java)
-            intent.putExtra("exercise", exercise)
-            intent.putExtra("key", key)
-            intent.putExtra("date", currentDate)
-            intent.putExtra("menu", "edit")
+            intent.putExtra(context?.getString(R.string.exercise)?.toLowerCase(), exercise)
+            intent.putExtra(context?.getString(R.string.key)?.toLowerCase(), key)
+            intent.putExtra(context?.getString(R.string.date)?.toLowerCase(), currentDate)
+            intent.putExtra(context?.getString(R.string.menu)?.toLowerCase(), context?.getString(R.string.edit)?.toLowerCase())
             startActivity(holder.itemView.context, intent, null)
         }
     }

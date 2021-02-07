@@ -11,7 +11,6 @@ import android.widget.EditText
 import com.example.project.R
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.time.LocalDateTime
@@ -56,7 +55,7 @@ class AddExerciseActivity : AppCompatActivity() {
             val exerciseKey = intent.getStringExtra(getString(R.string.key).toLowerCase())
 
             val current = LocalDateTime.now()
-            val formatterTime = DateTimeFormatter.ofPattern(getString(R.string.date_time_format))
+            val formatterTime = DateTimeFormatter.ofPattern(getString(R.string.time_format))
             val formattedTime = current.format(formatterTime)
 
             val databaseReference = mAuth.currentUser?.let {

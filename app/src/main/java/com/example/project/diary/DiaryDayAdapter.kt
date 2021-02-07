@@ -62,30 +62,39 @@ class DiaryDayAdapter(
             holder.caloriesAmount.text = caloriesAmount
         }
 
-        if (name == "Quick Add") {
+        if (name == context?.getString(R.string.quick_add)) {
             holder.itemView.setOnClickListener {
                 val intent = Intent(holder.itemView.context, QuickAddInfoActivity::class.java)
-                intent.putExtra("caloriesAmount", caloriesAmount)
-                intent.putExtra("meal", meal)
-                intent.putExtra("key", key)
-                intent.putExtra("date", currentDate)
+                intent.putExtra(context?.getString(R.string.caloriesAmount), caloriesAmount)
+                intent.putExtra(context?.getString(R.string.meal)?.toLowerCase(), meal)
+                intent.putExtra(context?.getString(R.string.key)?.toLowerCase(), key)
+                intent.putExtra(context?.getString(R.string.date)?.toLowerCase(), currentDate)
                 startActivity(holder.itemView.context, intent, null)
             }
         } else {
             holder.itemView.setOnClickListener {
                 val intent = Intent(holder.itemView.context, FoodInfoActivity::class.java)
-                intent.putExtra("menu", "diary")
-                intent.putExtra("id", id)
-                intent.putExtra("name", name)
-                intent.putExtra("description", description)
-                intent.putExtra("amount", amount)
-                intent.putExtra("caloriesAmount", caloriesAmount)
-                intent.putExtra("carbohydratesAmount", carbohydratesAmount)
-                intent.putExtra("fatsAmount", fatsAmount)
-                intent.putExtra("proteinsAmount", proteinsAmount)
-                intent.putExtra("meal", meal)
-                intent.putExtra("key", key)
-                intent.putExtra("date", currentDate)
+                intent.putExtra(
+                    context?.getString(R.string.menu)?.toLowerCase(),
+                    context?.getString(R.string.diary)?.toLowerCase()
+                )
+                intent.putExtra(context?.getString(R.string.id)?.toLowerCase(), id)
+                intent.putExtra(context?.getString(R.string.name)?.toLowerCase(), name)
+                intent.putExtra(
+                    context?.getString(R.string.description)?.toLowerCase(),
+                    description
+                )
+                intent.putExtra(context?.getString(R.string.amount)?.toLowerCase(), amount)
+                intent.putExtra(context?.getString(R.string.caloriesAmount), caloriesAmount)
+                intent.putExtra(
+                    context?.getString(R.string.carbohydratesAmount),
+                    carbohydratesAmount
+                )
+                intent.putExtra(context?.getString(R.string.fatsAmount), fatsAmount)
+                intent.putExtra(context?.getString(R.string.proteinsAmount), proteinsAmount)
+                intent.putExtra(context?.getString(R.string.meal)?.toLowerCase(), meal)
+                intent.putExtra(context?.getString(R.string.key)?.toLowerCase(), key)
+                intent.putExtra(context?.getString(R.string.date)?.toLowerCase(), currentDate)
                 startActivity(holder.itemView.context, intent, null)
             }
         }

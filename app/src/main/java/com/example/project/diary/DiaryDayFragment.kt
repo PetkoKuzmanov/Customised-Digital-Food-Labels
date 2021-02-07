@@ -36,7 +36,6 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-//        getData()
 
         val addFoodToBreakfastTextView =
             requireView().findViewById<TextView>(R.id.addFoodToBreakfastTextView)
@@ -51,32 +50,47 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
 
         addFoodToBreakfastTextView.setOnClickListener {
             val intent = Intent(requireView().context, AddFoodActivity::class.java)
-            intent.putExtra("meal", "breakfast")
-            intent.putExtra("date", currentDate)
+            intent.putExtra(
+                getString(R.string.meal).toLowerCase(),
+                getString(R.string.breakfast).toLowerCase()
+            )
+            intent.putExtra(getString(R.string.date).toLowerCase(), currentDate)
             startActivity(intent)
         }
         addFoodToLunchTextView.setOnClickListener {
             val intent = Intent(requireView().context, AddFoodActivity::class.java)
-            intent.putExtra("meal", "lunch")
-            intent.putExtra("date", currentDate)
+            intent.putExtra(
+                getString(R.string.meal).toLowerCase(),
+                getString(R.string.lunch).toLowerCase()
+            )
+            intent.putExtra(getString(R.string.date).toLowerCase(), currentDate)
             startActivity(intent)
         }
         addFoodToDinnerTextView.setOnClickListener {
             val intent = Intent(requireView().context, AddFoodActivity::class.java)
-            intent.putExtra("meal", "dinner")
-            intent.putExtra("date", currentDate)
+            intent.putExtra(
+                getString(R.string.meal).toLowerCase(),
+                getString(R.string.dinner).toLowerCase()
+            )
+            intent.putExtra(getString(R.string.date).toLowerCase(), currentDate)
             startActivity(intent)
         }
         addFoodToSnacksTextView.setOnClickListener {
             val intent = Intent(requireView().context, AddFoodActivity::class.java)
-            intent.putExtra("meal", "snacks")
-            intent.putExtra("date", currentDate)
+            intent.putExtra(
+                getString(R.string.meal).toLowerCase(),
+                getString(R.string.snacks).toLowerCase()
+            )
+            intent.putExtra(getString(R.string.date).toLowerCase(), currentDate)
             startActivity(intent)
         }
         addExerciseTextView.setOnClickListener {
             val intent = Intent(requireView().context, AddExerciseActivity::class.java)
-            intent.putExtra("date", currentDate)
-            intent.putExtra("menu", "add")
+            intent.putExtra(getString(R.string.date).toLowerCase(), currentDate)
+            intent.putExtra(
+                getString(R.string.menu).toLowerCase(),
+                getString(R.string.add).toLowerCase()
+            )
             startActivity(intent)
         }
     }
@@ -101,26 +115,32 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                 snacksFoodList.clear()
                 exerciseList.clear()
 
-                if (snapshot.child("users").child(mAuth.uid!!).exists()) {
+                if (snapshot.child(getString(R.string.users).toLowerCase()).child(mAuth.uid!!)
+                        .exists()
+                ) {
 
                     val caloriesReference =
-                        snapshot.child("users").child(mAuth.uid!!).child("goals")
-                            .child("calories")
+                        snapshot.child(getString(R.string.users).toLowerCase()).child(mAuth.uid!!)
+                            .child(getString(R.string.goals).toLowerCase())
+                            .child(getString(R.string.calories).toLowerCase())
 
                     var caloriesGoal = 0
                     if (caloriesReference.exists()) {
-                        caloriesGoal = snapshot.child("users").child(mAuth.uid!!).child("goals")
-                            .child("calories").value.toString().toInt()
+                        caloriesGoal = snapshot.child(getString(R.string.users).toLowerCase())
+                            .child(mAuth.uid!!).child(getString(R.string.goals).toLowerCase())
+                            .child(getString(R.string.calories).toLowerCase()).value.toString()
+                            .toInt()
                     }
 
                     val diaryReference =
-                        snapshot.child("users").child(mAuth.uid!!).child("dates").child(currentDate)
-                            .child("diary")
+                        snapshot.child(getString(R.string.users).toLowerCase()).child(mAuth.uid!!)
+                            .child(getString(R.string.dates).toLowerCase()).child(currentDate)
+                            .child(getString(R.string.diary).toLowerCase())
 
 
                     //Get the data for the meals
                     for (meal in diaryReference.children) {
-                        if (meal.key == "exercise") {
+                        if (meal.key == getString(R.string.exercise).toLowerCase()) {
                             for (index in meal.children) {
                                 val exercise = index.value.toString()
 
@@ -131,28 +151,31 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                             }
                         } else {
                             for (index in meal.children) {
-                                if (index.key?.contains("food")!!) {
-                                    val foodId = index.child("id").value.toString()
-                                    val foodAmount = index.child("amount").value.toString()
+                                if (index.key?.contains(getString(R.string.food).toLowerCase())!!) {
+                                    val foodId =
+                                        index.child(getString(R.string.id).toLowerCase()).value.toString()
+                                    val foodAmount =
+                                        index.child(getString(R.string.amount).toLowerCase()).value.toString()
 
-                                    val foodReference = snapshot.child("food").child(foodId)
+                                    val foodReference =
+                                        snapshot.child(getString(R.string.food).toLowerCase())
+                                            .child(foodId)
 
-                                    val foodName = foodReference.child("name").value.toString()
+                                    val foodName =
+                                        foodReference.child(getString(R.string.name).toLowerCase()).value.toString()
                                     val foodDescription =
-                                        foodReference.child("description").value.toString()
+                                        foodReference.child(getString(R.string.description).toLowerCase()).value.toString()
                                     val foodAmountMeasurement =
-                                        foodReference.child("measurement").value.toString()
+                                        foodReference.child(getString(R.string.measurement).toLowerCase()).value.toString()
                                     val foodCalories =
-                                        foodReference.child("calories").value.toString().toInt()
+                                        foodReference.child(getString(R.string.calories).toLowerCase()).value.toString()
+                                            .toInt()
                                     val foodCarbohydrates =
-                                        foodReference.child("carbohydrates").value.toString()
-                                    val foodFats = foodReference.child("fats").value.toString()
+                                        foodReference.child(getString(R.string.carbohydrates).toLowerCase()).value.toString()
+                                    val foodFats =
+                                        foodReference.child(getString(R.string.fats).toLowerCase()).value.toString()
                                     val foodProteins =
-                                        foodReference.child("proteins").value.toString()
-
-//                                val foodInstanceCalories =
-//                                    ((foodCalories * foodAmount.toDouble()) / 100).roundToInt()
-//                                        .toString()
+                                        foodReference.child(getString(R.string.proteins).toLowerCase()).value.toString()
 
                                     val foodModel = FoodModel()
                                     foodModel.setName(foodName)
@@ -168,46 +191,46 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                                     foodModel.setKey(index.key!!)
 
                                     when {
-                                        meal.key.toString() == "breakfast" -> {
+                                        meal.key.toString() == getString(R.string.breakfast).toLowerCase() -> {
                                             breakfastFoodList.add(foodModel)
                                         }
-                                        meal.key.toString() == "lunch" -> {
+                                        meal.key.toString() == getString(R.string.lunch).toLowerCase() -> {
                                             lunchFoodList.add(foodModel)
                                         }
-                                        meal.key.toString() == "dinner" -> {
+                                        meal.key.toString() == getString(R.string.dinner).toLowerCase() -> {
                                             dinnerFoodList.add(foodModel)
                                         }
-                                        meal.key.toString() == "snacks" -> {
+                                        meal.key.toString() == getString(R.string.snacks).toLowerCase() -> {
                                             snacksFoodList.add(foodModel)
                                         }
                                     }
-                                } else if (index.key?.contains("calories")!!) {
+                                } else if (index.key?.contains(getString(R.string.calories).toLowerCase())!!) {
                                     val calories = index.value.toString()
 
                                     val foodModel = FoodModel()
-                                    foodModel.setName("Quick Add")
-                                    foodModel.setId("Quick Add")
-                                    foodModel.setDescription(" ")
-                                    foodModel.setAmount("")
-                                    foodModel.setMeasurement(" ")
+                                    foodModel.setName(getString(R.string.quick_add))
+                                    foodModel.setId(getString(R.string.quick_add))
+                                    foodModel.setDescription(getString(R.string.empty_space))
+                                    foodModel.setAmount(getString(R.string.empty_space))
+                                    foodModel.setMeasurement(getString(R.string.empty_space))
                                     foodModel.setCaloriesAmount(calories)
-                                    foodModel.setCarbohydratesAmount("0")
-                                    foodModel.setFatsAmount("0")
-                                    foodModel.setProteinsAmount("0")
+                                    foodModel.setCarbohydratesAmount(getString(R.string.zero))
+                                    foodModel.setFatsAmount(getString(R.string.zero))
+                                    foodModel.setProteinsAmount(getString(R.string.zero))
                                     foodModel.setMeal(meal.key.toString())
                                     foodModel.setKey(index.key!!)
 
                                     when {
-                                        meal.key.toString() == "breakfast" -> {
+                                        meal.key.toString() == getString(R.string.breakfast).toLowerCase() -> {
                                             breakfastFoodList.add(foodModel)
                                         }
-                                        meal.key.toString() == "lunch" -> {
+                                        meal.key.toString() == getString(R.string.lunch).toLowerCase() -> {
                                             lunchFoodList.add(foodModel)
                                         }
-                                        meal.key.toString() == "dinner" -> {
+                                        meal.key.toString() == getString(R.string.dinner).toLowerCase() -> {
                                             dinnerFoodList.add(foodModel)
                                         }
-                                        meal.key.toString() == "snacks" -> {
+                                        meal.key.toString() == getString(R.string.snacks).toLowerCase() -> {
                                             snacksFoodList.add(foodModel)
                                         }
                                     }
@@ -258,7 +281,7 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                     var snacksCalories = 0
 
                     for (food in breakfastFoodList) {
-                        val calories = if (food.getName() == "Quick Add") {
+                        val calories = if (food.getName() == getString(R.string.quick_add)) {
                             food.getCaloriesAmount().toInt()
                         } else {
                             food.getCaloriesAmount().toInt() * food.getAmount().toInt() / 100
@@ -266,7 +289,7 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                         breakfastCalories += calories
                     }
                     for (food in lunchFoodList) {
-                        val calories = if (food.getName() == "Quick Add") {
+                        val calories = if (food.getName() == getString(R.string.quick_add)) {
                             food.getCaloriesAmount().toInt()
                         } else {
                             food.getCaloriesAmount().toInt() * food.getAmount().toInt() / 100
@@ -274,7 +297,7 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                         lunchCalories += calories
                     }
                     for (food in dinnerFoodList) {
-                        val calories = if (food.getName() == "Quick Add") {
+                        val calories = if (food.getName() == getString(R.string.quick_add)) {
                             food.getCaloriesAmount().toInt()
                         } else {
                             food.getCaloriesAmount().toInt() * food.getAmount().toInt() / 100
@@ -282,7 +305,7 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                         dinnerCalories += calories
                     }
                     for (food in snacksFoodList) {
-                        val calories = if (food.getName() == "Quick Add") {
+                        val calories = if (food.getName() == getString(R.string.quick_add)) {
                             food.getCaloriesAmount().toInt()
                         } else {
                             food.getCaloriesAmount().toInt() * food.getAmount().toInt() / 100
@@ -292,7 +315,7 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
 
                     val totalCalories =
                         breakfastCalories + lunchCalories + dinnerCalories + snacksCalories
-                    val remainingCalories = caloriesGoal!! - totalCalories
+                    val remainingCalories = caloriesGoal - totalCalories
 
                     val breakfastCaloriesTextView =
                         requireView().findViewById<TextView>(R.id.breakfastCalories)

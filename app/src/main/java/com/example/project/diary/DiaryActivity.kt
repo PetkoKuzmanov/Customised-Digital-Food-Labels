@@ -23,7 +23,8 @@ class DiaryActivity : AppCompatActivity() {
     private lateinit var currentDate: LocalDateTime
     private lateinit var formattedDate: String
 
-    private val formatterDate: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    private val formatterDate: DateTimeFormatter =
+        DateTimeFormatter.ofPattern("yyyy-MM-dd")
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +60,7 @@ class DiaryActivity : AppCompatActivity() {
             }
             R.id.action_logout -> {
                 Toast.makeText(
-                    baseContext, "Signing out.",
+                    baseContext, getString(R.string.signing_out),
                     Toast.LENGTH_SHORT
                 ).show()
                 mAuth.signOut()
@@ -99,18 +100,20 @@ class DiaryActivity : AppCompatActivity() {
 
         when (formattedDate) {
             formattedTodayDate -> {
-                dateTextView.text = "Today"
+                dateTextView.text = getString(R.string.today)
             }
             formattedYesterdayDate -> {
-                dateTextView.text = "Yesterday"
+                dateTextView.text = getString(R.string.yesterday)
             }
             formattedTomorrowDate -> {
-                dateTextView.text = "Tomorrow"
+                dateTextView.text = getString(R.string.tomorrow)
             }
             else -> {
-                val formatterDateForTextView: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM")
+                val formatterDateForTextView: DateTimeFormatter =
+                    DateTimeFormatter.ofPattern(getString(R.string.date_for_text_view))
 
-                dateTextView.text = currentDate.dayOfWeek.toString().toLowerCase().capitalize() + ", " + currentDate.format(formatterDateForTextView)
+                dateTextView.text = currentDate.dayOfWeek.toString().toLowerCase()
+                    .capitalize() + ", " + currentDate.format(formatterDateForTextView)
             }
         }
 

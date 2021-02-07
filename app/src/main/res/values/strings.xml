@@ -31,7 +31,7 @@
     <string name="edit">Edit</string>
     <string name="date">Date</string>
     <string name="key">Key</string>
-    <string name="date_time_format">HH-mm-ss</string>
+    <string name="time_format">HH-mm-ss</string>
     <string name="users">Users</string>
     <string name="dates">Dates</string>
     <string name="diary">Diary</string>
@@ -44,7 +44,7 @@
     <string name="fats">Fats</string>
     <string name="proteins">Proteins</string>
     <string name="meal">Meal</string>
-    <string name="quick_add">Quick add</string>
+    <string name="quick_add">Quick Add</string>
     <string name="please_input_a_number">Please input a number</string>
     <string name="cancel">Cancel</string>
     <string name="could_not_find_barcode">Could not find barcode</string>
@@ -59,7 +59,17 @@
     <string name="currentDate">currentDate</string>
     <string name="zero">0</string>
     <string name="please_fill_name_description_measurement">Please fill in the name, description and measurement</string>
-
+    <string name="date_format">yyyy-MM-dd</string>
+    <string name="signing_out">Signing out.</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="date_for_text_view">dd MMM</string>
+    <string name="goals">Goals</string>
+    <string name="empty_space"> </string>
+    <string name="grams_short">g</string>
+    <string name="zero_grams">0.0g</string>
+    <string name="cal">Cal</string>
+    <string name="macronutrients">Macronutrients</string>
 
 
 

@@ -2,10 +2,8 @@ package com.example.project.addToDiary
 
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.Menu
@@ -25,8 +23,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.common.InputImage
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import kotlinx.android.synthetic.main.activity_add_food.*
@@ -140,7 +136,7 @@ class AddFoodActivity : AppCompatActivity() {
         database = Firebase.database.reference
 
         val current = LocalDateTime.now()
-        val formatterTime = DateTimeFormatter.ofPattern(getString(R.string.date_time_format))
+        val formatterTime = DateTimeFormatter.ofPattern(getString(R.string.time_format))
         val formattedTime = current.format(formatterTime)
 
         //Create the alertDialog
