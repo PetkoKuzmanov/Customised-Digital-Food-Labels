@@ -9,7 +9,6 @@
         android:layout_width="230dp"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="11 November 2020"
         android:textSize="22sp" />
 
     <TextView
@@ -17,7 +16,6 @@
         android:layout_width="100dp"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="65kg"
         android:textSize="22sp"
         android:textStyle="bold" />
 </LinearLayout>

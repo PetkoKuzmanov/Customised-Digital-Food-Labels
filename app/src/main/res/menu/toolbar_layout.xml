@@ -5,15 +5,15 @@
     <item
         android:id="@+id/action_macronutrients"
         android:icon="@drawable/ic_pie_chart"
-        android:title="Macros"
+        android:title="@string/macros"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_weight"
-        android:title="Weight"
+        android:title="@string/weight"
         android:icon="@drawable/ic_line_chart"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_logout"
-        android:title="Log Out" />
+        android:title="@string/log_out" />
 
 </menu>

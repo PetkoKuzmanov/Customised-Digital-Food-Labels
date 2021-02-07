@@ -5,14 +5,14 @@
     <item
         android:id="@+id/actionFoodDelete"
         android:icon="@drawable/ic_delete"
-        android:title="Food Delete"
+        android:title="@string/food_delete"
         android:onClick="foodDelete"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/actionFoodInfoNext"
         android:icon="@drawable/ic_check"
-        android:title="Food Info"
+        android:title="@string/food_info"
         android:onClick="foodInfoNext"
         app:showAsAction="ifRoom" />
 

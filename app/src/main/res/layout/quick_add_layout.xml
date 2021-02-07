@@ -7,7 +7,7 @@
         android:id="@+id/enterCalories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter calories"
+        android:hint="@string/enter_calories"
         android:inputType="numberDecimal"
         android:maxLines="1" />
 

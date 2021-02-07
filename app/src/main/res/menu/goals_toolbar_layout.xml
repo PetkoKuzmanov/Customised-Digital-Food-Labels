@@ -5,7 +5,7 @@
     <item
         android:id="@+id/actionAddGoals"
         android:icon="@drawable/ic_check"
-        android:title="Add Goals"
+        android:title="@string/add_goals"
         android:onClick="addGoals"
         app:showAsAction="ifRoom" />
 

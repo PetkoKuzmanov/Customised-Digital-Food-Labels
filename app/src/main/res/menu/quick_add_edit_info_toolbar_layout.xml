@@ -4,14 +4,14 @@
     <item
         android:id="@+id/actionQuickAddDelete"
         android:icon="@drawable/ic_delete"
-        android:title="Calories Delete"
+        android:title="@string/calories_delete"
         android:onClick="quickAddDelete"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/actionQuickAddInfoNext"
         android:icon="@drawable/ic_check"
-        android:title="Calories Info"
+        android:title="@string/calories_info"
         android:onClick="quickAddInfoNext"
         app:showAsAction="ifRoom" />
 </menu>

@@ -189,9 +189,9 @@ class FoodInfoActivity : AppCompatActivity() {
         val fatsInfoAmount = findViewById<TextView>(R.id.fatsInfoAmount)
         val proteinsInfoAmount = findViewById<TextView>(R.id.proteinsInfoAmount)
 
-        carbohydratesInfoAmount.text = getString(R.string.zero_grams)
-        fatsInfoAmount.text = getString(R.string.zero_grams)
-        proteinsInfoAmount.text = getString(R.string.zero_grams)
+        carbohydratesInfoAmount.text = getString(R.string.zero_point_zero_grams)
+        fatsInfoAmount.text = getString(R.string.zero_point_zero_grams)
+        proteinsInfoAmount.text = getString(R.string.zero_point_zero_grams)
 
         val pieChart = findViewById<PieChart>(R.id.foodInfoPieChart)
         setPieChart(pieChart, 0)

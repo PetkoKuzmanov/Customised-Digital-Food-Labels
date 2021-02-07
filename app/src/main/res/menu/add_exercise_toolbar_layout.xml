@@ -5,7 +5,7 @@
     <item
         android:id="@+id/actionAddExercise"
         android:icon="@drawable/ic_check"
-        android:title="Add exercise"
+        android:title="@string/add_exercise"
         android:onClick="addExerciseNext"
         app:showAsAction="ifRoom" />
 

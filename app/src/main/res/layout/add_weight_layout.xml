@@ -17,7 +17,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Enter your weight (kg)"
+            android:text="@string/enter_your_weight_kg"
             android:textAlignment="center"
             android:textSize="20sp" />
 
@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:hint="Enter weight"
+            android:hint="@string/enter_weight"
             android:inputType="numberDecimal"
             android:maxLines="1" />
     </LinearLayout>
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Change date"
+            android:text="@string/change_date"
             android:textAlignment="center"
             android:textSize="16sp" />
 
@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="Date"
+            android:text="@string/date"
             android:textAlignment="center"
             android:textSize="20sp" />
     </LinearLayout>

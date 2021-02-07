@@ -67,7 +67,7 @@
     <string name="goals">Goals</string>
     <string name="empty_space"> </string>
     <string name="grams_short">g</string>
-    <string name="zero_grams">0.0g</string>
+    <string name="zero_point_zero_grams">0.0g</string>
     <string name="cal">Cal</string>
     <string name="macronutrients">Macronutrients</string>
     <string name="fatsCalories">fatsCalories</string>
@@ -78,6 +78,28 @@
     <string name="cant_log_in">Can not log in</string>
     <string name="please_fill_in_all_fields">Please fill in all fields</string>
     <string name="cant_register">Can not register</string>
+    <string name="food_name">Food name</string>
+    <string name="food_description">Food description</string>
+    <string name="number_of_servings">Number of servings</string>
+    <string name="zero_grams">0g</string>
+    <string name="total">Total</string>
+    <string name="customise_daily_goals">Customise daily goals</string>
+    <string name="enter_barcode">Enter barcode</string>
+    <string name="enter_your_weight_kg">Enter your weight (kg)</string>
+    <string name="enter_weight">Enter weight</string>
+    <string name="change_date">Change date</string>
+    <string name="enter_calories">Enter calories</string>
+    <string name="add_food_info">Add food info</string>
+    <string name="scan">Scan</string>
+    <string name="exercise_delete">Exercise delete</string>
+    <string name="food_delete">Food delete</string>
+    <string name="food_info">Food info</string>
+    <string name="add_goals">Add goals</string>
+    <string name="calories_delete">Calories delete</string>
+    <string name="calories_info">Calories info</string>
+    <string name="macros">Macros</string>
+    <string name="log_out">Log out</string>
+
 
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

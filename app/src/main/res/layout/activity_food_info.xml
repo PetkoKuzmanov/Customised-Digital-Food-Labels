@@ -29,7 +29,7 @@
             android:id="@+id/foodNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Food name"
+            android:text="@string/food_name"
             android:textSize="25sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Food description"
+            android:text="@string/food_description"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/foodNameTextView" />
@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Number of Servings"
+            android:text="@string/number_of_servings"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/foodDescriptionTextView" />
@@ -78,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Carbohydrates"
+            android:text="@string/carbohydrates"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/carbohydratesColor"
             app:layout_constraintTop_toTopOf="@+id/carbohydratesColor" />
@@ -106,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Fats"
+            android:text="@string/fats"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/fatsColor"
             app:layout_constraintTop_toTopOf="@+id/fatsColor" />
@@ -134,7 +134,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Proteins"
+            android:text="@string/proteins"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/proteinsColor"
             app:layout_constraintTop_toTopOf="@+id/proteinsColor" />
