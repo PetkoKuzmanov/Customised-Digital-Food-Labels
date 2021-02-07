@@ -39,7 +39,8 @@ class WeightAdapter(private val weightModelsList: MutableList<WeightModel>) :
         val info = weightModelsList[position]
 
         holder.date.text = info.getDate()
-        holder.weight.text = info.getWeight().toString() + "kg"
+        holder.weight.text =
+            info.getWeight().toString() + context?.getString(R.string.kg)?.toLowerCase()
     }
 
     override fun getItemCount(): Int {
@@ -49,7 +50,10 @@ class WeightAdapter(private val weightModelsList: MutableList<WeightModel>) :
     fun addItem(weight: Double, date: String) {
         database = Firebase.database.reference
         mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("dates").child(date).child("weight")
+            database.child(context?.getString(R.string.users)?.toLowerCase()!!).child(it.uid)
+                .child(context?.getString(R.string.dates)?.toLowerCase()!!).child(date).child(
+                    context?.getString(R.string.weight)?.toLowerCase()!!
+                )
                 .setValue(weight)
         }
     }

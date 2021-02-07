@@ -60,12 +60,12 @@ class MainActivity : AppCompatActivity() {
                         updateUI(user)
                     } else {
                         closeKeyboard()
-                        showMessage(view, "Cant log in")
+                        showMessage(view, getString(R.string.cant_log_in))
                     }
                 }
         } else {
             closeKeyboard()
-            showMessage(view, "Please fill in all fields")
+            showMessage(view, getString(R.string.please_fill_in_all_fields))
         }
     }
 
@@ -80,12 +80,12 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         // If sign in fails, display a message to the user.
                         closeKeyboard()
-                        showMessage(view, "Cant register")
+                        showMessage(view, getString(R.string.cant_register))
                     }
                 }
         } else {
             closeKeyboard()
-            showMessage(view, "Please fill in all fields")
+            showMessage(view, getString(R.string.please_fill_in_all_fields))
         }
     }
 

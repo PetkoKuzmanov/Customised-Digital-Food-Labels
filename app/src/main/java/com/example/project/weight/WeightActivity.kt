@@ -58,7 +58,8 @@ class WeightActivity : AppCompatActivity() {
 
         database = Firebase.database.reference
         val databaseReference = mAuth.currentUser?.let {
-            database.child("users").child(it.uid).child("dates")
+            database.child(getString(R.string.users).toLowerCase()).child(it.uid)
+                .child(getString(R.string.dates).toLowerCase())
         }
 
         databaseReference?.addValueEventListener(object : ValueEventListener {
@@ -67,7 +68,7 @@ class WeightActivity : AppCompatActivity() {
                 mutableMap.clear()
 
                 for (index in snapshot.children) {
-                    val dateSnapshot = index.child("weight")
+                    val dateSnapshot = index.child(getString(R.string.weight).toLowerCase())
 
                     if (dateSnapshot.exists()) {
                         val date = index.key.toString()
@@ -113,7 +114,7 @@ class WeightActivity : AppCompatActivity() {
 
         //Set the current date as the date
         val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val formatter = DateTimeFormatter.ofPattern(getString(R.string.date_format))
         val formattedDate = current.format(formatter)
         dateTextView.text = formattedDate
 
@@ -130,13 +131,15 @@ class WeightActivity : AppCompatActivity() {
                 { _, year, month, dayOfMonth ->
                     if (dayOfMonth < 10) {
                         if (month + 1 < 10) {
-                            dateTextView.text = ("$year-" + "0" + (month + 1) + "-0$dayOfMonth")
+                            dateTextView.text =
+                                ("$year-" + getString(R.string.zero) + (month + 1) + "-0$dayOfMonth")
                         } else {
                             dateTextView.text = ("$year-" + (month + 1) + "-0$dayOfMonth")
                         }
                     } else {
                         if (month + 1 < 10) {
-                            dateTextView.text = ("$year-" + "0" + (month + 1) + "-$dayOfMonth")
+                            dateTextView.text =
+                                ("$year-" + getString(R.string.zero) + (month + 1) + "-$dayOfMonth")
                         } else {
                             dateTextView.text = ("$year-" + (month + 1) + "-$dayOfMonth")
                         }
@@ -153,13 +156,13 @@ class WeightActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
             .setView(addWeightView)
         builder.create()
-        builder.setPositiveButton("ADD") { _, _ ->
+        builder.setPositiveButton(getString(R.string.add).toUpperCase()) { _, _ ->
             val input = enterWeight.text.toString()
             val fab = findViewById<FloatingActionButton>(R.id.fab)
             var weight = 0.0
 
             val snackbar = Snackbar.make(
-                fab, "Please input a number",
+                fab, getString(R.string.please_input_a_number),
                 Snackbar.LENGTH_LONG
             )
             snackbar.anchorView = fab
@@ -172,7 +175,7 @@ class WeightActivity : AppCompatActivity() {
                 snackbar.show()
             }
         }
-        builder.setNegativeButton("CANCEL") { _, _ ->
+        builder.setNegativeButton(getString(R.string.cancel).toUpperCase()) { _, _ ->
             //Cancels the adding of the weight even if this is left empty
         }
         builder.show()
@@ -230,7 +233,7 @@ class WeightActivity : AppCompatActivity() {
             values.add(Entry(i.toFloat(), weightList[i].toFloat()))
         }
 
-        val lineDataSet = LineDataSet(values, "Weight")
+        val lineDataSet = LineDataSet(values, getString(R.string.weight))
         val lineData = LineData(lineDataSet)
         lineChart.data = lineData
         lineDataSet.setDrawCircles(false)

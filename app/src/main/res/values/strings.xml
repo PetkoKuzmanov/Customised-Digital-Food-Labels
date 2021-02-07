@@ -73,14 +73,11 @@
     <string name="fatsCalories">fatsCalories</string>
     <string name="percent_sign">%</string>
     <string name="zero_percent">0%</string>
-
-
-
-
-
-
-
-
+    <string name="weight">Weight</string>
+    <string name="kg">Kg</string>
+    <string name="cant_log_in">Can not log in</string>
+    <string name="please_fill_in_all_fields">Please fill in all fields</string>
+    <string name="cant_register">Can not register</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
