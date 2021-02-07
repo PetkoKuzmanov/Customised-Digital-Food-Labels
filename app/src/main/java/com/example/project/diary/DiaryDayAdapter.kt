@@ -18,6 +18,7 @@ class DiaryDayAdapter(
 ) :
     RecyclerView.Adapter<DiaryDayAdapter.ViewHolder>() {
     var context: Context? = null
+    private var rowCount = 0
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -33,8 +34,16 @@ class DiaryDayAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val v = inflater.inflate(R.layout.food_row_layout, parent, false)
-        return ViewHolder(v)
+        return if (foodModelArrayList[rowCount].getName() == context?.getString(R.string.quick_add)) {
+            val v = inflater.inflate(R.layout.quick_add_row_layout, parent, false)
+            rowCount++
+            ViewHolder(v)
+        } else {
+            val v = inflater.inflate(R.layout.food_row_layout, parent, false)
+            rowCount++
+            ViewHolder(v)
+        }
+
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
