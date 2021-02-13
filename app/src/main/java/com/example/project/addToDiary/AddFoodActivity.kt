@@ -36,6 +36,7 @@ class AddFoodActivity : AppCompatActivity() {
     val context = this
 
     private var historyFoodModelList = ArrayList<FoodModel>()
+    private var allFoodModelList = ArrayList<FoodModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,15 +45,26 @@ class AddFoodActivity : AppCompatActivity() {
 
         populateList()
 
+        val currentDate = intent.getStringExtra(getString(R.string.date).toLowerCase()).toString()
+
         val searchView = findViewById<SearchView>(R.id.foodSearchView)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                val historyAdapter =
+                    AddFoodAdapter(historyFoodModelList, allFoodModelList, currentDate)
+                historyRecyclerView.adapter = historyAdapter
+
                 (historyRecyclerView.adapter as Filterable).filter.filter(query)
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                val historyAdapter =
+                    AddFoodAdapter(historyFoodModelList, historyFoodModelList, currentDate)
+                historyRecyclerView.adapter = historyAdapter
+
                 (historyRecyclerView.adapter as Filterable).filter.filter(newText)
+
                 return true
             }
         })
@@ -70,6 +82,7 @@ class AddFoodActivity : AppCompatActivity() {
         database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 historyFoodModelList.clear()
+                allFoodModelList.clear()
 
                 val foodHistoryReference = mAuth.currentUser?.let {
                     snapshot.child(getString(R.string.users).toLowerCase()).child(it.uid)
@@ -114,10 +127,47 @@ class AddFoodActivity : AppCompatActivity() {
                     historyFoodModelList.add(foodModel)
                 }
 
+                val foodDatabaseReference = snapshot.child("food")
+
+                for (index in foodDatabaseReference.children) {
+                    val foodId = index.key.toString()
+                    val foodAmount = "100"
+
+                    val foodName =
+                        index.child(getString(R.string.name).toLowerCase()).value.toString()
+                    val foodDescription =
+                        index.child(getString(R.string.description).toLowerCase()).value.toString()
+                    val foodAmountMeasurement =
+                        index.child(getString(R.string.measurement).toLowerCase()).value.toString()
+                    val foodCalories =
+                        index.child(getString(R.string.calories).toLowerCase()).value.toString()
+                            .toInt()
+                    val foodCarbohydrates =
+                        index.child(getString(R.string.carbohydrates).toLowerCase()).value.toString()
+                    val foodFats =
+                        index.child(getString(R.string.fats).toLowerCase()).value.toString()
+                    val foodProteins =
+                        index.child(getString(R.string.proteins).toLowerCase()).value.toString()
+
+                    val foodModel = FoodModel()
+                    foodModel.setName(foodName)
+                    foodModel.setId(foodId)
+                    foodModel.setDescription(foodDescription)
+                    foodModel.setAmount(foodAmount)
+                    foodModel.setMeasurement(foodAmountMeasurement)
+                    foodModel.setCaloriesAmount(foodCalories.toString())
+                    foodModel.setCarbohydratesAmount(foodCarbohydrates)
+                    foodModel.setFatsAmount(foodFats)
+                    foodModel.setProteinsAmount(foodProteins)
+                    foodModel.setMeal(intent?.getStringExtra(getString(R.string.meal).toLowerCase())!!)
+                    allFoodModelList.add(foodModel)
+                }
+
                 val layoutManager = LinearLayoutManager(context)
                 val historyRecyclerView = historyRecyclerView
                 historyRecyclerView.layoutManager = layoutManager
-                val historyAdapter = AddFoodAdapter(historyFoodModelList, currentDate)
+                val historyAdapter =
+                    AddFoodAdapter(historyFoodModelList, allFoodModelList, currentDate)
                 historyRecyclerView.adapter = historyAdapter
             }
 

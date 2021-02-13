@@ -19,6 +19,7 @@ import kotlin.collections.ArrayList
 
 class AddFoodAdapter(
     private val foodModelsList: MutableList<FoodModel>,
+    private val allFoodModelList: MutableList<FoodModel>,
     private val currentDate: String
 ) :
     RecyclerView.Adapter<AddFoodAdapter.ViewHolder>(), Filterable {
@@ -100,18 +101,18 @@ class AddFoodAdapter(
         override fun performFiltering(constraint: CharSequence): FilterResults {
             var filteredList: MutableList<FoodModel> = ArrayList()
             if (constraint.isEmpty()) {
-                filteredList = foodModelsList as ArrayList<FoodModel>
+                filteredList = allFoodModelList as ArrayList<FoodModel>
             } else {
                 val filterPattern =
                     constraint.toString().toLowerCase(Locale.ROOT).trim { it <= ' ' }
-                for (item in filteredFoodModelsList) {
+                for (item in allFoodModelList) {
                     if (item.getName().toLowerCase(Locale.ROOT).contains(filterPattern)) {
                         filteredList.add(item)
                     }
                 }
-                for (item in foodModelsList) {
+                for (item in allFoodModelList) {
                     if (item.getName().toLowerCase(Locale.ROOT)
-                            .contains(filterPattern) && !filteredFoodModelsList.contains(item)
+                            .contains(filterPattern) && !allFoodModelList.contains(item)
                     ) {
                         filteredList.add(item)
                     }
