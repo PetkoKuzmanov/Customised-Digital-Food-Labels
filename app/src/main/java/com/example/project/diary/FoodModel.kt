@@ -1,7 +1,6 @@
 package com.example.project.diary
 
 class FoodModel {
-
     private lateinit var id: String
     private lateinit var name: String
     private lateinit var description: String
@@ -13,6 +12,34 @@ class FoodModel {
     private lateinit var proteinsAmount: String
     private lateinit var meal: String
     private lateinit var key: String
+
+    constructor()
+
+    constructor(
+        id: String,
+        name: String,
+        description: String,
+        amount: String,
+        measurement: String,
+        caloriesAmount: String,
+        carbohydratesAmount: String,
+        fatsAmount: String,
+        proteinsAmount: String,
+        meal: String,
+        key: String
+    ) {
+        this.id = id
+        this.name = name
+        this.description = description
+        this.amount = amount
+        this.measurement = measurement
+        this.caloriesAmount = caloriesAmount
+        this.carbohydratesAmount = carbohydratesAmount
+        this.fatsAmount = fatsAmount
+        this.proteinsAmount = proteinsAmount
+        this.meal = meal
+        this.key = key
+    }
 
     fun getId(): String {
         return id

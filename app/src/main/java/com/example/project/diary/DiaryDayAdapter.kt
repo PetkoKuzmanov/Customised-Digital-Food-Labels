@@ -9,11 +9,9 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
 
 class DiaryDayAdapter(
-    private val foodModelArrayList: MutableList<FoodModel>,
+    private val foodModelList: MutableList<FoodModel>,
     private val currentDate: String
 ) :
     RecyclerView.Adapter<DiaryDayAdapter.ViewHolder>() {
@@ -34,7 +32,7 @@ class DiaryDayAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return if (foodModelArrayList[rowCount].getName() == context?.getString(R.string.quick_add)) {
+        return if (foodModelList[rowCount].getName() == context?.getString(R.string.quick_add)) {
             val v = inflater.inflate(R.layout.quick_add_row_layout, parent, false)
             rowCount++
             ViewHolder(v)
@@ -43,11 +41,10 @@ class DiaryDayAdapter(
             rowCount++
             ViewHolder(v)
         }
-
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val info = foodModelArrayList[position]
+        val info = foodModelList[position]
 
         val id = info.getId()
         val name = info.getName()
@@ -110,6 +107,6 @@ class DiaryDayAdapter(
     }
 
     override fun getItemCount(): Int {
-        return foodModelArrayList.size
+        return foodModelList.size
     }
 }

@@ -18,8 +18,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class AddFoodAdapter(
-    private val foodModelsList: MutableList<FoodModel>,
-    private val allFoodModelList: MutableList<FoodModel>,
+    private val historyFoodModelList: MutableList<FoodModel>,
+    private val foodModelListToFilter: MutableList<FoodModel>,
     private val currentDate: String
 ) :
     RecyclerView.Adapter<AddFoodAdapter.ViewHolder>(), Filterable {
@@ -28,7 +28,7 @@ class AddFoodAdapter(
     var filteredFoodModelsList = ArrayList<FoodModel>()
 
     init {
-        filteredFoodModelsList = foodModelsList as ArrayList<FoodModel>
+        filteredFoodModelsList = historyFoodModelList as ArrayList<FoodModel>
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -101,18 +101,18 @@ class AddFoodAdapter(
         override fun performFiltering(constraint: CharSequence): FilterResults {
             var filteredList: MutableList<FoodModel> = ArrayList()
             if (constraint.isEmpty()) {
-                filteredList = allFoodModelList as ArrayList<FoodModel>
+                filteredList = foodModelListToFilter as ArrayList<FoodModel>
             } else {
                 val filterPattern =
                     constraint.toString().toLowerCase(Locale.ROOT).trim { it <= ' ' }
-                for (item in allFoodModelList) {
+                for (item in foodModelListToFilter) {
                     if (item.getName().toLowerCase(Locale.ROOT).contains(filterPattern)) {
                         filteredList.add(item)
                     }
                 }
-                for (item in allFoodModelList) {
+                for (item in foodModelListToFilter) {
                     if (item.getName().toLowerCase(Locale.ROOT)
-                            .contains(filterPattern) && !allFoodModelList.contains(item)
+                            .contains(filterPattern) && !foodModelListToFilter.contains(item)
                     ) {
                         filteredList.add(item)
                     }
