@@ -25,10 +25,10 @@ class AddFoodAdapter(
     RecyclerView.Adapter<AddFoodAdapter.ViewHolder>(), Filterable {
 
     var context: Context? = null
-    var filteredFoodModelsList = ArrayList<FoodModel>()
+    var filteredFoodModelList = ArrayList<FoodModel>()
 
     init {
-        filteredFoodModelsList = historyFoodModelList as ArrayList<FoodModel>
+        filteredFoodModelList = historyFoodModelList as ArrayList<FoodModel>
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -50,7 +50,7 @@ class AddFoodAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val info = filteredFoodModelsList[position]
+        val info = filteredFoodModelList[position]
 
         val id = info.getId()
         val name = info.getName()
@@ -89,7 +89,7 @@ class AddFoodAdapter(
     }
 
     override fun getItemCount(): Int {
-        return filteredFoodModelsList.size
+        return filteredFoodModelList.size
     }
 
     override fun getFilter(): Filter {
@@ -126,7 +126,7 @@ class AddFoodAdapter(
 
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            filteredFoodModelsList = results?.values as ArrayList<FoodModel>
+            filteredFoodModelList = results?.values as ArrayList<FoodModel>
             notifyDataSetChanged()
         }
     }

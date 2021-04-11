@@ -10,6 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
+import com.example.project.diary.DiaryActivity
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.`is`
@@ -25,81 +26,10 @@ class SearchInHistoryAndDatabaseTest {
 
     @Rule
     @JvmField
-    var mActivityTestRule = ActivityTestRule(MainActivity::class.java)
+    var mActivityTestRule = ActivityTestRule(DiaryActivity::class.java)
 
     @Test
     fun searchInHistoryAndDatabaseTest() {
-        val appCompatEditText = onView(
-            allOf(
-                withId(R.id.email),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.container),
-                        childAtPosition(
-                            withId(android.R.id.content),
-                            0
-                        )
-                    ),
-                    0
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatEditText.perform(click())
-
-        val appCompatEditText2 = onView(
-            allOf(
-                withId(R.id.email),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.container),
-                        childAtPosition(
-                            withId(android.R.id.content),
-                            0
-                        )
-                    ),
-                    0
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatEditText2.perform(replaceText("qwe@qwe.com"), closeSoftKeyboard())
-
-        val appCompatEditText3 = onView(
-            allOf(
-                withId(R.id.password),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.container),
-                        childAtPosition(
-                            withId(android.R.id.content),
-                            0
-                        )
-                    ),
-                    1
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatEditText3.perform(replaceText("12345678"), closeSoftKeyboard())
-
-        val appCompatButton = onView(
-            allOf(
-                withId(R.id.buttonLogIn), withText("Log in"),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.container),
-                        childAtPosition(
-                            withId(android.R.id.content),
-                            0
-                        )
-                    ),
-                    2
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatButton.perform(click())
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:

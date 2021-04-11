@@ -97,6 +97,7 @@ class AddFoodInfoActivity : AppCompatActivity() {
 
     private fun addSingleFoodInfo(infoName: String, info: String) {
         val id = intent.getStringExtra(getString(R.string.barcode).toLowerCase())
+
         mAuth.currentUser?.let {
             database.child(getString(R.string.food).toLowerCase()).child(id!!).child(infoName)
                 .setValue(info)

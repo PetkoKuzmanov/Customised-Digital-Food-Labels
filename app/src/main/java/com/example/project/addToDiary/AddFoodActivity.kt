@@ -75,6 +75,27 @@ class AddFoodActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        val result: IntentResult? =
+            IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+
+        if (result != null) {
+            if (result.contents != null) {
+                addFoodInDatabase(result.contents)
+            } else {
+                addBarcodeManuallyAlert()
+            }
+        }
+
+        if (requestCode == addFoodRequestCode) {
+            if (resultCode == RESULT_OK) {
+                this.onBackPressed()
+            }
+        }
+    }
+
     private fun populateList() {
         val currentDate = intent.getStringExtra(getString(R.string.date).toLowerCase()).toString()
 
@@ -253,28 +274,7 @@ class AddFoodActivity : AppCompatActivity() {
 
     fun scanItem(item: MenuItem) {
         run {
-            IntentIntegrator(this).initiateScan();
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        val result: IntentResult? =
-            IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-
-        if (result != null) {
-            if (result.contents != null) {
-                addFoodInDatabase(result.contents)
-            } else {
-                addBarcodeManuallyAlert()
-            }
-        }
-
-        if (requestCode == addFoodRequestCode) {
-            if (resultCode == RESULT_OK) {
-                this.onBackPressed()
-            }
+            IntentIntegrator(this).initiateScan()
         }
     }
 
