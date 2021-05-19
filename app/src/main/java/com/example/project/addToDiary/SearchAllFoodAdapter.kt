@@ -160,19 +160,6 @@ class SearchAllFoodAdapter(
                     val foodFats = index.child("fats").value.toString()
                     val foodProteins = index.child("proteins").value.toString()
 
-//                    val foodModel = FoodModel()
-//                    foodModel.setName(foodName)
-//                    foodModel.setId(foodId)
-//                    foodModel.setDescription(foodDescription)
-//                    foodModel.setAmount("100")
-//                    foodModel.setMeasurement(foodAmountMeasurement)
-//                    foodModel.setCaloriesAmount(foodCalories)
-//                    foodModel.setCarbohydratesAmount(foodCarbohydrates)
-//                    foodModel.setFatsAmount(foodFats)
-//                    foodModel.setProteinsAmount(foodProteins)
-//                    foodModel.setMeal(meal)
-//                    foodModelList.add(foodModel)
-
                     val foodModel = FoodModel(
                         foodId,
                         foodName,

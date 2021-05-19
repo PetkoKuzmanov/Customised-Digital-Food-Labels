@@ -134,18 +134,6 @@ class AddFoodActivity : AppCompatActivity() {
                     val foodProteins =
                         foodReference.child(getString(R.string.proteins).toLowerCase()).value.toString()
 
-//                    val foodModel = FoodModel()
-//                    foodModel.setName(foodName)
-//                    foodModel.setId(foodId)
-//                    foodModel.setDescription(foodDescription)
-//                    foodModel.setAmount(foodAmount)
-//                    foodModel.setMeasurement(foodAmountMeasurement)
-//                    foodModel.setCaloriesAmount(foodCalories.toString())
-//                    foodModel.setCarbohydratesAmount(foodCarbohydrates)
-//                    foodModel.setFatsAmount(foodFats)
-//                    foodModel.setProteinsAmount(foodProteins)
-//                    foodModel.setMeal(intent?.getStringExtra(getString(R.string.meal).toLowerCase())!!)
-
                     val foodModel = FoodModel(
                         foodId,
                         foodName,
@@ -183,18 +171,6 @@ class AddFoodActivity : AppCompatActivity() {
                         index.child(getString(R.string.fats).toLowerCase()).value.toString()
                     val foodProteins =
                         index.child(getString(R.string.proteins).toLowerCase()).value.toString()
-
-//                    val foodModel = FoodModel()
-//                    foodModel.setName(foodName)
-//                    foodModel.setId(foodId)
-//                    foodModel.setDescription(foodDescription)
-//                    foodModel.setAmount(foodAmount)
-//                    foodModel.setMeasurement(foodAmountMeasurement)
-//                    foodModel.setCaloriesAmount(foodCalories.toString())
-//                    foodModel.setCarbohydratesAmount(foodCarbohydrates)
-//                    foodModel.setFatsAmount(foodFats)
-//                    foodModel.setProteinsAmount(foodProteins)
-//                    foodModel.setMeal(intent?.getStringExtra(getString(R.string.meal).toLowerCase())!!)
 
                     val foodModel = FoodModel(
                         foodId,
