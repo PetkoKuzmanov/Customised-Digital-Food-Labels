@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -19,48 +22,67 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:background="@drawable/border">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/previousDayButton"
-            android:layout_width="40dp"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:onClick="previousDay"
-            android:layout_marginStart="20dp"
-            android:background="@drawable/ic_left_arrow"
-            android:contentDescription="@string/previous_day" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/dateTextView"
-            android:layout_width="230dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:gravity="center"
-            android:text="@string/today"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_corner_off_white"
+                android:orientation="horizontal"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="5dp">
 
-        <Button
-            android:id="@+id/nextDayButton"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="20dp"
-            android:onClick="nextDay"
-            android:background="@drawable/ic_right_arrow"
-            android:contentDescription="@string/next_day" />
+                <Button
+                    android:id="@+id/previousDayButton"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_left_arrow"
+                    android:contentDescription="@string/previous_day"
+                    android:onClick="previousDay"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/dateTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+                    android:text="@string/today"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/nextDayButton"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_right_arrow"
+                    android:contentDescription="@string/next_day"
+                    android:onClick="nextDay"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </ScrollView>
+
 
 </LinearLayout>

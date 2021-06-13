@@ -327,20 +327,20 @@ class DiaryDayFragment(private val currentDate: String) : Fragment() {
                         requireView().findViewById<TextView>(R.id.dinnerCalories)
                     val snacksCaloriesTextView =
                         requireView().findViewById<TextView>(R.id.snacksCalories)
-                    val totalCaloriesTextView =
-                        requireView().findViewById<TextView>(R.id.caloriesConsumed)
+//                    val totalCaloriesTextView =
+//                        requireView().findViewById<TextView>(R.id.caloriesConsumed)
                     val remainingCaloriesTextView =
                         requireView().findViewById<TextView>(R.id.caloriesRemaining)
-                    val caloriesGoalTextView =
-                        requireView().findViewById<TextView>(R.id.goalCalories)
+//                    val caloriesGoalTextView =
+//                        requireView().findViewById<TextView>(R.id.goalCalories)
 
                     breakfastCaloriesTextView.text = breakfastCalories.toString()
                     lunchCaloriesTextView.text = lunchCalories.toString()
                     dinnerCaloriesTextView.text = dinnerCalories.toString()
                     snacksCaloriesTextView.text = snacksCalories.toString()
-                    totalCaloriesTextView.text = totalCalories.toString()
+//                    totalCaloriesTextView.text = totalCalories.toString()
                     remainingCaloriesTextView.text = remainingCalories.toString()
-                    caloriesGoalTextView.text = caloriesGoal.toString()
+//                    caloriesGoalTextView.text = caloriesGoal.toString()
                 }
             }
 
