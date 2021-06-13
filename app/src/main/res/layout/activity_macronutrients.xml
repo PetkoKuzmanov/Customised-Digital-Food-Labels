@@ -28,6 +28,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="60dp"
+        android:layout_marginHorizontal="10dp"
+        android:background="@drawable/rounded_corner_alice_blue"
         android:layout_marginTop="10dp">
 
         <TextView
@@ -132,7 +136,7 @@
             android:layout_width="50dp"
             android:layout_height="30dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="20dp"
             android:text="@string/total"
             android:textSize="22sp"
             app:layout_constraintEnd_toStartOf="@+id/goalLabel"
@@ -170,7 +174,7 @@
             android:layout_width="50dp"
             android:layout_height="30dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="20dp"
             android:text="@string/zero_percent"
             android:textSize="22sp"
             app:layout_constraintEnd_toStartOf="@+id/carbohydratesGoal"
@@ -181,7 +185,7 @@
             android:layout_width="50dp"
             android:layout_height="30dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="20dp"
             android:text="@string/zero_percent"
             android:textSize="22sp"
             app:layout_constraintEnd_toStartOf="@+id/fatsGoal"
@@ -192,7 +196,7 @@
             android:layout_width="50dp"
             android:layout_height="30dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="20dp"
             android:text="@string/zero_percent"
             android:textSize="22sp"
             app:layout_constraintEnd_toStartOf="@+id/proteinsGoal"
