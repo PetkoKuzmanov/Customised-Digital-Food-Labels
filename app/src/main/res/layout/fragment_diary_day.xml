@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".diary.DiaryDayFragment">
 
     <LinearLayout
@@ -18,8 +18,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:paddingBottom="10dp">
+            android:layout_gravity="center"
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/caloriesInfoLabel"
@@ -52,13 +52,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@drawable/border_with_white_background"
+            android:padding="5dp"
+            android:background="@drawable/rounded_corner_primary"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_bottom_with_white_background">
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_corner_alice_blue">
 
                 <TextView
                     android:id="@+id/breakfastLabel"
@@ -88,16 +90,21 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/breakfastRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_margin="5dp" />
 
             <TextView
                 android:id="@+id/addFoodToBreakfastTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_top_with_white_background"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/rounded_corner_alice_blue"
                 android:paddingVertical="10dp"
                 android:paddingStart="15dp"
-                android:text="@string/add_food"
+                android:text="+"
+                android:textStyle="bold"
+                android:gravity="center"
                 android:textSize="24sp"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
@@ -107,13 +114,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@drawable/border_with_white_background"
+            android:padding="5dp"
+            android:background="@drawable/rounded_corner_primary"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_bottom_with_white_background">
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_corner_alice_blue">
 
                 <TextView
                     android:id="@+id/lunchLabel"
@@ -143,16 +152,21 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/lunchRecyclerView"
                 android:layout_width="match_parent"
+                android:layout_margin="5dp"
                 android:layout_height="match_parent" />
 
             <TextView
                 android:id="@+id/addFoodToLunchTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_top_with_white_background"
-                android:paddingStart="15dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/rounded_corner_alice_blue"
                 android:paddingVertical="10dp"
-                android:text="@string/add_food"
+                android:paddingStart="15dp"
+                android:text="+"
+                android:textStyle="bold"
+                android:gravity="center"
                 android:textSize="24sp"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
@@ -162,13 +176,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@drawable/border_with_white_background"
+            android:padding="5dp"
+            android:background="@drawable/rounded_corner_primary"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_bottom_with_white_background">
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_corner_alice_blue">
 
                 <TextView
                     android:id="@+id/dinnerLabel"
@@ -198,16 +214,21 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/dinnerRecyclerView"
                 android:layout_width="match_parent"
+                android:layout_margin="5dp"
                 android:layout_height="match_parent" />
 
             <TextView
                 android:id="@+id/addFoodToDinnerTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_top_with_white_background"
-                android:paddingStart="15dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/rounded_corner_alice_blue"
                 android:paddingVertical="10dp"
-                android:text="@string/add_food"
+                android:paddingStart="15dp"
+                android:text="+"
+                android:textStyle="bold"
+                android:gravity="center"
                 android:textSize="24sp"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
@@ -217,13 +238,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@drawable/border_with_white_background"
+            android:padding="5dp"
+            android:background="@drawable/rounded_corner_primary"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_bottom_with_white_background">
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_corner_alice_blue">
 
                 <TextView
                     android:id="@+id/snacksLabel"
@@ -252,6 +275,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/snacksRecyclerView"
+                android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -259,10 +283,14 @@
                 android:id="@+id/addFoodToSnacksTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_top_with_white_background"
-                android:paddingStart="15dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/rounded_corner_alice_blue"
                 android:paddingVertical="10dp"
-                android:text="@string/add_food"
+                android:paddingStart="15dp"
+                android:text="+"
+                android:textStyle="bold"
+                android:gravity="center"
                 android:textSize="24sp"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
@@ -272,13 +300,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@drawable/border_with_white_background"
+            android:padding="5dp"
+            android:background="@drawable/rounded_corner_primary"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_bottom_with_white_background">
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_corner_alice_blue">
 
                 <TextView
                     android:id="@+id/exerciseLabel"
@@ -297,16 +327,21 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/exerciseRecyclerView"
                 android:layout_width="match_parent"
+                android:layout_margin="5dp"
                 android:layout_height="match_parent" />
 
             <TextView
                 android:id="@+id/addExerciseTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_top_with_white_background"
-                android:paddingStart="15dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/rounded_corner_alice_blue"
                 android:paddingVertical="10dp"
-                android:text="@string/add_exercise"
+                android:paddingStart="15dp"
+                android:text="+"
+                android:textStyle="bold"
+                android:gravity="center"
                 android:textSize="24sp"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
