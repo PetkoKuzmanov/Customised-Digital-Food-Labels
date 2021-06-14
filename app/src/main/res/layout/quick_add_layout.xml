@@ -5,7 +5,9 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/enterCalories"
-        android:layout_width="match_parent"
+        android:layout_marginStart="15dp"
+        android:layout_width="150dp"
+        android:maxLength="4"
         android:layout_height="wrap_content"
         android:hint="@string/enter_calories"
         android:inputType="numberDecimal"

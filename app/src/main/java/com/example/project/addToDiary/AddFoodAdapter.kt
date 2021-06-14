@@ -45,7 +45,7 @@ class AddFoodAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val v = inflater.inflate(R.layout.food_row_layout, parent, false)
+        val v = inflater.inflate(R.layout.food_row_with_background_layout, parent, false)
         return ViewHolder(v)
     }
 
