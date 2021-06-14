@@ -22,11 +22,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingStart="15dp"
-        android:paddingTop="15dp"
-        android:paddingEnd="15dp"
-        android:paddingBottom="5dp">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_corner_primary"
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/nameTextView"
@@ -39,11 +38,14 @@
 
         <EditText
             android:id="@+id/nameEditText"
-            android:layout_width="150dp"
+            android:layout_width="175dp"
             android:layout_height="40dp"
+            android:background="@drawable/rounded_corner_alice_blue"
             android:maxLength="17"
+            android:paddingHorizontal="15dp"
+            android:lines="1"
             android:textAlignment="center"
-            android:textSize="15sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/nameTextView" />
 
@@ -59,11 +61,14 @@
 
         <EditText
             android:id="@+id/descriptionEditText"
-            android:layout_width="150dp"
+            android:layout_width="175dp"
             android:layout_height="40dp"
+            android:background="@drawable/rounded_corner_alice_blue"
             android:maxLength="17"
+            android:paddingHorizontal="15dp"
+            android:lines="1"
             android:textAlignment="center"
-            android:textSize="15sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/descriptionTextView" />
 
@@ -79,11 +84,13 @@
 
         <EditText
             android:id="@+id/measurementEditText"
-            android:layout_width="50dp"
+            android:layout_width="75dp"
             android:layout_height="40dp"
+            android:background="@drawable/rounded_corner_alice_blue"
             android:maxLength="5"
+            android:paddingHorizontal="5dp"
             android:textAlignment="center"
-            android:textSize="15sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/measurementTextView" />
 
@@ -92,20 +99,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="@string/fats"
+            android:text="@string/fat"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/measurementTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/carbohydratesTextView" />
 
         <EditText
             android:id="@+id/fatsEditText"
-            android:layout_width="40dp"
+            android:layout_width="75dp"
             android:layout_height="40dp"
             android:layout_marginStart="5dp"
+            android:background="@drawable/rounded_corner_alice_blue"
             android:inputType="number"
             android:maxLength="3"
+            android:paddingHorizontal="5dp"
             android:textAlignment="center"
-            android:textSize="15sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/fatsTextView" />
 
@@ -113,20 +122,22 @@
             android:id="@+id/carbohydratesTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/carbohydrates"
-            android:textSize="24sp"
             android:layout_marginTop="15dp"
+            android:text="@string/carbs"
+            android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fatsTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/measurementTextView" />
 
         <EditText
             android:id="@+id/carbohydratesEditText"
-            android:layout_width="40dp"
+            android:layout_width="75dp"
             android:layout_height="40dp"
+            android:background="@drawable/rounded_corner_alice_blue"
             android:inputType="number"
             android:maxLength="3"
+            android:paddingHorizontal="5dp"
             android:textAlignment="center"
-            android:textSize="15sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/carbohydratesTextView" />
 
@@ -135,20 +146,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="@string/proteins"
+            android:text="@string/protein"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/carbohydratesTextView" />
+            app:layout_constraintTop_toBottomOf="@id/fatsTextView" />
 
         <EditText
             android:id="@+id/proteinsEditText"
-            android:layout_width="40dp"
+            android:layout_width="75dp"
             android:layout_height="40dp"
             android:layout_marginStart="5dp"
+            android:background="@drawable/rounded_corner_alice_blue"
             android:inputType="number"
             android:maxLength="3"
+            android:paddingHorizontal="5dp"
             android:textAlignment="center"
-            android:textSize="15sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/proteinsTextView" />
 
@@ -164,13 +177,15 @@
 
         <EditText
             android:id="@+id/addFoodCaloriesEditText"
-            android:layout_width="40dp"
+            android:layout_width="75dp"
             android:layout_height="40dp"
             android:layout_marginStart="5dp"
+            android:background="@drawable/rounded_corner_alice_blue"
             android:inputType="number"
             android:maxLength="3"
+            android:paddingHorizontal="5dp"
             android:textAlignment="center"
-            android:textSize="15sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/caloriesTextView" />
 
