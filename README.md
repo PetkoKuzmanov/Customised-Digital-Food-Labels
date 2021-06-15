@@ -14,7 +14,7 @@ Furthermore, it should keep track of the user’s weight and exercise done for e
 
 ### Diary menu
 
-![Screenshot_20210615-162654](https://user-images.githubusercontent.com/57803685/122062231-e6ef7100-cdf7-11eb-8c13-389525de3afe.jpg)
+![1](https://user-images.githubusercontent.com/57803685/122063134-aba17200-cdf8-11eb-8703-ecf0121dadad.png)
 
 ### Weight menu
 
