@@ -18,7 +18,7 @@ Furthermore, it should keep track of the user’s weight and exercise done for e
 
 ### Weight menu
 
-![Screenshot_20210615-162732](https://user-images.githubusercontent.com/57803685/122062253-ed7de880-cdf7-11eb-9ab2-80f20340d9fd.jpg)
+![2](https://user-images.githubusercontent.com/57803685/122063716-2ec2c800-cdf9-11eb-9a34-c742afa77e9e.png)
 
 ### Scanning a barcode
 
@@ -26,14 +26,14 @@ Furthermore, it should keep track of the user’s weight and exercise done for e
 
 ### Inputting information about the scanned food
 
-![Screenshot_20210615-162841](https://user-images.githubusercontent.com/57803685/122062286-f4a4f680-cdf7-11eb-9c14-1f4bafdfa7a2.jpg)
+![3](https://user-images.githubusercontent.com/57803685/122063729-31bdb880-cdf9-11eb-84a3-eb4713d39cc6.png)
 
 ### Food information activity
 
-![Screenshot_20210615-162903](https://user-images.githubusercontent.com/57803685/122062299-f8d11400-cdf7-11eb-9d26-b808cc27dfad.jpg)
+![4](https://user-images.githubusercontent.com/57803685/122063739-36826c80-cdf9-11eb-9586-2c8e7a0f2ceb.png)
 
 ### Food history
 
-![Screenshot_20210615-162928](https://user-images.githubusercontent.com/57803685/122062323-fc649b00-cdf7-11eb-91b9-1ac6e590792c.jpg)
+![5](https://user-images.githubusercontent.com/57803685/122063756-397d5d00-cdf9-11eb-8668-7effaecf9d13.png)
 
 ## © 2021 Petko Kuzmanov
