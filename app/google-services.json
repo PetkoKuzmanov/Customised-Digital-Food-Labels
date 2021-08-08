@@ -34,6 +34,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991087598127:android:105deda5802472259044da",
+        "android_client_info": {
+          "package_name": "com.petko.project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "991087598127-33gik6hg3nuagog3chhl8i66iu20du29.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATiTeNI1JFToJB6TrtKkk8EVRGrIsiHck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "991087598127-33gik6hg3nuagog3chhl8i66iu20du29.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

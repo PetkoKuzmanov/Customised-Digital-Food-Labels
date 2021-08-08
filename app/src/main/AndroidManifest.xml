@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.project">
+    package="com.petko.project">
 
     <application
-        android:name=".KtApplication"
+        android:name="com.petko.project.KtApplication"
         android:hardwareAccelerated="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,21 +11,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project">
-        <activity android:name=".addToDiary.AddExerciseActivity"
+        <activity android:name="com.petko.project.addToDiary.AddExerciseActivity"
             android:label="Exercise"/>
-        <activity android:name=".diary.QuickAddInfoActivity"
+        <activity android:name="com.petko.project.diary.QuickAddInfoActivity"
             android:label="Quick Add"/>
-        <activity android:name=".diary.FoodInfoActivity"
+        <activity android:name="com.petko.project.diary.FoodInfoActivity"
             android:label="Food Info"/>
-        <activity android:name=".addToDiary.AddFoodInfoActivity"
+        <activity android:name="com.petko.project.addToDiary.AddFoodInfoActivity"
             android:label="Add Food Info"/>
-        <activity android:name=".addToDiary.AddFoodActivity"
+        <activity android:name="com.petko.project.addToDiary.AddFoodActivity"
             android:label="Add Food"/>
         <activity
-            android:name=".weight.WeightActivity"
+            android:name="com.petko.project.weight.WeightActivity"
             android:label="Weight" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.petko.project.MainActivity"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,13 +33,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".diary.DiaryActivity"
+            android:name="com.petko.project.diary.DiaryActivity"
             android:label="Diary" />
         <activity
-            android:name=".macronutrients.MacronutrientsActivity"
+            android:name="com.petko.project.macronutrients.MacronutrientsActivity"
             android:label="Macronutrients" />
         <activity
-            android:name=".macronutrients.GoalsActivity"
+            android:name="com.petko.project.macronutrients.GoalsActivity"
             android:label="Goals" />
     </application>
 
